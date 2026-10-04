@@ -27,7 +27,7 @@ async function capture() {
     headless: true,
   });
 
-  const url = process.env.SITE_URL || 'http://localhost:5173';
+  const url = process.env.SITE_URL || 'http://127.0.0.1:5888';
   console.log('Capturing screenshots from:', url);
 
   // 1. Desktop Viewport (1920x1080)
@@ -37,41 +37,27 @@ async function capture() {
     deviceScaleFactor: 1,
   });
   const desktopPage = await desktopContext.newPage();
-  await desktopPage.goto(url, { waitUntil: 'networkidle' });
-  await desktopPage.waitForTimeout(1200);
+  await desktopPage.goto(url);
 
-  // Desktop Bio (Collapsed)
+  // Capture Splash Screen midway (after 700ms)
+  await desktopPage.waitForTimeout(700);
   await desktopPage.screenshot({
-    path: path.join(outputDir, 'desktop_bio_collapsed.png'),
+    path: path.join(outputDir, 'desktop_splash_screen.png'),
     fullPage: false,
   });
-  console.log('Saved: desktop_bio_collapsed.png');
+  console.log('Saved: desktop_splash_screen.png');
 
-  // Click Discord card to trigger copy toast
-  const discordCard = desktopPage.locator('button:has-text("Discord")').first();
-  if (await discordCard.count() > 0) {
-    await discordCard.click();
-    await desktopPage.waitForTimeout(400);
-    await desktopPage.screenshot({
-      path: path.join(outputDir, 'desktop_bio_toast_centered.png'),
-      fullPage: false,
-    });
-    console.log('Saved: desktop_bio_toast_centered.png');
-  }
+  // Wait for splash screen to complete and content to reveal (total ~2.4s)
+  await desktopPage.waitForTimeout(2500);
 
-  // Expand "Обо мне"
-  const expandBtn = desktopPage.locator('button:has-text("Обо мне")').first();
-  if (await expandBtn.count() > 0) {
-    await expandBtn.click();
-    await desktopPage.waitForTimeout(600);
-    await desktopPage.screenshot({
-      path: path.join(outputDir, 'desktop_bio_expanded.png'),
-      fullPage: false,
-    });
-    console.log('Saved: desktop_bio_expanded.png');
-  }
+  // Capture Bio tab with "Bio" button and official brand avatars
+  await desktopPage.screenshot({
+    path: path.join(outputDir, 'desktop_bio_with_brand_avatars.png'),
+    fullPage: false,
+  });
+  console.log('Saved: desktop_bio_with_brand_avatars.png');
 
-  // Switch to My Work tab
+  // Switch to My Work
   const workTab = desktopPage.locator('button:has-text("My Work")');
   if (await workTab.count() > 0) {
     await workTab.first().click();
@@ -81,34 +67,6 @@ async function capture() {
       fullPage: false,
     });
     console.log('Saved: desktop_my_work.png');
-
-    // Click first project (MudroHub)
-    const firstProject = desktopPage.locator('text=MudroHub').first();
-    if (await firstProject.count() > 0) {
-      await firstProject.click();
-      await desktopPage.waitForTimeout(800);
-      await desktopPage.screenshot({
-        path: path.join(outputDir, 'desktop_modal_mudrohub.png'),
-        fullPage: false,
-      });
-      console.log('Saved: desktop_modal_mudrohub.png');
-
-      // Click next image in carousel to test sliding animation
-      const nextBtn = desktopPage.locator('button[aria-label="Следующий скриншот"]').first();
-      if (await nextBtn.count() > 0) {
-        await nextBtn.click();
-        await desktopPage.waitForTimeout(500);
-        await desktopPage.screenshot({
-          path: path.join(outputDir, 'desktop_modal_slide2.png'),
-          fullPage: false,
-        });
-        console.log('Saved: desktop_modal_slide2.png');
-      }
-
-      // Close modal
-      await desktopPage.keyboard.press('Escape');
-      await desktopPage.waitForTimeout(500);
-    }
   }
 
   await desktopContext.close();
@@ -122,43 +80,21 @@ async function capture() {
     hasTouch: true,
   });
   const mobilePage = await mobileContext.newPage();
-  await mobilePage.goto(url, { waitUntil: 'networkidle' });
-  await mobilePage.waitForTimeout(1200);
+  await mobilePage.goto(url);
 
-  // Mobile Bio
+  // Wait for splash screen to complete on mobile
+  await mobilePage.waitForTimeout(3000);
+
+  // Mobile Bio with Bio tab and official brand avatars
   await mobilePage.screenshot({
-    path: path.join(outputDir, 'mobile_bio.png'),
+    path: path.join(outputDir, 'mobile_bio_with_brand_avatars.png'),
     fullPage: false,
   });
-  console.log('Saved: mobile_bio.png');
-
-  // Switch to My Work
-  const mobileWorkTab = mobilePage.locator('button:has-text("My Work")');
-  if (await mobileWorkTab.count() > 0) {
-    await mobileWorkTab.first().click();
-    await mobilePage.waitForTimeout(800);
-    await mobilePage.screenshot({
-      path: path.join(outputDir, 'mobile_my_work.png'),
-      fullPage: false,
-    });
-    console.log('Saved: mobile_my_work.png');
-
-    // Open project modal on mobile
-    const mobileFirstProj = mobilePage.locator('text=MudroHub').first();
-    if (await mobileFirstProj.count() > 0) {
-      await mobileFirstProj.click();
-      await mobilePage.waitForTimeout(800);
-      await mobilePage.screenshot({
-        path: path.join(outputDir, 'mobile_modal.png'),
-        fullPage: false,
-      });
-      console.log('Saved: mobile_modal.png');
-    }
-  }
+  console.log('Saved: mobile_bio_with_brand_avatars.png');
 
   await mobileContext.close();
   await browser.close();
-  console.log('\nAll updated screenshots captured successfully!');
+  console.log('\nAll new screenshots captured successfully!');
 }
 
 capture().catch((err) => {

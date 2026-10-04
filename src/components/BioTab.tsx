@@ -4,6 +4,11 @@ import { ExternalLink, Copy, Check, ChevronDown } from "lucide-react";
 import { bioData } from "@/data/bio";
 import { socialLinks } from "@/data/socials";
 import { BlurFade } from "@/components/ui/blur-fade";
+import {
+  TelegramBrandAvatar,
+  DiscordBrandAvatar,
+  GithubBrandAvatar,
+} from "@/components/ui/brand-icons";
 
 interface BioTabProps {
   onShowToast: (message: string) => void;
@@ -21,6 +26,19 @@ export function BioTab({ onShowToast }: BioTabProps) {
       setTimeout(() => setCopiedId(null), 2000);
     } catch {
       onShowToast(`Скопировано: ${text}`);
+    }
+  };
+
+  const renderBrandAvatar = (id: string) => {
+    switch (id) {
+      case "telegram":
+        return <TelegramBrandAvatar className="h-12 w-12" />;
+      case "discord":
+        return <DiscordBrandAvatar className="h-12 w-12" />;
+      case "github":
+        return <GithubBrandAvatar className="h-12 w-12" />;
+      default:
+        return null;
     }
   };
 
@@ -84,7 +102,7 @@ export function BioTab({ onShowToast }: BioTabProps) {
         </section>
       </BlurFade>
 
-      {/* Social Media & Contact Cards with Stylized Real Avatars */}
+      {/* Social Media & Contact Cards with Stylized Official Avatars */}
       <BlurFade delay={0.25} inView>
         <section className="space-y-4">
           <div className="flex items-center justify-between">
@@ -105,18 +123,12 @@ export function BioTab({ onShowToast }: BioTabProps) {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative flex flex-col justify-between p-5 rounded-2xl border border-emerald-800/40 bg-[#091a12]/70 hover:bg-[#0c2419]/90 hover:border-emerald-400/60 transition-all duration-300 shadow-lg hover:shadow-[0_0_25px_rgba(34,197,94,0.2)]"
+                    className="group relative flex flex-col justify-between p-5 rounded-2xl border border-emerald-800/40 bg-[#091a12]/70 hover:bg-[#0c2419]/90 hover:border-emerald-400/60 transition-all duration-300 shadow-lg hover:shadow-[0_0_25px_rgba(34,197,94,0.2)] cursor-pointer"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-3.5">
-                        {/* Stylized Real Avatar */}
-                        <div className="relative h-12 w-12 rounded-full p-0.5 ring-2 ring-emerald-500/50 shadow-[0_0_15px_rgba(74,222,128,0.35)] group-hover:ring-emerald-400 group-hover:shadow-[0_0_20px_rgba(74,222,128,0.5)] transition-all">
-                          <img
-                            src={social.avatarUrl}
-                            alt={social.title}
-                            className="h-full w-full rounded-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
+                        {/* Stylized Official Brand Avatar */}
+                        {renderBrandAvatar(social.id)}
 
                         <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-950/60 border border-emerald-800/50 group-hover:border-emerald-500/50 transition-colors">
                           <ExternalLink className="h-3.5 w-3.5 text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -155,14 +167,8 @@ export function BioTab({ onShowToast }: BioTabProps) {
                 >
                   <div>
                     <div className="flex items-center justify-between mb-3.5">
-                      {/* Stylized Real Avatar */}
-                      <div className="relative h-12 w-12 rounded-full p-0.5 ring-2 ring-emerald-500/50 shadow-[0_0_15px_rgba(74,222,128,0.35)] group-hover:ring-emerald-400 group-hover:shadow-[0_0_20px_rgba(74,222,128,0.5)] transition-all">
-                        <img
-                          src={social.avatarUrl}
-                          alt={social.title}
-                          className="h-full w-full rounded-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
+                      {/* Stylized Official Brand Avatar */}
+                      {renderBrandAvatar(social.id)}
 
                       <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-950/60 border border-emerald-800/50 group-hover:border-emerald-500/50 transition-colors">
                         {isCopied ? (

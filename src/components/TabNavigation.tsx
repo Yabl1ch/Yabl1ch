@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { User, FolderGit2 } from "lucide-react";
 
-export type TabType = "about" | "work";
+export type TabType = "bio" | "work";
 
 interface TabNavigationProps {
   activeTab: TabType;
@@ -16,8 +16,8 @@ export function TabNavigation({
 }: TabNavigationProps) {
   const tabs = [
     {
-      id: "about" as const,
-      label: "About Me",
+      id: "bio" as const,
+      label: "Bio",
       icon: User,
     },
     {
@@ -39,7 +39,7 @@ export function TabNavigation({
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className="relative flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200 outline-none select-none interactive-cursor"
+              className="relative flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200 outline-none select-none cursor-pointer"
             >
               {/* Active animated pill sliding under the selected tab */}
               {isActive && (
