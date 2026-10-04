@@ -1,6 +1,5 @@
 import * as React from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Terminal, Sparkles, Cpu, Layers } from "lucide-react";
 import { BlurFade } from "@/components/ui/blur-fade";
 
 export function HeroHeader() {
@@ -36,7 +35,7 @@ export function HeroHeader() {
   };
 
   return (
-    <header className="relative flex flex-col items-center justify-center pt-12 pb-8 px-4 text-center">
+    <header className="relative flex flex-col items-center justify-center pt-12 pb-6 px-4 text-center">
       {/* 3D Tilt Avatar with Rotating Emerald Glow */}
       <BlurFade delay={0.1} inView>
         <div
@@ -96,7 +95,7 @@ export function HeroHeader() {
 
       {/* Interactive Per-Letter Name: "Yabl1ch" */}
       <BlurFade delay={0.2} inView>
-        <div className="flex items-center justify-center gap-1 sm:gap-1.5 mb-3">
+        <div className="flex items-center justify-center gap-1 sm:gap-1.5">
           {letters.map((char, index) => (
             <motion.span
               key={index}
@@ -116,35 +115,6 @@ export function HeroHeader() {
               {char}
             </motion.span>
           ))}
-        </div>
-      </BlurFade>
-
-      {/* Tagline / Subtitle */}
-      <BlurFade delay={0.3} inView>
-        <p className="max-w-xl text-base sm:text-lg text-emerald-200/80 font-medium leading-relaxed px-4">
-          Максим • Техноблогинг, ИИ & Автоматизация
-        </p>
-      </BlurFade>
-
-      {/* Interactive Badges with Lucide SVG icons */}
-      <BlurFade delay={0.4} inView>
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-          <div className="flex items-center gap-1.5 rounded-full border border-emerald-800/60 bg-[#0d2217]/70 px-3 py-1 text-xs font-medium text-emerald-300 shadow-sm backdrop-blur-md">
-            <Terminal className="h-3.5 w-3.5 text-emerald-400" />
-            <span>Bot Developer</span>
-          </div>
-          <div className="flex items-center gap-1.5 rounded-full border border-emerald-800/60 bg-[#0d2217]/70 px-3 py-1 text-xs font-medium text-emerald-300 shadow-sm backdrop-blur-md">
-            <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
-            <span>AI Enthusiast</span>
-          </div>
-          <div className="flex items-center gap-1.5 rounded-full border border-emerald-800/60 bg-[#0d2217]/70 px-3 py-1 text-xs font-medium text-emerald-300 shadow-sm backdrop-blur-md">
-            <Cpu className="h-3.5 w-3.5 text-emerald-400" />
-            <span>Automation</span>
-          </div>
-          <div className="flex items-center gap-1.5 rounded-full border border-emerald-800/60 bg-[#0d2217]/70 px-3 py-1 text-xs font-medium text-emerald-300 shadow-sm backdrop-blur-md">
-            <Layers className="h-3.5 w-3.5 text-emerald-400" />
-            <span>Vibe Coder</span>
-          </div>
         </div>
       </BlurFade>
     </header>

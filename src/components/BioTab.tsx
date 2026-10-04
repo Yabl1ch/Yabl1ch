@@ -1,7 +1,8 @@
 import * as React from "react";
-import { ExternalLink, Copy, Check, Send, Github, MessageSquare } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ExternalLink, Copy, Check, ChevronDown } from "lucide-react";
 import { bioData } from "@/data/bio";
-import { socialLinks, type SocialLink } from "@/data/socials";
+import { socialLinks } from "@/data/socials";
 import { BlurFade } from "@/components/ui/blur-fade";
 
 interface BioTabProps {
@@ -9,6 +10,7 @@ interface BioTabProps {
 }
 
 export function BioTab({ onShowToast }: BioTabProps) {
+  const [isBioExpanded, setIsBioExpanded] = React.useState(false);
   const [copiedId, setCopiedId] = React.useState<string | null>(null);
 
   const handleCopy = async (text: string, label: string, linkId: string) => {
@@ -22,57 +24,76 @@ export function BioTab({ onShowToast }: BioTabProps) {
     }
   };
 
-  const getSocialIcon = (id: SocialLink["id"]) => {
-    switch (id) {
-      case "telegram":
-        return <Send className="h-5 w-5 text-emerald-400 group-hover:scale-110 transition-transform" />;
-      case "github":
-        return <Github className="h-5 w-5 text-emerald-400 group-hover:scale-110 transition-transform" />;
-      case "discord":
-        return <MessageSquare className="h-5 w-5 text-emerald-400 group-hover:scale-110 transition-transform" />;
-    }
-  };
-
   return (
-    <div className="w-full max-w-3xl mx-auto space-y-8 px-4">
-      {/* About Me Exact Bio Card */}
+    <div className="w-full max-w-3xl mx-auto space-y-6 px-4">
+      {/* Expandable About Me Card */}
       <BlurFade delay={0.15} inView>
-        <section className="relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-[#0b1f16]/70 p-6 sm:p-8 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
-          {/* Subtle decorative corner accent */}
+        <section className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-[#0b1f16]/75 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-emerald-500/50">
+          {/* Decorative ambient corner glow */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl"
           />
 
-          <div className="relative space-y-4">
-            <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#4ade80]" />
-              Обо мне
-            </h2>
-
-            {/* EXACT TEXT PARAGRAPHS FROM ABOUTME.md */}
-            <div className="space-y-4 text-emerald-100/90 text-base sm:text-lg leading-relaxed font-normal">
-              {bioData.paragraphs.map((paragraph, index) => (
-                <p key={index} className="tracking-wide">
-                  {paragraph}
-                </p>
-              ))}
+          {/* Header (Clickable Accordion Trigger) */}
+          <button
+            onClick={() => setIsBioExpanded(!isBioExpanded)}
+            className="w-full flex items-center justify-between p-5 sm:p-6 text-left cursor-pointer select-none group focus:outline-none"
+            aria-expanded={isBioExpanded}
+          >
+            <div className="inline-flex items-center gap-3">
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#4ade80] shrink-0" />
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white group-hover:text-emerald-300 transition-colors">
+                Обо мне
+              </h2>
             </div>
-          </div>
+
+            <div className="flex items-center gap-2 rounded-lg bg-emerald-950/70 border border-emerald-800/60 px-3 py-1.5 text-xs font-medium text-emerald-300 group-hover:bg-emerald-900/60 group-hover:border-emerald-500/50 transition-all">
+              <span>{isBioExpanded ? "Свернуть" : "Развернуть"}</span>
+              <motion.div
+                animate={{ rotate: isBioExpanded ? 180 : 0 }}
+                transition={{ duration: 0.25, ease: "easeInOut" }}
+              >
+                <ChevronDown className="h-4 w-4 text-emerald-400" />
+              </motion.div>
+            </div>
+          </button>
+
+          {/* Collapsible Content */}
+          <AnimatePresence initial={false}>
+            {isBioExpanded && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="overflow-hidden"
+              >
+                <div className="px-5 sm:px-6 pb-6 pt-1 border-t border-emerald-900/50">
+                  <div className="space-y-4 text-emerald-100/90 text-sm sm:text-base leading-relaxed font-normal pt-4">
+                    {bioData.paragraphs.map((paragraph, index) => (
+                      <p key={index} className="tracking-wide">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </section>
       </BlurFade>
 
-      {/* Social Media & Contact Cards */}
+      {/* Social Media & Contact Cards with Stylized Real Avatars */}
       <BlurFade delay={0.25} inView>
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold tracking-tight text-white flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#4ade80]" />
-              Связь и соцсети
-            </h3>
-            <span className="text-xs text-emerald-400/60 uppercase tracking-widest font-mono">
-              Links & Contacts
-            </span>
+            <div className="inline-flex items-center gap-3">
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#4ade80] shrink-0" />
+              <h3 className="text-xl font-bold tracking-tight text-white">
+                Связь и соцсети
+              </h3>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -84,23 +105,33 @@ export function BioTab({ onShowToast }: BioTabProps) {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative flex flex-col justify-between p-5 rounded-xl border border-emerald-800/40 bg-[#091a12]/60 hover:bg-[#0c2419]/80 hover:border-emerald-500/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_20px_rgba(34,197,94,0.15)] interactive-cursor"
+                    className="group relative flex flex-col justify-between p-5 rounded-2xl border border-emerald-800/40 bg-[#091a12]/70 hover:bg-[#0c2419]/90 hover:border-emerald-400/60 transition-all duration-300 shadow-lg hover:shadow-[0_0_25px_rgba(34,197,94,0.2)]"
                   >
                     <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-950/80 border border-emerald-800/50">
-                          {getSocialIcon(social.id)}
+                      <div className="flex items-center justify-between mb-3.5">
+                        {/* Stylized Real Avatar */}
+                        <div className="relative h-12 w-12 rounded-full p-0.5 ring-2 ring-emerald-500/50 shadow-[0_0_15px_rgba(74,222,128,0.35)] group-hover:ring-emerald-400 group-hover:shadow-[0_0_20px_rgba(74,222,128,0.5)] transition-all">
+                          <img
+                            src={social.avatarUrl}
+                            alt={social.title}
+                            className="h-full w-full rounded-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
                         </div>
-                        <ExternalLink className="h-4 w-4 text-emerald-500/50 group-hover:text-emerald-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-950/60 border border-emerald-800/50 group-hover:border-emerald-500/50 transition-colors">
+                          <ExternalLink className="h-3.5 w-3.5 text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                        </div>
                       </div>
-                      <div className="font-semibold text-white group-hover:text-emerald-300 transition-colors">
+
+                      <div className="font-bold text-white text-base group-hover:text-emerald-300 transition-colors">
                         {social.title}
                       </div>
-                      <div className="text-sm font-mono text-emerald-400/80 mt-0.5">
+                      <div className="text-xs sm:text-sm font-mono text-emerald-400/90 mt-0.5">
                         {social.handle}
                       </div>
                     </div>
-                    <div className="mt-3 text-xs text-emerald-200/50 line-clamp-2">
+
+                    <div className="mt-3 text-xs text-emerald-200/60 line-clamp-2">
                       {social.description}
                     </div>
                   </a>
@@ -120,29 +151,37 @@ export function BioTab({ onShowToast }: BioTabProps) {
                       social.id
                     )
                   }
-                  className="group relative text-left flex flex-col justify-between p-5 rounded-xl border border-emerald-800/40 bg-[#091a12]/60 hover:bg-[#0c2419]/80 hover:border-emerald-500/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_20px_rgba(34,197,94,0.15)] interactive-cursor"
+                  className="group relative text-left flex flex-col justify-between p-5 rounded-2xl border border-emerald-800/40 bg-[#091a12]/70 hover:bg-[#0c2419]/90 hover:border-emerald-400/60 transition-all duration-300 shadow-lg hover:shadow-[0_0_25px_rgba(34,197,94,0.2)] cursor-pointer"
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-950/80 border border-emerald-800/50">
-                        {getSocialIcon(social.id)}
+                    <div className="flex items-center justify-between mb-3.5">
+                      {/* Stylized Real Avatar */}
+                      <div className="relative h-12 w-12 rounded-full p-0.5 ring-2 ring-emerald-500/50 shadow-[0_0_15px_rgba(74,222,128,0.35)] group-hover:ring-emerald-400 group-hover:shadow-[0_0_20px_rgba(74,222,128,0.5)] transition-all">
+                        <img
+                          src={social.avatarUrl}
+                          alt={social.title}
+                          className="h-full w-full rounded-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
                       </div>
-                      <div className="flex items-center gap-1 text-xs text-emerald-400/80 group-hover:text-emerald-300 font-mono">
+
+                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-950/60 border border-emerald-800/50 group-hover:border-emerald-500/50 transition-colors">
                         {isCopied ? (
-                          <Check className="h-4 w-4 text-emerald-400" />
+                          <Check className="h-3.5 w-3.5 text-emerald-300" />
                         ) : (
-                          <Copy className="h-4 w-4 text-emerald-500/60 group-hover:text-emerald-300 transition-colors" />
+                          <Copy className="h-3.5 w-3.5 text-emerald-400 group-hover:scale-110 transition-transform" />
                         )}
                       </div>
                     </div>
-                    <div className="font-semibold text-white group-hover:text-emerald-300 transition-colors">
+
+                    <div className="font-bold text-white text-base group-hover:text-emerald-300 transition-colors">
                       {social.title}
                     </div>
-                    <div className="text-sm font-mono text-emerald-400/80 mt-0.5">
+                    <div className="text-xs sm:text-sm font-mono text-emerald-400/90 mt-0.5">
                       {social.handle}
                     </div>
                   </div>
-                  <div className="mt-3 text-xs text-emerald-200/50 line-clamp-2">
+
+                  <div className="mt-3 text-xs text-emerald-200/60 line-clamp-2">
                     {social.description}
                   </div>
                 </button>

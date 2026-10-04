@@ -1,7 +1,6 @@
 import * as React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { AnimatedGrid } from "@/components/ui/animated-grid";
-import { CustomCursor } from "@/components/ui/custom-cursor";
 import { Toast } from "@/components/ui/toast";
 import { HeroHeader } from "@/components/HeroHeader";
 import { TabNavigation, type TabType } from "@/components/TabNavigation";
@@ -27,9 +26,6 @@ export function App() {
 
   return (
     <div className="relative min-h-screen w-full bg-[#07130e] text-[#f0fdf4] overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">
-      {/* Custom Glowing Green Cursor (Desktop Only) */}
-      <CustomCursor />
-
       {/* Floating AnimatedGrid Backdrop */}
       <AnimatedGrid
         size={42}
@@ -91,15 +87,11 @@ export function App() {
           </div>
         </main>
 
-        {/* Minimal Footer */}
+        {/* Clean Footer without crafted text */}
         <footer className="relative z-10 border-t border-emerald-950/70 py-6 px-4 text-center text-xs text-emerald-400/50">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-            <span className="flex items-center gap-1.5 font-medium text-emerald-300/70">
-              <Code2 className="h-3.5 w-3.5 text-emerald-400" />
-              Yabl1ch Portfolio
-            </span>
-            <span className="hidden sm:inline text-emerald-800">•</span>
-            <span>Crafted with React, TypeScript & Tailwind CSS</span>
+          <div className="flex items-center justify-center gap-1.5 font-medium text-emerald-300/70">
+            <Code2 className="h-3.5 w-3.5 text-emerald-400" />
+            <span>Yabl1ch Portfolio</span>
           </div>
         </footer>
       </div>
