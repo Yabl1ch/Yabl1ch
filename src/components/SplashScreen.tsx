@@ -76,8 +76,8 @@ const LEAVES_DATA: LeafConfig[] = Array.from({ length: 54 }, (_, i) => {
     rotX: 30 + ((i * 17) % 50),
     rotY: 25 + ((i * 23) % 55),
     scale: isForegroundFast ? 1.4 : scale,
-    delay: (i % 8) * 0.015, // 0.0s to 0.105s fast start
-    duration: 0.42 + (i % 6) * 0.025, // 0.42s to 0.545s swift convergence
+    delay: (i % 8) * 0.032, // 0.0s to 0.22s organic start
+    duration: 0.78 + (i % 6) * 0.045, // 0.78s to 1.0s flight and convergence
     gradientType: (i % 3) as 0 | 1 | 2,
     blur: isForegroundFast ? 1.2 : 0,
   };
@@ -159,34 +159,34 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
   const [leavesConverged, setLeavesConverged] = React.useState(false);
   const [progress, setProgress] = React.useState(0);
 
-  // Snappy progress bar and 0.9s total choreographed lifecycle
+  // Choreographed 1.6s total lifecycle
   React.useEffect(() => {
-    // 0 to 100% in ~550ms
+    // 0 to 100% in ~1000ms
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(progressInterval);
           return 100;
         }
-        const step = Math.floor(Math.random() * 9) + 8;
+        const step = Math.floor(Math.random() * 6) + 4;
         return Math.min(prev + step, 100);
       });
-    }, 32);
+    }, 45);
 
-    // Stage 1: Fast swirling leaves arrive & converge at center (~520ms)
+    // Stage 1: Swirling leaves arrive & converge at center (~1000ms)
     const convergeTimer = setTimeout(() => {
       setLeavesConverged(true);
-    }, 520);
+    }, 1000);
 
-    // Stage 2: Smooth exit begins (~650ms)
+    // Stage 2: Smooth exit begins (~1220ms)
     const exitTimer = setTimeout(() => {
       setIsExiting(true);
-    }, 650);
+    }, 1220);
 
-    // Stage 3: Exactly 0.9s (900ms) complete lifecycle
+    // Stage 3: Exactly 1.6s (1600ms) complete lifecycle
     const completeTimer = setTimeout(() => {
       onComplete();
-    }, 900);
+    }, 1600);
 
     return () => {
       clearInterval(progressInterval);
@@ -207,7 +207,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
             scale: 1.08,
             filter: "blur(14px)",
           }}
-          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#040f09] text-[#f0fdf4] overflow-hidden select-none"
         >
           {/* Shared SVG Gradients and Filters */}
@@ -355,7 +355,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
                     strokeLinecap="round"
                     initial={{ pathLength: 0, opacity: 0 }}
                     animate={{ pathLength: 1, opacity: 1 }}
-                    transition={{ duration: 0.35, delay: 0.1, ease: "easeInOut" }}
+                    transition={{ duration: 0.5, delay: 0.25, ease: "easeInOut" }}
                     filter="url(#splashGlow)"
                   />
 
@@ -371,9 +371,9 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
                     animate={{ scale: 1, rotate: 0, opacity: 1 }}
                     transition={{
                       type: "spring",
-                      stiffness: 300,
+                      stiffness: 260,
                       damping: 18,
-                      delay: 0.2,
+                      delay: 0.4,
                     }}
                   >
                     <motion.path
@@ -397,7 +397,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
                     fill="rgba(34, 197, 94, 0.18)"
                     initial={{ opacity: 0, scale: 0.92 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
+                    transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
                   />
 
                   {/* Apple Neon Outline */}
@@ -409,18 +409,18 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
                     strokeLinejoin="round"
                     initial={{ pathLength: 0 }}
                     animate={{ pathLength: 1 }}
-                    transition={{ duration: 0.45, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.75, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                     filter="url(#splashGlow)"
                   />
                 </svg>
               </div>
             </div>
 
-            {/* Glowing Brand Title and Snappy Progress */}
+            {/* Glowing Brand Title and Progress */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.2 }}
+              transition={{ duration: 0.4, delay: 0.35 }}
               className="mt-4 flex flex-col items-center gap-2.5 text-center"
             >
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-[0.28em] text-white uppercase font-mono drop-shadow-[0_0_12px_rgba(74,222,128,0.5)]">
