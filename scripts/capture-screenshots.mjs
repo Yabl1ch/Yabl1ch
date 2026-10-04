@@ -39,26 +39,26 @@ async function capture() {
   const desktopPage = await desktopContext.newPage();
   await desktopPage.goto(url);
 
-  // Capture Flying Leaves midway (after 1000ms)
-  await desktopPage.waitForTimeout(1000);
+  // Capture Flying Leaves flurry at ~300ms
+  await desktopPage.waitForTimeout(300);
   await desktopPage.screenshot({
     path: path.join(outputDir, 'desktop_apple_leaves_intro.png'),
     fullPage: false,
   });
   console.log('Saved: desktop_apple_leaves_intro.png');
 
-  // Capture Converged Leaves & Glowing Apple (after 2000ms)
-  await desktopPage.waitForTimeout(1000);
+  // Capture Converged Leaves around Glowing Apple at ~530ms
+  await desktopPage.waitForTimeout(230);
   await desktopPage.screenshot({
     path: path.join(outputDir, 'desktop_apple_leaves_converge.png'),
     fullPage: false,
   });
   console.log('Saved: desktop_apple_leaves_converge.png');
 
-  // Wait for splash screen to complete and content to reveal (total ~3.5s)
-  await desktopPage.waitForTimeout(1800);
+  // Wait for splash screen to complete (at ~1100ms)
+  await desktopPage.waitForTimeout(600);
 
-  // Capture Bio tab showing GitHub avatar with white contour and socials
+  // Capture Bio tab
   await desktopPage.screenshot({
     path: path.join(outputDir, 'desktop_bio_with_github_avatar.png'),
     fullPage: false,
@@ -78,8 +78,8 @@ async function capture() {
   const mobilePage = await mobileContext.newPage();
   await mobilePage.goto(url);
 
-  // Wait for splash screen to complete on mobile
-  await mobilePage.waitForTimeout(3800);
+  // Wait for splash screen (0.9s) to finish on mobile
+  await mobilePage.waitForTimeout(1300);
 
   // Mobile Bio with Bio tab and official brand avatars
   await mobilePage.screenshot({
