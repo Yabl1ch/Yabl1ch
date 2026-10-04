@@ -38,16 +38,16 @@ export function DiscordBrandAvatar({ className = "h-12 w-12" }: { className?: st
   );
 }
 
-/** Official GitHub Octocat Logo with stylized gradient and glowing ring */
+/** Official GitHub Octocat Logo with crisp white circular contour and zoomed-in icon */
 export function GithubBrandAvatar({ className = "h-12 w-12" }: { className?: string }) {
   return (
     <div
-      className={`relative rounded-full p-0.5 bg-gradient-to-tr from-[#1f2937] via-[#22c55e] to-[#4b5563] ring-2 ring-emerald-500/50 shadow-[0_0_15px_rgba(34,197,94,0.35)] group-hover:ring-emerald-400 group-hover:shadow-[0_0_22px_rgba(74,222,128,0.55)] transition-all shrink-0 ${className}`}
+      className={`relative rounded-full p-0.5 border-2 border-white ring-2 ring-white/40 shadow-[0_0_16px_rgba(255,255,255,0.35)] group-hover:border-white group-hover:ring-white/80 group-hover:shadow-[0_0_24px_rgba(255,255,255,0.6)] transition-all shrink-0 ${className}`}
     >
-      <div className="h-full w-full rounded-full bg-gradient-to-b from-[#181717] to-[#0d1117] flex items-center justify-center overflow-hidden">
+      <div className="h-full w-full rounded-full bg-[#0e1117] flex items-center justify-center overflow-hidden">
         <svg
           viewBox="0 0 24 24"
-          className="h-3/5 w-3/5 text-white"
+          className="h-[82%] w-[82%] text-white"
           fill="currentColor"
         >
           <path

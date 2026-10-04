@@ -39,35 +39,31 @@ async function capture() {
   const desktopPage = await desktopContext.newPage();
   await desktopPage.goto(url);
 
-  // Capture Splash Screen midway (after 700ms)
-  await desktopPage.waitForTimeout(700);
+  // Capture Flying Leaves midway (after 1000ms)
+  await desktopPage.waitForTimeout(1000);
   await desktopPage.screenshot({
-    path: path.join(outputDir, 'desktop_splash_screen.png'),
+    path: path.join(outputDir, 'desktop_apple_leaves_intro.png'),
     fullPage: false,
   });
-  console.log('Saved: desktop_splash_screen.png');
+  console.log('Saved: desktop_apple_leaves_intro.png');
 
-  // Wait for splash screen to complete and content to reveal (total ~2.4s)
-  await desktopPage.waitForTimeout(2500);
-
-  // Capture Bio tab with "Bio" button and official brand avatars
+  // Capture Converged Leaves & Glowing Apple (after 2000ms)
+  await desktopPage.waitForTimeout(1000);
   await desktopPage.screenshot({
-    path: path.join(outputDir, 'desktop_bio_with_brand_avatars.png'),
+    path: path.join(outputDir, 'desktop_apple_leaves_converge.png'),
     fullPage: false,
   });
-  console.log('Saved: desktop_bio_with_brand_avatars.png');
+  console.log('Saved: desktop_apple_leaves_converge.png');
 
-  // Switch to My Work
-  const workTab = desktopPage.locator('button:has-text("My Work")');
-  if (await workTab.count() > 0) {
-    await workTab.first().click();
-    await desktopPage.waitForTimeout(800);
-    await desktopPage.screenshot({
-      path: path.join(outputDir, 'desktop_my_work.png'),
-      fullPage: false,
-    });
-    console.log('Saved: desktop_my_work.png');
-  }
+  // Wait for splash screen to complete and content to reveal (total ~3.5s)
+  await desktopPage.waitForTimeout(1800);
+
+  // Capture Bio tab showing GitHub avatar with white contour and socials
+  await desktopPage.screenshot({
+    path: path.join(outputDir, 'desktop_bio_with_github_avatar.png'),
+    fullPage: false,
+  });
+  console.log('Saved: desktop_bio_with_github_avatar.png');
 
   await desktopContext.close();
 
@@ -83,7 +79,7 @@ async function capture() {
   await mobilePage.goto(url);
 
   // Wait for splash screen to complete on mobile
-  await mobilePage.waitForTimeout(3000);
+  await mobilePage.waitForTimeout(3800);
 
   // Mobile Bio with Bio tab and official brand avatars
   await mobilePage.screenshot({
@@ -98,6 +94,6 @@ async function capture() {
 }
 
 capture().catch((err) => {
-  console.error('Screenshot capture failed:', err);
+  console.error('Error during capture:', err);
   process.exit(1);
 });
