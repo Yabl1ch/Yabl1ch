@@ -116,7 +116,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 overflow-y-auto">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -132,12 +132,12 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 16 }}
           transition={{ type: "spring", stiffness: 350, damping: 28 }}
-          className={`relative z-10 w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-2xl border border-emerald-500/30 bg-[#091811]/95 text-white shadow-[0_0_50px_rgba(34,197,94,0.25)] backdrop-blur-2xl flex flex-col ${
-            isLightbox ? "max-w-6xl max-h-[96vh]" : ""
+          className={`relative z-10 w-full max-w-4xl max-h-[92dvh] sm:max-h-[92vh] overflow-y-auto rounded-2xl border border-emerald-500/30 bg-[#091811]/95 text-white shadow-[0_0_50px_rgba(34,197,94,0.25)] backdrop-blur-2xl flex flex-col ${
+            isLightbox ? "max-w-6xl max-h-[96dvh] sm:max-h-[96vh]" : ""
           }`}
         >
           {/* Header Bar */}
-          <div className="sticky top-0 z-20 flex items-center justify-between border-b border-emerald-900/60 bg-[#091811]/90 px-5 py-4 backdrop-blur-xl">
+          <div className="sticky top-0 z-20 flex items-center justify-between border-b border-emerald-900/60 bg-[#091811]/90 px-4 py-3 sm:px-5 sm:py-4 backdrop-blur-xl">
             <div className="flex items-center gap-3">
               <h2 className="text-lg sm:text-xl font-bold tracking-tight text-white">
                 {project.title}
@@ -167,7 +167,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           </div>
 
           {/* Main Content Area */}
-          <div className="p-5 sm:p-7 space-y-6">
+          <div className="p-4 sm:p-7 space-y-4 sm:space-y-6">
             {/* Interactive Animated Screenshot Carousel */}
             <div className="relative group/carousel rounded-2xl overflow-hidden border border-emerald-800/50 bg-[#050f0b] shadow-inner">
               <div className="relative aspect-video sm:aspect-[16/10] w-full flex items-center justify-center overflow-hidden">

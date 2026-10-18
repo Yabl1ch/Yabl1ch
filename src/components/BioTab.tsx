@@ -42,7 +42,7 @@ export function BioTab({ onShowToast }: BioTabProps) {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto space-y-6 px-4">
+    <div className="w-full max-w-3xl mx-auto space-y-4 sm:space-y-6 px-3 sm:px-4">
       {/* Expandable About Me Card */}
       <section className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-[#0b1f16]/75 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-emerald-500/50">
           {/* Decorative ambient corner glow */}
@@ -54,12 +54,12 @@ export function BioTab({ onShowToast }: BioTabProps) {
           {/* Header (Clickable Accordion Trigger) */}
           <button
             onClick={() => setIsBioExpanded(!isBioExpanded)}
-            className="w-full flex items-center justify-between p-5 sm:p-6 text-left cursor-pointer select-none group focus:outline-none"
+            className="w-full flex items-center justify-between p-4 sm:p-6 text-left cursor-pointer select-none group focus:outline-none touch-manipulation"
             aria-expanded={isBioExpanded}
           >
-            <div className="inline-flex items-center gap-3">
+            <div className="inline-flex items-center gap-2 sm:gap-3">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#4ade80] shrink-0" />
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white group-hover:text-emerald-300 transition-colors">
+              <h2 className="text-lg sm:text-2xl font-bold tracking-tight text-white group-hover:text-emerald-300 transition-colors">
                 Обо мне
               </h2>
             </div>
@@ -119,7 +119,7 @@ export function BioTab({ onShowToast }: BioTabProps) {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative flex flex-col justify-between p-5 rounded-2xl border border-emerald-800/40 bg-[#081a12]/60 backdrop-blur-md overflow-hidden transition-[transform,box-shadow,border-color,background-color,backdrop-filter] duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.015] hover:border-emerald-400/80 hover:bg-[#062417]/80 hover:backdrop-blur-3xl hover:shadow-[0_16px_40px_rgba(16,185,129,0.35),0_0_24px_rgba(52,211,153,0.22),inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-1px_3px_rgba(16,185,129,0.45),inset_0_0_24px_rgba(16,185,129,0.18)] cursor-pointer text-left will-change-transform"
+                    className="group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-emerald-800/40 bg-[#081a12]/60 backdrop-blur-md overflow-hidden transition-[transform,box-shadow,border-color,background-color,backdrop-filter] duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.015] active:scale-[0.98] touch-manipulation hover:border-emerald-400/80 hover:bg-[#062417]/80 hover:backdrop-blur-3xl hover:shadow-[0_16px_40px_rgba(16,185,129,0.35),0_0_24px_rgba(52,211,153,0.22),inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-1px_3px_rgba(16,185,129,0.45),inset_0_0_24px_rgba(16,185,129,0.18)] cursor-pointer text-left will-change-transform"
                   >
                     {/* Green Liquid Glass: Ambient caustic radial glow */}
                     <div
@@ -179,7 +179,7 @@ export function BioTab({ onShowToast }: BioTabProps) {
                       social.id
                     )
                   }
-                  className="group relative flex flex-col justify-between p-5 rounded-2xl border border-emerald-800/40 bg-[#081a12]/60 backdrop-blur-md overflow-hidden transition-[transform,box-shadow,border-color,background-color,backdrop-filter] duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.015] hover:border-emerald-400/80 hover:bg-[#062417]/80 hover:backdrop-blur-3xl hover:shadow-[0_16px_40px_rgba(16,185,129,0.35),0_0_24px_rgba(52,211,153,0.22),inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-1px_3px_rgba(16,185,129,0.45),inset_0_0_24px_rgba(16,185,129,0.18)] cursor-pointer text-left will-change-transform"
+                  className="group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-emerald-800/40 bg-[#081a12]/60 backdrop-blur-md overflow-hidden transition-[transform,box-shadow,border-color,background-color,backdrop-filter] duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.015] active:scale-[0.98] touch-manipulation hover:border-emerald-400/80 hover:bg-[#062417]/80 hover:backdrop-blur-3xl hover:shadow-[0_16px_40px_rgba(16,185,129,0.35),0_0_24px_rgba(52,211,153,0.22),inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-1px_3px_rgba(16,185,129,0.45),inset_0_0_24px_rgba(16,185,129,0.18)] cursor-pointer text-left will-change-transform"
                 >
                   {/* Green Liquid Glass: Ambient caustic radial glow */}
                   <div

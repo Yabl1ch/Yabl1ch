@@ -28,12 +28,12 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 space-y-6">
-      {/* Section Header & Google Public Profile Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-emerald-900/50 gap-3">
-        <div className="inline-flex items-center gap-3">
+    <div className="w-full max-w-5xl mx-auto px-3 sm:px-4 space-y-4 sm:space-y-6">
+      {/* Section Header & Google Public Profile Link */}
+      <div className="flex items-center justify-between pb-3 border-b border-emerald-900/50 gap-2">
+        <div className="inline-flex items-center gap-2 sm:gap-3">
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#4ade80] shrink-0" />
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+          <h2 className="text-lg sm:text-2xl font-bold tracking-tight text-white">
             Сертификаты
           </h2>
         </div>
@@ -43,21 +43,22 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
           href="https://www.skills.google/public_profiles/ff0cb930-aafd-45ad-ba31-a8d58aa189a2"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-950/80 border border-emerald-800/60 hover:bg-emerald-900/60 hover:border-emerald-500/50 text-emerald-300 transition-all shadow-sm group"
+          className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-950/80 border border-emerald-800/60 hover:bg-emerald-900/60 hover:border-emerald-500/50 text-emerald-300 transition-all shadow-sm group shrink-0 touch-manipulation"
         >
           <GoogleCloudLogo className="h-3.5 w-3.5" />
-          <span>Google Skills Профиль</span>
+          <span className="hidden sm:inline">Google Skills Профиль</span>
+          <span className="sm:hidden">Google Skills</span>
           <ExternalLink className="h-3 w-3 text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </a>
       </div>
 
       {/* Certificates Grid: instant rendering without delay */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {certificates.map((cert) => (
           <article
             key={cert.id}
             onClick={() => onSelectCertificate(cert)}
-            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:scale-[1.01] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer h-full will-change-transform"
+            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:scale-[1.01] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer h-full will-change-transform touch-manipulation active:scale-[0.98]"
           >
             {/* Ambient backlight glow on hover */}
             <div

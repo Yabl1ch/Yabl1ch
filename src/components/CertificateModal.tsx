@@ -100,7 +100,7 @@ export function CertificateModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 overflow-y-auto">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -116,12 +116,12 @@ export function CertificateModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 16 }}
           transition={{ type: "spring", stiffness: 350, damping: 28 }}
-          className={`relative z-10 w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-2xl border border-emerald-500/30 bg-[#091811]/95 text-white shadow-[0_0_50px_rgba(34,197,94,0.25)] backdrop-blur-2xl flex flex-col ${
-            isExpanded ? "max-w-6xl max-h-[96vh]" : ""
+          className={`relative z-10 w-full max-w-4xl max-h-[92dvh] sm:max-h-[92vh] overflow-y-auto rounded-2xl border border-emerald-500/30 bg-[#091811]/95 text-white shadow-[0_0_50px_rgba(34,197,94,0.25)] backdrop-blur-2xl flex flex-col ${
+            isExpanded ? "max-w-6xl max-h-[96dvh] sm:max-h-[96vh]" : ""
           }`}
         >
           {/* Header Bar */}
-          <div className="sticky top-0 z-20 flex items-center justify-between border-b border-emerald-900/60 bg-[#091811]/90 px-5 py-4 backdrop-blur-xl">
+          <div className="sticky top-0 z-20 flex items-center justify-between border-b border-emerald-900/60 bg-[#091811]/90 px-4 py-3 sm:px-5 sm:py-4 backdrop-blur-xl">
             <div className="flex items-center gap-3 min-w-0">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-950/80 border border-emerald-800/60">
                 {renderIssuerLogo(certificate.issuerLogo)}
@@ -161,7 +161,7 @@ export function CertificateModal({
           </div>
 
           {/* Main Modal Body */}
-          <div className="p-5 sm:p-7 space-y-6">
+          <div className="p-4 sm:p-7 space-y-4 sm:space-y-6">
             {/* Certificate Cover Display */}
             <div className="relative group rounded-2xl overflow-hidden border border-emerald-800/50 bg-[#050f0b] shadow-[inset_0_0_40px_rgba(0,0,0,0.8)] flex items-center justify-center p-4 sm:p-8">
               {/* Decorative radial lighting */}
@@ -334,7 +334,7 @@ export function CertificateModal({
           </div>
 
           {/* Modal Footer */}
-          <div className="border-t border-emerald-900/60 bg-[#071710]/80 px-6 py-4 flex items-center justify-between">
+          <div className="border-t border-emerald-900/60 bg-[#071710]/80 px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between">
             <span className="text-xs font-mono text-emerald-400/60">
               {certificate.orderNumber} / 05 • {certificate.title}
             </span>

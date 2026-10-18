@@ -8,24 +8,24 @@ interface WorksTabProps {
 
 export function WorksTab({ onSelectProject }: WorksTabProps) {
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 space-y-6">
+    <div className="w-full max-w-5xl mx-auto px-3 sm:px-4 space-y-4 sm:space-y-6">
       {/* Tab Section Header */}
       <div className="flex items-center justify-between pb-3 border-b border-emerald-900/50">
-        <div className="inline-flex items-center gap-3">
+        <div className="inline-flex items-center gap-2 sm:gap-3">
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#4ade80] shrink-0" />
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+          <h2 className="text-lg sm:text-2xl font-bold tracking-tight text-white">
             Мои работы
           </h2>
         </div>
       </div>
 
       {/* Projects Grid: strictly in requested order 1..4 with instant rendering */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {projects.map((project) => (
           <article
             key={project.id}
             onClick={() => onSelectProject(project)}
-            className="group relative flex flex-col rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:scale-[1.01] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer will-change-transform"
+            className="group relative flex flex-col rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:scale-[1.01] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer will-change-transform touch-manipulation active:scale-[0.98]"
           >
             {/* Ambient backlight glow on hover */}
             <div

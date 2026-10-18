@@ -34,7 +34,7 @@ export function HeroHeader() {
   };
 
   return (
-    <header className="relative flex flex-col items-center justify-center pt-12 pb-6 px-4 text-center">
+    <header className="relative flex flex-col items-center justify-center pt-8 sm:pt-12 pb-3 sm:pb-6 px-4 text-center">
       {/* 3D Tilt Avatar with Rotating Emerald Glow */}
       <motion.div
         initial={{ opacity: 0, scale: 0.92, y: 10 }}
@@ -46,7 +46,7 @@ export function HeroHeader() {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           style={{ perspective: 1000 }}
-          className="relative mb-6 cursor-pointer select-none group"
+          className="relative mb-4 sm:mb-6 cursor-pointer select-none group"
         >
           {/* Rotating gradient background glow */}
           <div
@@ -69,7 +69,7 @@ export function HeroHeader() {
             }}
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-full p-1 bg-gradient-to-b from-emerald-400/80 via-emerald-600/40 to-emerald-950/90 shadow-[0_0_30px_rgba(34,197,94,0.35)]"
+            className="relative h-24 w-24 sm:h-32 sm:w-32 rounded-full p-1 bg-gradient-to-b from-emerald-400/80 via-emerald-600/40 to-emerald-950/90 shadow-[0_0_30px_rgba(34,197,94,0.35)]"
           >
             <div className="relative h-full w-full rounded-full overflow-hidden border-2 border-emerald-400/60 bg-[#07130e]">
               <img
@@ -115,7 +115,7 @@ export function HeroHeader() {
               color: "#4ade80",
               textShadow: "0 0 20px rgba(74, 222, 128, 0.9)",
             }}
-            className="inline-block text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white cursor-pointer select-none transition-colors duration-200"
+            className="inline-block text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white cursor-pointer select-none transition-colors duration-200"
           >
             {char}
           </motion.span>
