@@ -44,12 +44,7 @@ export function BioTab({ onShowToast }: BioTabProps) {
   return (
     <div className="w-full max-w-3xl mx-auto space-y-6 px-4">
       {/* Expandable About Me Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-      >
-        <section className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-[#0b1f16]/75 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-emerald-500/50">
+      <section className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-[#0b1f16]/75 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-emerald-500/50">
           {/* Decorative ambient corner glow */}
           <div
             aria-hidden="true"
@@ -103,15 +98,9 @@ export function BioTab({ onShowToast }: BioTabProps) {
             )}
           </AnimatePresence>
         </section>
-      </motion.div>
 
       {/* Social Media & Contact Cards with Stylized Official Avatars */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-      >
-        <section className="space-y-4">
+      <section className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="inline-flex items-center gap-3">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#4ade80] shrink-0" />
@@ -242,9 +231,8 @@ export function BioTab({ onShowToast }: BioTabProps) {
             })}
           </div>
         </section>
-      </motion.div>
     </div>
   );
 }
 
-export default BioTab;
+export default React.memo(BioTab);

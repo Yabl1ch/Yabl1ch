@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import * as React from "react";
 import {
   ExternalLink,
   ShieldCheck,
@@ -30,12 +30,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
   return (
     <div className="w-full max-w-5xl mx-auto px-4 space-y-6">
       {/* Section Header & Google Public Profile Banner */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-emerald-900/50 gap-3"
-      >
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-emerald-900/50 gap-3">
         <div className="inline-flex items-center gap-3">
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#4ade80] shrink-0" />
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
@@ -54,20 +49,13 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
           <span>Google Skills Профиль</span>
           <ExternalLink className="h-3 w-3 text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </a>
-      </motion.div>
+      </div>
 
-      {/* Certificates Grid */}
+      {/* Certificates Grid: instant rendering without delay */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {certificates.map((cert, index) => (
-          <motion.article
+        {certificates.map((cert) => (
+          <article
             key={cert.id}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.28,
-              delay: index * 0.04,
-              ease: [0.16, 1, 0.3, 1],
-            }}
             onClick={() => onSelectCertificate(cert)}
             className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:scale-[1.01] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer h-full will-change-transform"
           >
@@ -185,11 +173,11 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
                 </div>
               </div>
             </div>
-          </motion.article>
+          </article>
         ))}
       </div>
     </div>
   );
 }
 
-export default CertificatesTab;
+export default React.memo(CertificatesTab);

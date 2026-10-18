@@ -1,6 +1,5 @@
 import * as React from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { BlurFade } from "@/components/ui/blur-fade";
 
 export function HeroHeader() {
   const letters = ["Y", "a", "b", "l", "1", "c", "h"];
@@ -37,7 +36,11 @@ export function HeroHeader() {
   return (
     <header className="relative flex flex-col items-center justify-center pt-12 pb-6 px-4 text-center">
       {/* 3D Tilt Avatar with Rotating Emerald Glow */}
-      <BlurFade delay={0.1} inView>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      >
         <div
           ref={cardRef}
           onMouseMove={handleMouseMove}
@@ -74,6 +77,7 @@ export function HeroHeader() {
                 alt="Yabl1ch Avatar"
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="eager"
+                decoding="async"
               />
               {/* Glass specular highlight overlay */}
               <div
@@ -91,36 +95,34 @@ export function HeroHeader() {
             </div>
           </motion.div>
         </div>
-      </BlurFade>
+      </motion.div>
 
       {/* Interactive Per-Letter Name: "Yabl1ch" */}
-      <BlurFade delay={0.2} inView>
-        <div className="flex items-center justify-center gap-1 sm:gap-1.5">
-          {letters.map((char, index) => (
-            <motion.span
-              key={index}
-              initial={{ opacity: 0, y: 14, filter: "blur(4px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{
-                delay: 0.08 + index * 0.045,
-                duration: 0.55,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              whileHover={{
-                y: -8,
-                scale: 1.18,
-                color: "#4ade80",
-                textShadow: "0 0 20px rgba(74, 222, 128, 0.9)",
-              }}
-              className="inline-block text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white cursor-pointer select-none transition-colors duration-200"
-            >
-              {char}
-            </motion.span>
-          ))}
-        </div>
-      </BlurFade>
+      <div className="flex items-center justify-center gap-1 sm:gap-1.5">
+        {letters.map((char, index) => (
+          <motion.span
+            key={index}
+            initial={{ opacity: 0, y: 14, filter: "blur(4px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{
+              delay: 0.08 + index * 0.045,
+              duration: 0.55,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            whileHover={{
+              y: -8,
+              scale: 1.18,
+              color: "#4ade80",
+              textShadow: "0 0 20px rgba(74, 222, 128, 0.9)",
+            }}
+            className="inline-block text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white cursor-pointer select-none transition-colors duration-200"
+          >
+            {char}
+          </motion.span>
+        ))}
+      </div>
     </header>
   );
 }
 
-export default HeroHeader;
+export default React.memo(HeroHeader);

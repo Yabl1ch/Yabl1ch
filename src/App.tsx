@@ -1,12 +1,12 @@
 import * as React from "react";
-import { AnimatePresence, motion, useScroll, useVelocity, useSpring, useTransform } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { AnimatedGrid } from "@/components/ui/animated-grid";
 import { Toast } from "@/components/ui/toast";
 import { HeroHeader } from "@/components/HeroHeader";
 import { TabNavigation, type TabType } from "@/components/TabNavigation";
-import { BioTab } from "@/components/BioTab";
-import { WorksTab } from "@/components/WorksTab";
-import { CertificatesTab } from "@/components/CertificatesTab";
+import BioTab from "@/components/BioTab";
+import WorksTab from "@/components/WorksTab";
+import CertificatesTab from "@/components/CertificatesTab";
 import { ProjectModal } from "@/components/ProjectModal";
 import { CertificateModal } from "@/components/CertificateModal";
 import { SplashScreen } from "@/components/SplashScreen";
@@ -15,6 +15,39 @@ import { projects } from "@/data/projects";
 import type { Certificate } from "@/data/certificates";
 import { certificates } from "@/data/certificates";
 import { Code2 } from "lucide-react";
+
+const TAB_INDICES: Record<TabType, number> = {
+  bio: 0,
+  work: 1,
+  certificates: 2,
+};
+
+const tabSlideVariants: Variants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 36 : direction < 0 ? -36 : 0,
+    opacity: 0,
+    transition: {
+      x: { type: "spring", stiffness: 440, damping: 34, mass: 0.7 },
+      opacity: { duration: 0.16, ease: "easeOut" },
+    },
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      x: { type: "spring", stiffness: 440, damping: 34, mass: 0.7 },
+      opacity: { duration: 0.16, ease: "easeOut" },
+    },
+  },
+  exit: (direction: number) => ({
+    x: direction < 0 ? 28 : -28,
+    opacity: 0,
+    transition: {
+      x: { duration: 0.09, ease: [0.32, 0, 0.67, 0] },
+      opacity: { duration: 0.08, ease: "linear" },
+    },
+  }),
+};
 
 export function App() {
   const [showSplash, setShowSplash] = React.useState(true);
@@ -29,32 +62,12 @@ export function App() {
   const handleTabChange = React.useCallback(
     (newTab: TabType) => {
       if (newTab === activeTab) return;
-      const tabIndices: Record<TabType, number> = {
-        bio: 0,
-        work: 1,
-        certificates: 2,
-      };
-      const currentIdx = tabIndices[activeTab];
-      const nextIdx = tabIndices[newTab];
+      const currentIdx = TAB_INDICES[activeTab];
+      const nextIdx = TAB_INDICES[newTab];
       setTabDirection(nextIdx > currentIdx ? 1 : -1);
       setActiveTab(newTab);
     },
     [activeTab]
-  );
-
-  // Microscopic scroll-linked motion blur
-  const { scrollY } = useScroll();
-  const scrollVelocity = useVelocity(scrollY);
-  const smoothVelocity = useSpring(scrollVelocity, {
-    damping: 45,
-    stiffness: 350,
-  });
-
-  // Maps velocity to an ultra-subtle blur (0px to 1px max)
-  const motionBlur = useTransform(
-    smoothVelocity,
-    [-1800, 0, 1800],
-    ["blur(1px)", "blur(0px)", "blur(1px)"]
   );
 
   const handleShowToast = React.useCallback((message: string) => {
@@ -73,24 +86,6 @@ export function App() {
     setShowSplash(false);
     setIsContentVisible(true);
   }, []);
-
-  const tabSlideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? "35%" : direction < 0 ? "-35%" : 0,
-      opacity: 0,
-      filter: "blur(3px)",
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-      filter: "blur(0px)",
-    },
-    exit: (direction: number) => ({
-      x: direction < 0 ? "35%" : "-35%",
-      opacity: 0,
-      filter: "blur(3px)",
-    }),
-  };
 
   return (
     <div className="relative min-h-screen w-full bg-[#07130e] text-[#f0fdf4] overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">
@@ -130,8 +125,7 @@ export function App() {
             ? { opacity: 1, y: 0 }
             : { opacity: 0, y: 16 }
         }
-        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-        style={{ filter: motionBlur }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 flex min-h-screen flex-col justify-between max-w-6xl mx-auto will-change-[transform,opacity]"
       >
         <main className="flex-1 pb-16">
@@ -146,7 +140,7 @@ export function App() {
             certificateCount={certificates.length}
           />
 
-          {/* Animated Directional Tab Content Switcher ("листание") */}
+          {/* Animated Directional Tab Content Switcher ("листание" без задержек) */}
           <div className="relative mt-4 overflow-hidden min-h-[480px]">
             <AnimatePresence mode="wait" custom={tabDirection} initial={false}>
               <motion.div
@@ -156,11 +150,6 @@ export function App() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 320, damping: 30 },
-                  opacity: { duration: 0.26, ease: "easeInOut" },
-                  filter: { duration: 0.26 },
-                }}
                 className="w-full will-change-transform"
               >
                 {activeTab === "bio" ? (
@@ -185,20 +174,26 @@ export function App() {
       </motion.div>
 
       {/* Project Lightbox & Details Modal */}
-      <ProjectModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
 
-      {/* Certificate Cover & Authenticity Verification Modal */}
-      <CertificateModal
-        certificate={selectedCertificate}
-        onClose={() => setSelectedCertificate(null)}
-        onShowToast={handleShowToast}
-      />
+      {/* Certificate Verification & Cover Modal */}
+      {selectedCertificate && (
+        <CertificateModal
+          certificate={selectedCertificate}
+          onClose={() => setSelectedCertificate(null)}
+          onShowToast={handleShowToast}
+        />
+      )}
 
-      {/* Copy Feedback Toast Notification */}
-      <Toast message={toastMessage} onClose={handleCloseToast} />
+      {/* Global Toast Notification */}
+      {toastMessage && (
+        <Toast message={toastMessage} onClose={handleCloseToast} />
+      )}
     </div>
   );
 }
