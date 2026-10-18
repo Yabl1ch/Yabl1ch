@@ -60,3 +60,37 @@ export function GithubBrandAvatar({ className = "h-12 w-12" }: { className?: str
     </div>
   );
 }
+
+/** Official Google Cloud stylized vector logo */
+export function GoogleCloudLogo({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"
+        fill="#4285F4"
+      />
+      <path
+        d="M19 18H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3z"
+        fill="#38BDF8"
+      />
+    </svg>
+  );
+}
+
+/** Official IBM 8-bar vector mark */
+export function IbmLogo({ className = "h-4 w-8" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 16" className={className} fill="currentColor">
+      <path d="M0 0h6v1.8H0zm0 2.4h6v1.8H0zm0 2.4h6v1.8H0zm0 2.4h6v1.8H0zm0 2.4h6v1.8H0zm0 2.4h6v1.8H0zm0 2.4h6v1.8H0zm9-16h11v1.8H9zm0 2.4h11v1.8H9zm0 2.4h4.5v1.8H9zm0 2.4h4.5v1.8H9zm0 2.4h11v1.8H9zm0 2.4h11v1.8H9zm14-12h9v1.8h-9zm0 2.4h3.5v1.8H23zm0 2.4h6v1.8H23zm0 2.4h6v1.8H23zm0 2.4h3.5v1.8H23zm0 2.4h9v1.8h-9z" />
+    </svg>
+  );
+}
+
+/** Official Kaggle vector logo */
+export function KaggleLogo({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+      <path d="M18.825 23.859c-.022.092-.117.141-.281.141h-3.139c-.187 0-.351-.082-.492-.246l-4.773-6.079-1.312 1.258v4.757c0 .223-.111.334-.333.334H5.852c-.222 0-.333-.111-.333-.334V.334C5.519.111 5.63 0 5.852 0h2.643c.222 0 .333.111.333.334v14.475l5.807-5.836c.141-.141.305-.211.492-.211h3.355c.164 0 .258.07.281.211.023.164-.035.281-.176.352l-5.643 5.496 5.854 8.761c.14.187.163.316.07.478z" />
+    </svg>
+  );
+}

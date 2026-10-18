@@ -1,18 +1,20 @@
 import { motion } from "framer-motion";
-import { User, FolderGit2 } from "lucide-react";
+import { User, FolderGit2, Award } from "lucide-react";
 
-export type TabType = "bio" | "work";
+export type TabType = "bio" | "work" | "certificates";
 
 interface TabNavigationProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
   workCount?: number;
+  certificateCount?: number;
 }
 
 export function TabNavigation({
   activeTab,
   onTabChange,
   workCount = 4,
+  certificateCount = 5,
 }: TabNavigationProps) {
   const tabs = [
     {
@@ -26,11 +28,17 @@ export function TabNavigation({
       icon: FolderGit2,
       badge: workCount,
     },
+    {
+      id: "certificates" as const,
+      label: "My certificates",
+      icon: Award,
+      badge: certificateCount,
+    },
   ];
 
   return (
-    <nav className="relative flex justify-center px-4 my-6 z-20">
-      <div className="relative flex items-center p-1.5 rounded-full glass-pill border border-emerald-500/30 bg-[#081a13]/85 shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
+    <nav className="relative flex justify-center px-2 sm:px-4 my-6 z-20">
+      <div className="relative flex items-center p-1 sm:p-1.5 rounded-full glass-pill border border-emerald-500/30 bg-[#081a13]/85 shadow-[0_4px_24px_rgba(0,0,0,0.6)] max-w-full overflow-x-auto scrollbar-none">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           const Icon = tab.icon;
@@ -39,7 +47,7 @@ export function TabNavigation({
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className="relative flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200 outline-none select-none cursor-pointer"
+              className="relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-200 outline-none select-none cursor-pointer shrink-0"
             >
               {/* Active animated pill sliding under the selected tab */}
               {isActive && (

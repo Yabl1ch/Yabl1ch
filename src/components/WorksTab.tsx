@@ -11,7 +11,7 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
   return (
     <div className="w-full max-w-5xl mx-auto px-4 space-y-6">
       {/* Tab Section Header */}
-      <BlurFade delay={0.1} inView>
+      <BlurFade delay={0.05}>
         <div className="flex items-center justify-between pb-3 border-b border-emerald-900/50">
           <div className="inline-flex items-center gap-3">
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#4ade80] shrink-0" />
@@ -25,7 +25,7 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
       {/* Projects Grid: strictly in requested order 1..4 with clean previews */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {projects.map((project, index) => (
-          <BlurFade key={project.id} delay={0.15 + index * 0.08} inView>
+          <BlurFade key={project.id} delay={0.06 + index * 0.05}>
             <motion.article
               whileHover={{ y: -6 }}
               transition={{ type: "spring", stiffness: 350, damping: 22 }}

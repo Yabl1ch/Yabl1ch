@@ -27,7 +27,7 @@ async function capture() {
     headless: true,
   });
 
-  const url = process.env.SITE_URL || 'http://127.0.0.1:5888';
+  const url = process.env.SITE_URL || 'http://127.0.0.1:5889';
   console.log('Capturing screenshots from:', url);
 
   // 1. Desktop Viewport (1920x1080)
@@ -37,33 +37,74 @@ async function capture() {
     deviceScaleFactor: 1,
   });
   const desktopPage = await desktopContext.newPage();
-  await desktopPage.goto(url, { waitUntil: 'commit' });
+  
+  // Listen for console errors
+  desktopPage.on('console', msg => console.log('PAGE LOG:', msg.text()));
+  desktopPage.on('pageerror', err => console.error('PAGE ERROR:', err));
 
-  // Capture Flying Leaves flurry early in animation (~350ms)
-  await desktopPage.waitForTimeout(350);
+  await desktopPage.goto(url, { waitUntil: 'domcontentloaded' });
+
+  // Capture glowing grid squares manifesting (~280ms into 0.5s phase)
+  await desktopPage.waitForTimeout(280);
   await desktopPage.screenshot({
-    path: path.join(outputDir, 'desktop_apple_leaves_intro.png'),
+    path: path.join(outputDir, 'desktop_grid_manifesting.png'),
     fullPage: false,
   });
-  console.log('Saved: desktop_apple_leaves_intro.png');
+  console.log('Saved: desktop_grid_manifesting.png');
 
-  // Capture Converged Leaves around apple emblem (~900ms)
-  await desktopPage.waitForTimeout(550);
+  // Capture content reveal (~600ms into 0.5s-0.7s reveal phase)
+  await desktopPage.waitForTimeout(320);
   await desktopPage.screenshot({
-    path: path.join(outputDir, 'desktop_apple_leaves_converge.png'),
+    path: path.join(outputDir, 'desktop_content_reveal.png'),
     fullPage: false,
   });
-  console.log('Saved: desktop_apple_leaves_converge.png');
+  console.log('Saved: desktop_content_reveal.png');
 
-  // Wait for 1.6s splash screen to complete (at ~2000ms total)
-  await desktopPage.waitForTimeout(1100);
+  // Wait for intro to complete (after 700ms total)
+  await desktopPage.waitForTimeout(400);
 
-  // Capture Bio tab after splash completes
+  // Capture Bio tab after intro completes
   await desktopPage.screenshot({
     path: path.join(outputDir, 'desktop_bio_with_github_avatar.png'),
     fullPage: false,
   });
   console.log('Saved: desktop_bio_with_github_avatar.png');
+
+  // Click on "My certificates" tab
+  console.log('Navigating to My certificates tab...');
+  await desktopPage.click('text="My certificates"');
+  await desktopPage.waitForTimeout(500);
+
+  // Capture "My certificates" grid view
+  await desktopPage.screenshot({
+    path: path.join(outputDir, 'desktop_certificates_tab.png'),
+    fullPage: false,
+  });
+  console.log('Saved: desktop_certificates_tab.png');
+
+  // Click on the first certificate to open CertificateModal
+  console.log('Opening CertificateModal for Introduction to Generative AI...');
+  await desktopPage.click('text="Introduction to Generative AI"');
+  await desktopPage.waitForTimeout(500);
+
+  // Verify verification link is present
+  const verifyLink = await desktopPage.getAttribute('a:has-text("Проверить подлинность")', 'href');
+  console.log('Found verification URL:', verifyLink);
+
+  // Capture modal view with cover & verification link
+  await desktopPage.screenshot({
+    path: path.join(outputDir, 'desktop_certificate_modal.png'),
+    fullPage: false,
+  });
+  console.log('Saved: desktop_certificate_modal.png');
+
+  // Test copy link button and toast
+  await desktopPage.click('button:has-text("Скопировать ссылку")');
+  await desktopPage.waitForTimeout(300);
+
+  // Close modal
+  await desktopPage.click('button:has-text("Закрыть")');
+  await desktopPage.waitForTimeout(400);
 
   await desktopContext.close();
 
@@ -76,10 +117,10 @@ async function capture() {
     hasTouch: true,
   });
   const mobilePage = await mobileContext.newPage();
-  await mobilePage.goto(url, { waitUntil: 'commit' });
+  await mobilePage.goto(url, { waitUntil: 'domcontentloaded' });
 
-  // Wait for 1.6s splash screen to finish on mobile
-  await mobilePage.waitForTimeout(2200);
+  // Wait for 0.7s intro to finish on mobile
+  await mobilePage.waitForTimeout(1000);
 
   // Mobile Bio with Bio tab and official brand avatars
   await mobilePage.screenshot({
@@ -87,6 +128,16 @@ async function capture() {
     fullPage: false,
   });
   console.log('Saved: mobile_bio_with_brand_avatars.png');
+
+  // Switch to My certificates on mobile
+  await mobilePage.click('text="My certificates"');
+  await mobilePage.waitForTimeout(500);
+
+  await mobilePage.screenshot({
+    path: path.join(outputDir, 'mobile_certificates_tab.png'),
+    fullPage: false,
+  });
+  console.log('Saved: mobile_certificates_tab.png');
 
   await mobileContext.close();
   await browser.close();

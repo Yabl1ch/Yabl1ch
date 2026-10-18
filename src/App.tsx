@@ -6,16 +6,22 @@ import { HeroHeader } from "@/components/HeroHeader";
 import { TabNavigation, type TabType } from "@/components/TabNavigation";
 import { BioTab } from "@/components/BioTab";
 import { WorksTab } from "@/components/WorksTab";
+import { CertificatesTab } from "@/components/CertificatesTab";
 import { ProjectModal } from "@/components/ProjectModal";
+import { CertificateModal } from "@/components/CertificateModal";
 import { SplashScreen } from "@/components/SplashScreen";
 import type { Project } from "@/data/projects";
 import { projects } from "@/data/projects";
+import type { Certificate } from "@/data/certificates";
+import { certificates } from "@/data/certificates";
 import { Code2 } from "lucide-react";
 
 export function App() {
   const [showSplash, setShowSplash] = React.useState(true);
+  const [isContentVisible, setIsContentVisible] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState<TabType>("bio");
   const [selectedProject, setSelectedProject] = React.useState<Project | null>(null);
+  const [selectedCertificate, setSelectedCertificate] = React.useState<Certificate | null>(null);
   const [toastMessage, setToastMessage] = React.useState<string | null>(null);
 
   // Microscopic scroll-linked motion blur
@@ -41,14 +47,24 @@ export function App() {
     setToastMessage(null);
   }, []);
 
+  const handleStartReveal = React.useCallback(() => {
+    setIsContentVisible(true);
+  }, []);
+
   const handleSplashComplete = React.useCallback(() => {
     setShowSplash(false);
+    setIsContentVisible(true);
   }, []);
 
   return (
     <div className="relative min-h-screen w-full bg-[#07130e] text-[#f0fdf4] overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">
-      {/* Apple & Leaf Intro Splash Screen */}
-      {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
+      {/* 0.7s Grid & Glowing Squares Intro Screen */}
+      {showSplash && (
+        <SplashScreen
+          onStartReveal={handleStartReveal}
+          onComplete={handleSplashComplete}
+        />
+      )}
 
       {/* Floating AnimatedGrid Backdrop */}
       <AnimatedGrid
@@ -70,20 +86,28 @@ export function App() {
         className="pointer-events-none fixed bottom-[-10%] right-[15%] h-[500px] w-[500px] rounded-full bg-emerald-500/10 blur-[140px] z-0"
       />
 
-      {/* Main Content with Microscopic Motion Blur */}
+      {/* Main Content with Timed 0.2s Reveal and Microscopic Motion Blur */}
       <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={
+          isContentVisible
+            ? { opacity: 1, y: 0 }
+            : { opacity: 0, y: 16 }
+        }
+        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
         style={{ filter: motionBlur }}
-        className="relative z-10 flex min-h-screen flex-col justify-between max-w-6xl mx-auto will-change-[filter]"
+        className="relative z-10 flex min-h-screen flex-col justify-between max-w-6xl mx-auto will-change-[transform,opacity]"
       >
         <main className="flex-1 pb-16">
           {/* Hero Header with 3D Tilt Avatar and Per-Letter Interactive Hover */}
           <HeroHeader />
 
-          {/* Segmented Control Tab Navigation (Bio / My Work) */}
+          {/* Segmented Control Tab Navigation (Bio / My Work / My certificates) */}
           <TabNavigation
             activeTab={activeTab}
             onTabChange={setActiveTab}
             workCount={projects.length}
+            certificateCount={certificates.length}
           />
 
           {/* Animated Tab Content Switcher */}
@@ -92,22 +116,32 @@ export function App() {
               {activeTab === "bio" ? (
                 <motion.div
                   key="bio-tab"
-                  initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, y: -12, filter: "blur(6px)" }}
-                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
                 >
                   <BioTab onShowToast={handleShowToast} />
                 </motion.div>
-              ) : (
+              ) : activeTab === "work" ? (
                 <motion.div
                   key="work-tab"
-                  initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, y: -12, filter: "blur(6px)" }}
-                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
                 >
                   <WorksTab onSelectProject={setSelectedProject} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="certificates-tab"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                >
+                  <CertificatesTab onSelectCertificate={setSelectedCertificate} />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -127,6 +161,13 @@ export function App() {
       <ProjectModal
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
+      />
+
+      {/* Certificate Cover & Authenticity Verification Modal */}
+      <CertificateModal
+        certificate={selectedCertificate}
+        onClose={() => setSelectedCertificate(null)}
+        onShowToast={handleShowToast}
       />
 
       {/* Copy Feedback Toast Notification */}
