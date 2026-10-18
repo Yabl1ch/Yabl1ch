@@ -31,9 +31,9 @@ async function benchmark() {
   });
   const page = await context.newPage();
 
-  await page.goto(url, { waitUntil: 'domcontentloaded' });
+  await page.goto(url, { waitUntil: 'networkidle' });
   // Wait for 0.7s intro and initial content reveal to settle
-  await page.waitForTimeout(1200);
+  await page.waitForTimeout(1000);
 
   // 1. Benchmark Bio -> My Work
   console.log('\n--- Test 1: Switch to "My Work" ---');
