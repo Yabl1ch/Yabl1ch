@@ -90,7 +90,7 @@ export function CertificateModal({
       case "google":
         return <GoogleCloudLogo className="h-5 w-5" />;
       case "ibm":
-        return <IbmLogo className="h-3.5 w-7 text-[#0062ff]" />;
+        return <IbmLogo className="h-3.5 w-8 text-[#0062ff]" />;
       case "kaggle":
         return <KaggleLogo className="h-5 w-5 text-[#20beff]" />;
       default:

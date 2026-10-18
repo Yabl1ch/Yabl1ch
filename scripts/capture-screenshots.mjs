@@ -70,10 +70,20 @@ async function capture() {
   });
   console.log('Saved: desktop_bio_with_github_avatar.png');
 
+  // Hover over Telegram social card to test green liquid glass
+  console.log('Hovering on social card to capture green liquid glass effect...');
+  await desktopPage.hover('text="Telegram"');
+  await desktopPage.waitForTimeout(600);
+  await desktopPage.screenshot({
+    path: path.join(outputDir, 'desktop_social_liquid_glass.png'),
+    fullPage: false,
+  });
+  console.log('Saved: desktop_social_liquid_glass.png');
+
   // Click on "My certificates" tab
   console.log('Navigating to My certificates tab...');
   await desktopPage.click('text="My certificates"');
-  await desktopPage.waitForTimeout(500);
+  await desktopPage.waitForTimeout(600);
 
   // Capture "My certificates" grid view
   await desktopPage.screenshot({
@@ -81,6 +91,16 @@ async function capture() {
     fullPage: false,
   });
   console.log('Saved: desktop_certificates_tab.png');
+
+  // Hover over the IBM certificate card to test smooth hover
+  console.log('Hovering on IBM certificate card...');
+  await desktopPage.hover('text="Artificial Intelligence Fundamentals"');
+  await desktopPage.waitForTimeout(600);
+  await desktopPage.screenshot({
+    path: path.join(outputDir, 'desktop_certificate_hover.png'),
+    fullPage: false,
+  });
+  console.log('Saved: desktop_certificate_hover.png');
 
   // Click on the first certificate to open CertificateModal
   console.log('Opening CertificateModal for Introduction to Generative AI...');

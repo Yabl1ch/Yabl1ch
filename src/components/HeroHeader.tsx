@@ -99,16 +99,18 @@ export function HeroHeader() {
           {letters.map((char, index) => (
             <motion.span
               key={index}
+              initial={{ opacity: 0, y: 14, filter: "blur(4px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{
+                delay: 0.08 + index * 0.045,
+                duration: 0.55,
+                ease: [0.16, 1, 0.3, 1],
+              }}
               whileHover={{
                 y: -8,
                 scale: 1.18,
                 color: "#4ade80",
                 textShadow: "0 0 20px rgba(74, 222, 128, 0.9)",
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 450,
-                damping: 14,
               }}
               className="inline-block text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white cursor-pointer select-none transition-colors duration-200"
             >

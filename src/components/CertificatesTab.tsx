@@ -19,7 +19,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
       case "google":
         return <GoogleCloudLogo className="h-4 w-4" />;
       case "ibm":
-        return <IbmLogo className="h-3 w-6 text-[#0062ff]" />;
+        return <IbmLogo className="h-3 w-7 text-[#0062ff]" />;
       case "kaggle":
         return <KaggleLogo className="h-4 w-4 text-[#20beff]" />;
       default:
@@ -39,11 +39,8 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
         <div className="inline-flex items-center gap-3">
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#4ade80] shrink-0" />
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
-            Сертификаты и бейджи
+            Сертификаты
           </h2>
-          <span className="px-2 py-0.5 rounded-full text-xs font-mono bg-emerald-950/80 border border-emerald-800/60 text-emerald-300">
-            {certificates.length} подтверждено
-          </span>
         </div>
 
         {/* Master Google Skills Profile Quick Link */}
@@ -71,16 +68,27 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
               delay: index * 0.04,
               ease: [0.16, 1, 0.3, 1],
             }}
-            whileHover={{ y: -6 }}
             onClick={() => onSelectCertificate(cert)}
-            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-all duration-300 hover:border-emerald-400/60 hover:shadow-[0_0_35px_rgba(34,197,94,0.25)] cursor-pointer h-full"
+            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:scale-[1.01] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer h-full will-change-transform"
           >
+            {/* Ambient backlight glow on hover */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-tr from-emerald-500/0 via-emerald-400/20 to-emerald-500/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-700 ease-out z-0"
+            />
+
+            {/* Specular glass reflection layer */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.04] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"
+            />
+
             {/* Cover Image Container */}
-            <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#050f0b] flex items-center justify-center p-6 border-b border-emerald-900/40">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#050f0b] flex items-center justify-center p-6 border-b border-emerald-900/40 z-10">
               <img
                 src={cert.imageUrl}
                 alt={cert.title}
-                className="max-h-full max-w-full object-contain transition-transform duration-500 ease-out group-hover:scale-105 select-none"
+                className="max-h-full max-w-full object-contain transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04] select-none"
                 loading="lazy"
               />
 

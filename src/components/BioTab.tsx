@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Copy, Check, ChevronDown } from "lucide-react";
 import { bioData } from "@/data/bio";
 import { socialLinks } from "@/data/socials";
-import { BlurFade } from "@/components/ui/blur-fade";
 import {
   TelegramBrandAvatar,
   DiscordBrandAvatar,
@@ -45,7 +44,11 @@ export function BioTab({ onShowToast }: BioTabProps) {
   return (
     <div className="w-full max-w-3xl mx-auto space-y-6 px-4">
       {/* Expandable About Me Card */}
-      <BlurFade delay={0.15} inView>
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+      >
         <section className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-[#0b1f16]/75 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-emerald-500/50">
           {/* Decorative ambient corner glow */}
           <div
@@ -100,10 +103,14 @@ export function BioTab({ onShowToast }: BioTabProps) {
             )}
           </AnimatePresence>
         </section>
-      </BlurFade>
+      </motion.div>
 
       {/* Social Media & Contact Cards with Stylized Official Avatars */}
-      <BlurFade delay={0.25} inView>
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+      >
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="inline-flex items-center gap-3">
@@ -123,28 +130,48 @@ export function BioTab({ onShowToast }: BioTabProps) {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative flex flex-col justify-between p-5 rounded-2xl border border-emerald-800/40 bg-[#091a12]/70 hover:bg-[#0c2419]/90 hover:border-emerald-400/60 transition-all duration-300 shadow-lg hover:shadow-[0_0_25px_rgba(34,197,94,0.2)] cursor-pointer"
+                    className="group relative flex flex-col justify-between p-5 rounded-2xl border border-emerald-800/40 bg-[#081a12]/60 backdrop-blur-md overflow-hidden transition-[transform,box-shadow,border-color,background-color,backdrop-filter] duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.015] hover:border-emerald-400/80 hover:bg-[#062417]/80 hover:backdrop-blur-3xl hover:shadow-[0_16px_40px_rgba(16,185,129,0.35),0_0_24px_rgba(52,211,153,0.22),inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-1px_3px_rgba(16,185,129,0.45),inset_0_0_24px_rgba(16,185,129,0.18)] cursor-pointer text-left will-change-transform"
                   >
-                    <div>
-                      <div className="flex items-center justify-between mb-3.5">
-                        {/* Stylized Official Brand Avatar */}
-                        {renderBrandAvatar(social.id)}
+                    {/* Green Liquid Glass: Ambient caustic radial glow */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute -inset-[100%] bg-[radial-gradient(circle_at_35%_25%,_rgba(52,211,153,0.32),_rgba(16,185,129,0.12)_40%,_transparent_75%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out z-0"
+                    />
 
-                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-950/60 border border-emerald-800/50 group-hover:border-emerald-500/50 transition-colors">
-                          <ExternalLink className="h-3.5 w-3.5 text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    {/* Green Liquid Glass: Specular top-light prism refraction */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.12] via-emerald-400/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out z-0"
+                    />
+
+                    {/* Green Liquid Glass: Diagonal refractive sheen ray */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-emerald-300/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-out z-0"
+                    />
+
+                    <div className="relative z-10 flex flex-col justify-between h-full">
+                      <div>
+                        <div className="flex items-center justify-between mb-3.5">
+                          {/* Stylized Official Brand Avatar */}
+                          {renderBrandAvatar(social.id)}
+
+                          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-950/60 border border-emerald-800/50 group-hover:border-emerald-400/70 group-hover:bg-emerald-900/50 transition-colors">
+                            <ExternalLink className="h-3.5 w-3.5 text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                          </div>
+                        </div>
+
+                        <div className="font-bold text-white text-base group-hover:text-emerald-200 transition-colors">
+                          {social.title}
+                        </div>
+                        <div className="text-xs sm:text-sm font-mono text-emerald-400/90 mt-0.5">
+                          {social.handle}
                         </div>
                       </div>
 
-                      <div className="font-bold text-white text-base group-hover:text-emerald-300 transition-colors">
-                        {social.title}
+                      <div className="mt-3 text-xs text-emerald-200/60 group-hover:text-emerald-100/75 transition-colors line-clamp-2">
+                        {social.description}
                       </div>
-                      <div className="text-xs sm:text-sm font-mono text-emerald-400/90 mt-0.5">
-                        {social.handle}
-                      </div>
-                    </div>
-
-                    <div className="mt-3 text-xs text-emerald-200/60 line-clamp-2">
-                      {social.description}
                     </div>
                   </a>
                 );
@@ -163,39 +190,59 @@ export function BioTab({ onShowToast }: BioTabProps) {
                       social.id
                     )
                   }
-                  className="group relative text-left flex flex-col justify-between p-5 rounded-2xl border border-emerald-800/40 bg-[#091a12]/70 hover:bg-[#0c2419]/90 hover:border-emerald-400/60 transition-all duration-300 shadow-lg hover:shadow-[0_0_25px_rgba(34,197,94,0.2)] cursor-pointer"
+                  className="group relative flex flex-col justify-between p-5 rounded-2xl border border-emerald-800/40 bg-[#081a12]/60 backdrop-blur-md overflow-hidden transition-[transform,box-shadow,border-color,background-color,backdrop-filter] duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.015] hover:border-emerald-400/80 hover:bg-[#062417]/80 hover:backdrop-blur-3xl hover:shadow-[0_16px_40px_rgba(16,185,129,0.35),0_0_24px_rgba(52,211,153,0.22),inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-1px_3px_rgba(16,185,129,0.45),inset_0_0_24px_rgba(16,185,129,0.18)] cursor-pointer text-left will-change-transform"
                 >
-                  <div>
-                    <div className="flex items-center justify-between mb-3.5">
-                      {/* Stylized Official Brand Avatar */}
-                      {renderBrandAvatar(social.id)}
+                  {/* Green Liquid Glass: Ambient caustic radial glow */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -inset-[100%] bg-[radial-gradient(circle_at_35%_25%,_rgba(52,211,153,0.32),_rgba(16,185,129,0.12)_40%,_transparent_75%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out z-0"
+                  />
 
-                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-950/60 border border-emerald-800/50 group-hover:border-emerald-500/50 transition-colors">
-                        {isCopied ? (
-                          <Check className="h-3.5 w-3.5 text-emerald-300" />
-                        ) : (
-                          <Copy className="h-3.5 w-3.5 text-emerald-400 group-hover:scale-110 transition-transform" />
-                        )}
+                  {/* Green Liquid Glass: Specular top-light prism refraction */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.12] via-emerald-400/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out z-0"
+                  />
+
+                  {/* Green Liquid Glass: Diagonal refractive sheen ray */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-emerald-300/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-out z-0"
+                  />
+
+                  <div className="relative z-10 flex flex-col justify-between h-full">
+                    <div>
+                      <div className="flex items-center justify-between mb-3.5">
+                        {/* Stylized Official Brand Avatar */}
+                        {renderBrandAvatar(social.id)}
+
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-950/60 border border-emerald-800/50 group-hover:border-emerald-400/70 group-hover:bg-emerald-900/50 transition-colors">
+                          {isCopied ? (
+                            <Check className="h-3.5 w-3.5 text-emerald-300" />
+                          ) : (
+                            <Copy className="h-3.5 w-3.5 text-emerald-400 group-hover:scale-110 transition-transform" />
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="font-bold text-white text-base group-hover:text-emerald-200 transition-colors">
+                        {social.title}
+                      </div>
+                      <div className="text-xs sm:text-sm font-mono text-emerald-400/90 mt-0.5">
+                        {social.handle}
                       </div>
                     </div>
 
-                    <div className="font-bold text-white text-base group-hover:text-emerald-300 transition-colors">
-                      {social.title}
+                    <div className="mt-3 text-xs text-emerald-200/60 group-hover:text-emerald-100/75 transition-colors line-clamp-2">
+                      {social.description}
                     </div>
-                    <div className="text-xs sm:text-sm font-mono text-emerald-400/90 mt-0.5">
-                      {social.handle}
-                    </div>
-                  </div>
-
-                  <div className="mt-3 text-xs text-emerald-200/60 line-clamp-2">
-                    {social.description}
                   </div>
                 </button>
               );
             })}
           </div>
         </section>
-      </BlurFade>
+      </motion.div>
     </div>
   );
 }

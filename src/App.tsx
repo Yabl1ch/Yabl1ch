@@ -24,6 +24,24 @@ export function App() {
   const [selectedCertificate, setSelectedCertificate] = React.useState<Certificate | null>(null);
   const [toastMessage, setToastMessage] = React.useState<string | null>(null);
 
+  const [tabDirection, setTabDirection] = React.useState<number>(0);
+
+  const handleTabChange = React.useCallback(
+    (newTab: TabType) => {
+      if (newTab === activeTab) return;
+      const tabIndices: Record<TabType, number> = {
+        bio: 0,
+        work: 1,
+        certificates: 2,
+      };
+      const currentIdx = tabIndices[activeTab];
+      const nextIdx = tabIndices[newTab];
+      setTabDirection(nextIdx > currentIdx ? 1 : -1);
+      setActiveTab(newTab);
+    },
+    [activeTab]
+  );
+
   // Microscopic scroll-linked motion blur
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
@@ -56,6 +74,24 @@ export function App() {
     setIsContentVisible(true);
   }, []);
 
+  const tabSlideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? "35%" : direction < 0 ? "-35%" : 0,
+      opacity: 0,
+      filter: "blur(3px)",
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      filter: "blur(0px)",
+    },
+    exit: (direction: number) => ({
+      x: direction < 0 ? "35%" : "-35%",
+      opacity: 0,
+      filter: "blur(3px)",
+    }),
+  };
+
   return (
     <div className="relative min-h-screen w-full bg-[#07130e] text-[#f0fdf4] overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">
       {/* 0.7s Grid & Glowing Squares Intro Screen */}
@@ -86,7 +122,7 @@ export function App() {
         className="pointer-events-none fixed bottom-[-10%] right-[15%] h-[500px] w-[500px] rounded-full bg-emerald-500/10 blur-[140px] z-0"
       />
 
-      {/* Main Content with Timed 0.2s Reveal and Microscopic Motion Blur */}
+      {/* Main Content with Timed Smooth Reveal */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={
@@ -94,7 +130,7 @@ export function App() {
             ? { opacity: 1, y: 0 }
             : { opacity: 0, y: 16 }
         }
-        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
         style={{ filter: motionBlur }}
         className="relative z-10 flex min-h-screen flex-col justify-between max-w-6xl mx-auto will-change-[transform,opacity]"
       >
@@ -105,45 +141,36 @@ export function App() {
           {/* Segmented Control Tab Navigation (Bio / My Work / My certificates) */}
           <TabNavigation
             activeTab={activeTab}
-            onTabChange={setActiveTab}
+            onTabChange={handleTabChange}
             workCount={projects.length}
             certificateCount={certificates.length}
           />
 
-          {/* Animated Tab Content Switcher */}
-          <div className="relative mt-4">
-            <AnimatePresence mode="wait">
-              {activeTab === "bio" ? (
-                <motion.div
-                  key="bio-tab"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                >
+          {/* Animated Directional Tab Content Switcher ("листание") */}
+          <div className="relative mt-4 overflow-hidden min-h-[480px]">
+            <AnimatePresence mode="wait" custom={tabDirection} initial={false}>
+              <motion.div
+                key={activeTab}
+                custom={tabDirection}
+                variants={tabSlideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  x: { type: "spring", stiffness: 320, damping: 30 },
+                  opacity: { duration: 0.26, ease: "easeInOut" },
+                  filter: { duration: 0.26 },
+                }}
+                className="w-full will-change-transform"
+              >
+                {activeTab === "bio" ? (
                   <BioTab onShowToast={handleShowToast} />
-                </motion.div>
-              ) : activeTab === "work" ? (
-                <motion.div
-                  key="work-tab"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                >
+                ) : activeTab === "work" ? (
                   <WorksTab onSelectProject={setSelectedProject} />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="certificates-tab"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                >
+                ) : (
                   <CertificatesTab onSelectCertificate={setSelectedCertificate} />
-                </motion.div>
-              )}
+                )}
+              </motion.div>
             </AnimatePresence>
           </div>
         </main>
