@@ -106,18 +106,14 @@ export function HeroHeader() {
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{
               delay: 0.08 + index * 0.045,
-              duration: 0.55,
+              duration: 0.45,
               ease: [0.16, 1, 0.3, 1],
             }}
-            whileHover={{
-              y: -8,
-              scale: 1.18,
-              color: "#4ade80",
-              textShadow: "0 0 20px rgba(74, 222, 128, 0.9)",
-            }}
-            className="inline-block text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white cursor-pointer select-none transition-colors duration-200"
+            className="relative inline-block py-2 -my-2 group/char cursor-pointer select-none"
           >
-            {char}
+            <span className="inline-block text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white transition-[transform,color,filter] duration-200 ease-out will-change-[transform,color,filter] group-hover/char:-translate-y-2 group-hover/char:scale-110 group-hover/char:text-emerald-400 group-hover/char:drop-shadow-[0_0_16px_rgba(74,222,128,0.85)]">
+              {char}
+            </span>
           </motion.span>
         ))}
       </div>
