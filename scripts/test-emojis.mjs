@@ -31,7 +31,7 @@ let foundEmojis = 0;
 for (const file of filesToCheck) {
   if (!fs.existsSync(file)) continue;
   // skip binary files if any
-  if (file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.ico') || file.endsWith('.webp') || file.endsWith('.pdf')) continue;
+  if (file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.ico') || file.endsWith('.webp') || file.endsWith('.avif') || file.endsWith('.pdf')) continue;
   const content = fs.readFileSync(file, 'utf8');
   const lines = content.split('\n');
   lines.forEach((line, idx) => {

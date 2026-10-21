@@ -29,7 +29,7 @@ export const certificates: Certificate[] = [
     credentialId: "28934995",
     verifyUrl:
       "https://www.skills.google/public_profiles/ff0cb930-aafd-45ad-ba31-a8d58aa189a2/badges/28934995",
-    imageUrl: "./certificates/google-intro-genai.png",
+    imageUrl: "./certificates/google-intro-genai.avif",
     pdfUrl: "./certificates/google-intro-genai.pdf",
     skills: ["Generative AI", "Deep Learning", "Google Cloud", "AI Ethics"],
     description:
@@ -47,7 +47,7 @@ export const certificates: Certificate[] = [
     credentialId: "28935144",
     verifyUrl:
       "https://www.skills.google/public_profiles/ff0cb930-aafd-45ad-ba31-a8d58aa189a2/badges/28935144",
-    imageUrl: "./certificates/google-intro-llm.png",
+    imageUrl: "./certificates/google-intro-llm.avif",
     pdfUrl: "./certificates/google-intro-llm.pdf",
     skills: ["Large Language Models", "NLP", "Prompt Tuning", "Transformers"],
     description:
@@ -65,7 +65,7 @@ export const certificates: Certificate[] = [
     credentialId: "28935156",
     verifyUrl:
       "https://www.skills.google/public_profiles/ff0cb930-aafd-45ad-ba31-a8d58aa189a2/badges/28935156",
-    imageUrl: "./certificates/google-responsible-ai.png",
+    imageUrl: "./certificates/google-responsible-ai.avif",
     pdfUrl: "./certificates/google-responsible-ai.pdf",
     skills: ["Responsible AI", "AI Ethics", "Bias Mitigation", "Safety & Fairness"],
     description:
@@ -86,7 +86,7 @@ export const certificates: Certificate[] = [
     secondaryVerifyUrl:
       "https://skills.yourlearning.ibm.com/credential/CREDLY-29bdaec3-af04-458e-a70e-2e6fa78c5dd5",
     secondaryVerifyLabel: "IBM Skills Portal",
-    imageUrl: "./certificates/ibm-ai-fundamentals.png",
+    imageUrl: "./certificates/ibm-ai-fundamentals.avif",
     pdfUrl: "./certificates/ibm-ai-fundamentals.pdf",
     skills: ["AI Fundamentals", "Machine Learning", "Neural Networks", "NLP", "Cognitive Systems"],
     description:
@@ -103,7 +103,7 @@ export const certificates: Certificate[] = [
     issueDate: "18 октября 2026 г.",
     credentialId: "yabl1ch/intro-to-ai-ethics",
     verifyUrl: "https://www.kaggle.com/learn/certification/yabl1ch/intro-to-ai-ethics",
-    imageUrl: "./certificates/kaggle-ai-ethics.png",
+    imageUrl: "./certificates/kaggle-ai-ethics.avif",
     pdfUrl: "./certificates/kaggle-ai-ethics.pdf",
     skills: ["AI Fairness", "Model Card Toolkit", "Mitigating Bias", "Data Ethics"],
     description:

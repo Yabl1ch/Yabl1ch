@@ -73,7 +73,7 @@ export function HeroHeader() {
           >
             <div className="relative h-full w-full rounded-full overflow-hidden border-2 border-emerald-400/60 bg-[#07130e]">
               <img
-                src="./avatar.jpg"
+                src="./avatar.avif"
                 alt="Yabl1ch Avatar"
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="eager"

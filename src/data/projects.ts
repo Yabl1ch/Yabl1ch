@@ -23,26 +23,26 @@ export const projects: Project[] = [
     subtitle: "Локальный защищенный мессенджер с медиатекой и мини-играми",
     description:
       "MudroHub — локальный мессенджер, рассчитанный на 6 человек и разработанный всего за 2 дня мною. В нём предусмотрены как общий чат для всех участников, так и личные диалоги. В сервис также встроены общая медиатека, аудиоплеер и подборка мини-игр. Все сообщения защищены сквозным шифрованием (E2EE), а сам проект написан на TypeScript.",
-    coverImage: "./projects/mudro-hub/General_chat.png",
+    coverImage: "./projects/mudro-hub/General_chat.avif",
     images: [
       {
-        url: "./projects/mudro-hub/General_chat.png",
+        url: "./projects/mudro-hub/General_chat.avif",
         caption: "Общий чат для всех участников с поддержкой E2EE шифрования",
       },
       {
-        url: "./projects/mudro-hub/Private_chats.png",
+        url: "./projects/mudro-hub/Private_chats.avif",
         caption: "Личные конфиденциальные диалоги между пользователями",
       },
       {
-        url: "./projects/mudro-hub/Media_Library.png",
+        url: "./projects/mudro-hub/Media_Library.avif",
         caption: "Общая медиатека для загрузки и просмотра файлов и изображений",
       },
       {
-        url: "./projects/mudro-hub/Audio_player.png",
+        url: "./projects/mudro-hub/Audio_player.avif",
         caption: "Встроенный аудиоплеер с совместным воспроизведением треков",
       },
       {
-        url: "./projects/mudro-hub/Mini_games.png",
+        url: "./projects/mudro-hub/Mini_games.avif",
         caption: "Подборка интерактивных мини-игр для компании",
       },
     ],
@@ -70,14 +70,14 @@ export const projects: Project[] = [
     subtitle: "Векторный редактор и компилятор шрифтов",
     description:
       "Glyph Master — разработанное мной приложение для создания шрифтов с поддержкой русской и английской раскладок, работающее локально. Оно оснащено богатой палитрой векторных инструментов, а также поддерживает автоматическую компиляцию в форматы TTF, OTF и WOFF2 с возможностью выгрузки в общий ZIP-архив.",
-    coverImage: "./projects/glyph-master/Landing.png",
+    coverImage: "./projects/glyph-master/Landing.avif",
     images: [
       {
-        url: "./projects/glyph-master/Landing.png",
+        url: "./projects/glyph-master/Landing.avif",
         caption: "Главная рабочая область и полотно векторного редактирования глифов",
       },
       {
-        url: "./projects/glyph-master/Backend.png",
+        url: "./projects/glyph-master/Backend.avif",
         caption: "Конвейер сборки и генерации шрифтовых файлов TTF, OTF и WOFF2",
       },
     ],
@@ -102,10 +102,10 @@ export const projects: Project[] = [
     subtitle: "Аналог Clownfish Voice Changer на PyQt6 и DSP",
     description:
       "Yabl1chVoice — это разработаный мною аналог Clownfish Voice Changer. Оно было написано на базе PyQt6 и низколатентного аудиодвижка DSP.",
-    coverImage: "./projects/yabl1ch-voice/main.png",
+    coverImage: "./projects/yabl1ch-voice/main.avif",
     images: [
       {
-        url: "./projects/yabl1ch-voice/main.png",
+        url: "./projects/yabl1ch-voice/main.avif",
         caption: "Интерфейс изменения голоса в реальном времени с выбором DSP пресетов",
       },
     ],
@@ -130,10 +130,10 @@ export const projects: Project[] = [
     subtitle: "Генератор дизайн-систем и промптов на базе LLM",
     description:
       "AI Vibe Designer (Aura Studio) — разработанное мной веб-приложение, позволяющее с помощью API любой LLM-модели составить полноценный профиль дизайна со всеми цветами и шрифтами, а затем скопировать готовый промпт.",
-    coverImage: "./projects/ai-vibe-designer/main.png",
+    coverImage: "./projects/ai-vibe-designer/main.avif",
     images: [
       {
-        url: "./projects/ai-vibe-designer/main.png",
+        url: "./projects/ai-vibe-designer/main.avif",
         caption: "Генерация дизайн-профиля с гармоничными цветами, типографикой и экспортом промпта",
       },
     ],
