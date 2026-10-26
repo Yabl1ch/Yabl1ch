@@ -51,13 +51,13 @@ export function HeroHeader() {
           {/* Rotating gradient background glow */}
           <div
             aria-hidden="true"
-            className="absolute -inset-2.5 rounded-full opacity-70 blur-xl transition-opacity duration-500 group-hover:opacity-100 animate-spin-slow bg-gradient-to-tr from-emerald-600 via-green-400 to-emerald-900"
+            className="absolute -inset-2.5 rounded-full opacity-70 blur-xl transition-opacity duration-500 group-hover:opacity-100 animate-ring-spin bg-gradient-to-tr from-emerald-600 via-green-400 to-emerald-900"
           />
 
-          {/* Secondary pulsing halo */}
+          {/* Secondary pulsing halo with glow animation */}
           <div
             aria-hidden="true"
-            className="absolute -inset-1 rounded-full bg-emerald-500/30 blur-md animate-pulse-glow"
+            className="absolute -inset-1 rounded-full bg-emerald-500/30 blur-md animate-glow-pulse"
           />
 
           {/* 3D Card Container */}

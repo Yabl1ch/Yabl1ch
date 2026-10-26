@@ -1,4 +1,5 @@
 import * as React from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   ExternalLink,
   ShieldCheck,
@@ -14,6 +15,8 @@ interface CertificatesTabProps {
 }
 
 export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   const renderIssuerLogo = (logo: Certificate["issuerLogo"]) => {
     switch (logo) {
       case "google":
@@ -53,12 +56,34 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
       </div>
 
       {/* Certificates Grid: instant rendering without delay */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: shouldReduceMotion ? 0 : 0.07 } },
+        }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+      >
         {certificates.map((cert) => (
-          <article
+          <motion.article
+            variants={{
+              hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 18 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            whileHover={shouldReduceMotion ? undefined : { y: -5, scale: 1.01 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             key={cert.id}
+            role="button"
+            tabIndex={0}
             onClick={() => onSelectCertificate(cert)}
-            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:scale-[1.01] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer h-full will-change-transform touch-manipulation active:scale-[0.98]"
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                onSelectCertificate(cert);
+              }
+            }}
+            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer h-full touch-manipulation"
           >
             {/* Ambient backlight glow on hover */}
             <div
@@ -73,12 +98,13 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
             />
 
             {/* Cover Image Container */}
-            <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#050f0b] flex items-center justify-center p-6 border-b border-emerald-900/40 z-10">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#050f0b] flex items-center justify-center p-6 border-b border-emerald-900/40 z-10 image-sheen">
               <img
                 src={cert.imageUrl}
                 alt={cert.title}
                 className="max-h-full max-w-full object-contain transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04] select-none"
                 loading="lazy"
+                decoding="async"
               />
 
               {/* Subtle dark gradient overlay */}
@@ -174,9 +200,9 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
                 </div>
               </div>
             </div>
-          </article>
+          </motion.article>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

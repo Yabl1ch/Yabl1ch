@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AnimatePresence, motion, type Variants } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import { AnimatedGrid } from "@/components/ui/animated-grid";
 import { Toast } from "@/components/ui/toast";
 import { HeroHeader } from "@/components/HeroHeader";
@@ -50,6 +50,7 @@ const tabSlideVariants: Variants = {
 };
 
 export function App() {
+  const shouldReduceMotion = useReducedMotion();
   const [showSplash, setShowSplash] = React.useState(true);
   const [isContentVisible, setIsContentVisible] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState<TabType>("bio");
@@ -107,14 +108,15 @@ export function App() {
         className="fixed inset-0 z-0 pointer-events-none"
       />
 
-      {/* Secondary Ambient Gradient Blobs */}
+      {/* Secondary Ambient Gradient Blobs with Drift Animation */}
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed top-[-10%] left-[20%] h-[320px] w-[320px] sm:h-[500px] sm:w-[500px] rounded-full bg-emerald-600/10 blur-[100px] sm:blur-[130px] z-0"
+        className="pointer-events-none fixed top-[-10%] left-[20%] h-[320px] w-[320px] sm:h-[500px] sm:w-[500px] rounded-full bg-emerald-600/10 blur-[100px] sm:blur-[130px] z-0 animate-aurora-drift"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed bottom-[-10%] right-[15%] h-[320px] w-[320px] sm:h-[500px] sm:w-[500px] rounded-full bg-emerald-500/10 blur-[110px] sm:blur-[140px] z-0"
+        className="pointer-events-none fixed bottom-[-10%] right-[15%] h-[320px] w-[320px] sm:h-[500px] sm:w-[500px] rounded-full bg-emerald-500/10 blur-[110px] sm:blur-[140px] z-0 animate-aurora-drift"
+        style={{ animationDelay: "1s" }}
       />
 
       {/* Main Content with Timed Smooth Reveal */}
@@ -125,7 +127,7 @@ export function App() {
             ? { opacity: 1, y: 0 }
             : { opacity: 0, y: 16 }
         }
-        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.45, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 flex min-h-screen min-h-[100dvh] flex-col justify-between max-w-6xl mx-auto will-change-[transform,opacity] px-1 sm:px-4"
       >
         <main className="flex-1 pb-10 sm:pb-16">
@@ -146,10 +148,10 @@ export function App() {
               <motion.div
                 key={activeTab}
                 custom={tabDirection}
-                variants={tabSlideVariants}
-                initial="enter"
+                variants={shouldReduceMotion ? undefined : tabSlideVariants}
+                initial={shouldReduceMotion ? false : "enter"}
                 animate="center"
-                exit="exit"
+                exit={shouldReduceMotion ? undefined : "exit"}
                 className="w-full will-change-transform"
               >
                 {activeTab === "bio" ? (

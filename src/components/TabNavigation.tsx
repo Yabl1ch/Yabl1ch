@@ -40,15 +40,19 @@ export function TabNavigation({
   ];
 
   return (
-    <nav className="relative flex justify-center px-3 sm:px-4 my-4 sm:my-6 z-20 w-full">
-      <div className="relative grid grid-cols-3 w-full max-w-[360px] sm:max-w-none sm:w-auto sm:flex sm:items-center p-1 sm:p-1.5 rounded-full border border-emerald-500/30 bg-[#081a13]/90 shadow-[0_4px_24px_rgba(0,0,0,0.6)] backdrop-blur-xl select-none overflow-hidden">
+    <nav aria-label="Основная навигация портфолио" className="relative flex justify-center px-3 sm:px-4 my-4 sm:my-6 z-20 w-full">
+      <div role="tablist" className="relative grid grid-cols-3 w-full max-w-[360px] sm:max-w-none sm:w-auto sm:flex sm:items-center p-1 sm:p-1.5 rounded-full border border-emerald-500/30 bg-[#081a13]/90 shadow-[0_4px_24px_rgba(0,0,0,0.6)] backdrop-blur-xl select-none overflow-hidden">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           const Icon = tab.icon;
 
           return (
             <button
+              type="button"
               key={tab.id}
+              role="tab"
+              aria-selected={isActive}
+              aria-controls={`${tab.id}-panel`}
               onClick={() => onTabChange(tab.id)}
               className="relative flex items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-200 outline-none select-none cursor-pointer w-full sm:w-auto shrink-0 touch-manipulation"
             >

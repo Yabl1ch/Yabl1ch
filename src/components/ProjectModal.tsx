@@ -128,6 +128,10 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
         {/* Modal Window Container */}
         <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="project-modal-title"
+          tabIndex={-1}
           initial={{ opacity: 0, scale: 0.94, y: 16 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 16 }}
@@ -139,7 +143,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           {/* Header Bar */}
           <div className="sticky top-0 z-20 flex items-center justify-between border-b border-emerald-900/60 bg-[#091811]/90 px-4 py-3 sm:px-5 sm:py-4 backdrop-blur-xl">
             <div className="flex items-center gap-3">
-              <h2 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+              <h2 id="project-modal-title" className="text-lg sm:text-xl font-bold tracking-tight text-white">
                 {project.title}
               </h2>
             </div>
@@ -149,6 +153,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 onClick={() => setIsLightbox(!isLightbox)}
                 className="rounded-lg p-2 text-emerald-300/70 hover:bg-emerald-900/40 hover:text-emerald-200 transition-colors"
                 title={isLightbox ? "Свернуть просмотр" : "Развернуть на весь экран"}
+                aria-label={isLightbox ? "Свернуть просмотр проекта" : "Развернуть просмотр проекта"}
               >
                 {isLightbox ? (
                   <Minimize2 className="h-4 w-4" />
@@ -160,6 +165,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 onClick={onClose}
                 className="rounded-lg p-2 text-emerald-300/70 hover:bg-emerald-900/40 hover:text-emerald-200 transition-colors"
                 title="Закрыть (Esc)"
+                aria-label="Закрыть окно проекта"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -200,6 +206,8 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                     <img
                       src={currentImage.url}
                       alt={currentImage.caption}
+                      loading="eager"
+                      decoding="async"
                       className="max-h-full max-w-full object-contain rounded-lg select-none pointer-events-none"
                     />
                   </motion.div>
@@ -259,6 +267,9 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                       <img
                         src={img.url}
                         alt={`Миниатюра ${idx + 1}`}
+                        loading="lazy"
+                        decoding="async"
+                        aria-current={isCurrent ? "true" : undefined}
                         className="h-full w-full object-cover"
                       />
                     </button>

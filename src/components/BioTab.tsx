@@ -56,6 +56,7 @@ export function BioTab({ onShowToast }: BioTabProps) {
             onClick={() => setIsBioExpanded(!isBioExpanded)}
             className="w-full flex items-center justify-between p-4 sm:p-6 text-left cursor-pointer select-none group focus:outline-none touch-manipulation"
             aria-expanded={isBioExpanded}
+            aria-controls="bio-content"
           >
             <div className="inline-flex items-center gap-2 sm:gap-3">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#4ade80] shrink-0" />
@@ -83,6 +84,7 @@ export function BioTab({ onShowToast }: BioTabProps) {
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                id="bio-content"
                 className="overflow-hidden"
               >
                 <div className="px-5 sm:px-6 pb-6 pt-1 border-t border-emerald-900/50">
@@ -110,7 +112,9 @@ export function BioTab({ onShowToast }: BioTabProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+          >
             {socialLinks.map((social) => {
               if (social.isExternal && social.url) {
                 return (

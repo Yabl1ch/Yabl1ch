@@ -1,4 +1,5 @@
 import * as React from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { projects, type Project } from "@/data/projects";
 
@@ -7,6 +8,8 @@ interface WorksTabProps {
 }
 
 export function WorksTab({ onSelectProject }: WorksTabProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <div className="w-full max-w-5xl mx-auto px-3 sm:px-4 space-y-4 sm:space-y-6">
       {/* Tab Section Header */}
@@ -20,12 +23,34 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
       </div>
 
       {/* Projects Grid: strictly in requested order 1..4 with instant rendering */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: shouldReduceMotion ? 0 : 0.08 } },
+        }}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"
+      >
         {projects.map((project) => (
-          <article
+          <motion.article
+            variants={{
+              hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 18 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            whileHover={shouldReduceMotion ? undefined : { y: -5, scale: 1.01 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             key={project.id}
+            role="button"
+            tabIndex={0}
             onClick={() => onSelectProject(project)}
-            className="group relative flex flex-col rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:scale-[1.01] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer will-change-transform touch-manipulation active:scale-[0.98]"
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                onSelectProject(project);
+              }
+            }}
+            className="group relative flex flex-col rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[box-shadow,border-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer touch-manipulation"
           >
             {/* Ambient backlight glow on hover */}
             <div
@@ -40,12 +65,12 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
             />
 
             {/* Cover Image Container */}
-            <div className="relative aspect-video w-full overflow-hidden bg-[#050f0b] z-10">
+            <div className="relative aspect-video w-full overflow-hidden bg-[#050f0b] z-10 image-sheen">
               <img
                 src={project.coverImage}
                 alt={project.title}
                 className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
-                loading="eager"
+                loading="lazy"
                 decoding="async"
               />
 
@@ -74,9 +99,9 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
                 <ArrowUpRight className="h-4 w-4 text-emerald-400 group-hover:text-black transition-colors" />
               </button>
             </div>
-          </article>
+          </motion.article>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

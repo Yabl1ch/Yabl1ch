@@ -112,6 +112,10 @@ export function CertificateModal({
 
         {/* Modal Window Container */}
         <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="certificate-modal-title"
+          tabIndex={-1}
           initial={{ opacity: 0, scale: 0.94, y: 16 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 16 }}
@@ -127,7 +131,7 @@ export function CertificateModal({
                 {renderIssuerLogo(certificate.issuerLogo)}
               </div>
               <div className="min-w-0">
-                <h2 className="text-base sm:text-lg font-bold tracking-tight text-white truncate">
+                <h2 id="certificate-modal-title" className="text-base sm:text-lg font-bold tracking-tight text-white truncate">
                   {certificate.title}
                 </h2>
                 <p className="text-xs font-mono text-emerald-400/80 truncate">
