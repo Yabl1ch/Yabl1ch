@@ -89,7 +89,7 @@ export function App() {
   }, []);
 
   return (
-    <div className="relative min-h-screen min-h-[100dvh] w-full bg-[#07130e] text-[#f0fdf4] overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">
+    <div className="relative min-h-[100dvh] w-full bg-[#07130e] text-[#f0fdf4] overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">
       {/* 0.7s Grid & Glowing Squares Intro Screen */}
       {showSplash && (
         <SplashScreen
@@ -103,7 +103,7 @@ export function App() {
         size={42}
         color="#14532d"
         accent="#22c55e"
-        opacity={0.65}
+        opacity={0.38}
         fade={true}
         className="fixed inset-0 z-0 pointer-events-none"
       />
@@ -113,12 +113,6 @@ export function App() {
         aria-hidden="true"
         className="pointer-events-none fixed top-[-10%] left-[20%] h-[320px] w-[320px] sm:h-[500px] sm:w-[500px] rounded-full bg-emerald-600/10 blur-[100px] sm:blur-[130px] z-0 animate-aurora-drift"
       />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed bottom-[-10%] right-[15%] h-[320px] w-[320px] sm:h-[500px] sm:w-[500px] rounded-full bg-emerald-500/10 blur-[110px] sm:blur-[140px] z-0 animate-aurora-drift"
-        style={{ animationDelay: "1s" }}
-      />
-
       {/* Main Content with Timed Smooth Reveal */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
@@ -128,7 +122,7 @@ export function App() {
             : { opacity: 0, y: 16 }
         }
         transition={{ duration: shouldReduceMotion ? 0 : 0.45, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 flex min-h-screen min-h-[100dvh] flex-col justify-between max-w-6xl mx-auto will-change-[transform,opacity] px-1 sm:px-4"
+        className="relative z-10 flex min-h-[100dvh] flex-col justify-between max-w-6xl mx-auto will-change-[transform,opacity] px-2 sm:px-4 pt-[env(safe-area-inset-top)]"
       >
         <main className="flex-1 pb-10 sm:pb-16">
           {/* Hero Header with 3D Tilt Avatar and Per-Letter Interactive Hover */}
@@ -147,6 +141,9 @@ export function App() {
             <AnimatePresence mode="wait" custom={tabDirection} initial={false}>
               <motion.div
                 key={activeTab}
+                id={`${activeTab}-panel`}
+                role="tabpanel"
+                aria-labelledby={`${activeTab}-tab`}
                 custom={tabDirection}
                 variants={shouldReduceMotion ? undefined : tabSlideVariants}
                 initial={shouldReduceMotion ? false : "enter"}

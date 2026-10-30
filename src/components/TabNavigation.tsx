@@ -50,11 +50,12 @@ export function TabNavigation({
             <button
               type="button"
               key={tab.id}
+              id={`${tab.id}-tab`}
               role="tab"
               aria-selected={isActive}
               aria-controls={`${tab.id}-panel`}
               onClick={() => onTabChange(tab.id)}
-              className="relative flex items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-200 outline-none select-none cursor-pointer w-full sm:w-auto shrink-0 touch-manipulation"
+              className="relative flex min-h-11 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-200 outline-none select-none cursor-pointer w-full sm:w-auto shrink-0 touch-manipulation"
             >
               {/* Active animated pill sliding under the selected tab */}
               {isActive && (

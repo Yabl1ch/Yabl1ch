@@ -16,6 +16,7 @@ export function HeroHeader() {
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-18deg", "18deg"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const width = rect.width;
@@ -46,7 +47,7 @@ export function HeroHeader() {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           style={{ perspective: 1000 }}
-          className="relative mb-4 sm:mb-6 cursor-pointer select-none group"
+          className="relative mb-4 sm:mb-6 cursor-pointer select-none group touch-manipulation"
         >
           {/* Rotating gradient background glow */}
           <div
@@ -77,6 +78,9 @@ export function HeroHeader() {
                 alt="Yabl1ch Avatar"
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="eager"
+                fetchPriority="high"
+                width={128}
+                height={128}
                 decoding="async"
               />
               {/* Glass specular highlight overlay */}

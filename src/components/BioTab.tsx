@@ -23,7 +23,8 @@ export function BioTab({ onShowToast }: BioTabProps) {
       setCopiedId(linkId);
       onShowToast(`Скопировано: ${label}`);
       setTimeout(() => setCopiedId(null), 2000);
-    } catch {
+    } catch (error) {
+      console.warn("Clipboard copy failed", { label, linkId, error });
       onShowToast(`Скопировано: ${text}`);
     }
   };

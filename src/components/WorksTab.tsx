@@ -50,7 +50,7 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
                 onSelectProject(project);
               }
             }}
-            className="group relative flex flex-col rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[box-shadow,border-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer touch-manipulation"
+            className="group relative flex flex-col rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] active:scale-[0.99] cursor-pointer touch-manipulation"
           >
             {/* Ambient backlight glow on hover */}
             <div
@@ -69,6 +69,8 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
               <img
                 src={project.coverImage}
                 alt={project.title}
+                width={960}
+                height={540}
                 className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
                 loading="lazy"
                 decoding="async"
@@ -93,7 +95,7 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
                   e.stopPropagation();
                   onSelectProject(project);
                 }}
-                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-950/80 border border-emerald-800/60 group-hover:bg-emerald-500 group-hover:border-emerald-400 group-hover:text-black transition-all shadow-sm"
+                className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-950/80 border border-emerald-800/60 group-hover:bg-emerald-500 group-hover:border-emerald-400 group-hover:text-black transition-all shadow-sm"
                 aria-label={`Открыть проект ${project.title}`}
               >
                 <ArrowUpRight className="h-4 w-4 text-emerald-400 group-hover:text-black transition-colors" />

@@ -83,7 +83,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
                 onSelectCertificate(cert);
               }
             }}
-            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer h-full touch-manipulation"
+            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] active:scale-[0.99] cursor-pointer h-full touch-manipulation"
           >
             {/* Ambient backlight glow on hover */}
             <div
@@ -102,6 +102,8 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
               <img
                 src={cert.imageUrl}
                 alt={cert.title}
+                width={640}
+                height={480}
                 className="max-h-full max-w-full object-contain transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04] select-none"
                 loading="lazy"
                 decoding="async"
@@ -178,7 +180,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="p-1.5 rounded-lg bg-emerald-950/80 border border-emerald-800/60 hover:bg-emerald-900/60 hover:border-emerald-500/50 text-emerald-300 transition-colors cursor-pointer"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-emerald-950/80 border border-emerald-800/60 hover:bg-emerald-900/60 hover:border-emerald-500/50 text-emerald-300 transition-colors cursor-pointer"
                     title="Проверить подлинность в официальном реестре"
                     aria-label="Проверить подлинность"
                   >
@@ -191,7 +193,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
                       e.stopPropagation();
                       onSelectCertificate(cert);
                     }}
-                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-950/80 border border-emerald-800/60 group-hover:bg-emerald-500 group-hover:border-emerald-400 group-hover:text-black text-emerald-300 font-semibold text-[11px] transition-all shadow-sm cursor-pointer"
+                    className="inline-flex min-h-11 items-center gap-1 px-3 py-2 rounded-lg bg-emerald-950/80 border border-emerald-800/60 group-hover:bg-emerald-500 group-hover:border-emerald-400 group-hover:text-black text-emerald-300 font-semibold text-[11px] transition-all shadow-sm cursor-pointer whitespace-nowrap"
                     aria-label={`Открыть сертификат ${cert.title}`}
                   >
                     <Eye className="h-3 w-3" />

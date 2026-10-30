@@ -206,6 +206,8 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                     <img
                       src={currentImage.url}
                       alt={currentImage.caption}
+                      width={960}
+                      height={600}
                       loading="eager"
                       decoding="async"
                       className="max-h-full max-w-full object-contain rounded-lg select-none pointer-events-none"

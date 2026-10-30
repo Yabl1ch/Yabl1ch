@@ -68,7 +68,8 @@ export function CertificateModal({
       setCopiedLink(true);
       onShowToast("Ссылка для проверки подлинности скопирована");
       setTimeout(() => setCopiedLink(false), 2000);
-    } catch {
+    } catch (error) {
+      console.warn("Verification link copy failed", { certificateId: certificate.id, error });
       onShowToast(`Ссылка: ${certificate.verifyUrl}`);
     }
   };
@@ -80,7 +81,8 @@ export function CertificateModal({
       setCopiedId(true);
       onShowToast(`ID скопирован: ${certificate.credentialId}`);
       setTimeout(() => setCopiedId(false), 2000);
-    } catch {
+    } catch (error) {
+      console.warn("Credential ID copy failed", { certificateId: certificate.id, error });
       onShowToast(`ID: ${certificate.credentialId}`);
     }
   };
@@ -178,8 +180,11 @@ export function CertificateModal({
                 <img
                   src={certificate.imageUrl}
                   alt={`Обложка сертификата ${certificate.title}`}
+                  width={640}
+                  height={480}
                   className="max-h-[360px] sm:max-h-[440px] max-w-full object-contain rounded-xl shadow-2xl transition-transform duration-300 group-hover:scale-[1.02]"
                   loading="eager"
+                  decoding="async"
                 />
               </div>
 

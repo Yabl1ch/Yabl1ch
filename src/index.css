@@ -59,7 +59,26 @@ body {
   color: #f0fdf4;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   overflow-x: hidden;
-  min-height: 100vh;
+  min-height: 100dvh;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+@media (hover: none) {
+  .hover-only {
+    display: none;
+  }
 }
 
 /* Glassmorphism helpers */
@@ -148,5 +167,33 @@ body {
   .animate-aurora-drift {
     animation-duration: 28s;
     opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-panel,
+  .glass-panel-glow,
+  .glass-pill {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: #0b1f16;
+  }
+}
+
+@media (max-width: 380px) {
+  .glass-panel,
+  .glass-panel-glow,
+  .glass-pill {
+    box-shadow: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .glass-panel,
+  .glass-panel-glow,
+  .glass-pill {
+    forced-color-adjust: auto;
+    background: Canvas;
+    border-color: CanvasText;
   }
 }
