@@ -72,7 +72,7 @@ export function HeroHeader() {
           {/* Secondary pulsing halo with glow animation */}
           <div
             aria-hidden="true"
-            className="absolute -inset-1 rounded-full bg-emerald-500/30 blur-md animate-glow-pulse"
+            className="absolute -inset-1 rounded-full bg-emerald-500/30 blur-md transition-opacity duration-500 group-hover:opacity-80"
           />
 
           {/* 3D Card Container */}

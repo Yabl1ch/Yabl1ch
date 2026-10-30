@@ -26,7 +26,6 @@ const tabSlideVariants: Variants = {
   enter: (direction: number) => ({
     x: direction > 0 ? 36 : direction < 0 ? -36 : 0,
     opacity: 0,
-    filter: "blur(4px)",
     transition: {
       x: { type: "spring", stiffness: 440, damping: 34, mass: 0.7 },
       opacity: { duration: 0.16, ease: "easeOut" },
@@ -35,7 +34,6 @@ const tabSlideVariants: Variants = {
   center: {
     x: 0,
     opacity: 1,
-    filter: "blur(0px)",
     transition: {
       x: { type: "spring", stiffness: 440, damping: 34, mass: 0.7 },
       opacity: { duration: 0.16, ease: "easeOut" },
@@ -44,7 +42,6 @@ const tabSlideVariants: Variants = {
   exit: (direction: number) => ({
     x: direction < 0 ? 28 : -28,
     opacity: 0,
-    filter: "blur(2px)",
     transition: {
       x: { duration: 0.09, ease: [0.32, 0, 0.67, 0] },
       opacity: { duration: 0.08, ease: "linear" },

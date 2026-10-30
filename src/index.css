@@ -139,6 +139,12 @@ img {
   }
 }
 
+@media (hover: none), (pointer: coarse) {
+  .group:hover {
+    transform: none;
+  }
+}
+
 /* Tactile press feedback stays scoped to direct pointer interactions. */
 .is-pressed {
   transform: scale(0.98) translateY(1px);
@@ -147,12 +153,6 @@ img {
 @media (prefers-reduced-motion: reduce) {
   .is-pressed {
     transform: none;
-  }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .group:hover .group-hover\\:rotate-\[3deg\] {
-    transform: rotate(3deg);
   }
 }
 
@@ -180,6 +180,16 @@ img {
     transition-duration: 0.01ms !important;
   }
 
+  .image-sheen::after,
+  .status-breathe,
+  .active-tab-signal,
+  .animate-aurora-drift,
+  .animate-aurora-drift-reverse,
+  .animate-ring-spin,
+  .animate-glow-pulse {
+    animation: none;
+  }
+
   .image-sheen::after {
     display: none;
   }
@@ -198,6 +208,10 @@ img {
   .animate-aurora-drift-reverse {
     animation-duration: 28s;
     opacity: 0.7;
+  }
+
+  .animate-aurora-drift-reverse {
+    display: none;
   }
 }
 

@@ -56,7 +56,7 @@ export function BioTab({ onShowToast }: BioTabProps) {
           {/* Header (Clickable Accordion Trigger) */}
           <button
             onClick={() => setIsBioExpanded(!isBioExpanded)}
-            className="w-full flex items-center justify-between p-4 sm:p-6 text-left cursor-pointer select-none group focus:outline-none touch-manipulation"
+            className="w-full flex items-center justify-between p-4 sm:p-6 text-left cursor-pointer select-none group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1f16] touch-manipulation"
             aria-expanded={isBioExpanded}
             aria-controls="bio-content"
           >
@@ -139,6 +139,7 @@ export function BioTab({ onShowToast }: BioTabProps) {
                     onPointerDown={(event) => event.currentTarget.classList.add("is-pressed")}
                     onPointerUp={(event) => event.currentTarget.classList.remove("is-pressed")}
                     onPointerCancel={(event) => event.currentTarget.classList.remove("is-pressed")}
+                    onPointerLeave={(event) => event.currentTarget.classList.remove("is-pressed")}
                   >
                     {/* Green Liquid Glass: Ambient caustic radial glow */}
                     <div
@@ -202,6 +203,8 @@ export function BioTab({ onShowToast }: BioTabProps) {
                   onPointerDown={(event) => event.currentTarget.classList.add("is-pressed")}
                   onPointerUp={(event) => event.currentTarget.classList.remove("is-pressed")}
                   onPointerCancel={(event) => event.currentTarget.classList.remove("is-pressed")}
+                  onPointerLeave={(event) => event.currentTarget.classList.remove("is-pressed")}
+                  onLostPointerCapture={(event) => event.currentTarget.classList.remove("is-pressed")}
                 >
                   {/* Green Liquid Glass: Ambient caustic radial glow */}
                   <div

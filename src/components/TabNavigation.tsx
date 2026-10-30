@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { User, FolderGit2, Award } from "lucide-react";
 
 export type TabType = "bio" | "work" | "certificates";
@@ -16,6 +16,7 @@ export function TabNavigation({
   workCount = 4,
   certificateCount = 5,
 }: TabNavigationProps) {
+  const shouldReduceMotion = useReducedMotion();
   const tabs = [
     {
       id: "bio" as const,
@@ -54,15 +55,25 @@ export function TabNavigation({
               role="tab"
               aria-selected={isActive}
               aria-controls={`${tab.id}-panel`}
+              tabIndex={isActive ? 0 : -1}
               onClick={() => onTabChange(tab.id)}
-              className="relative flex min-h-11 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-[color,transform] duration-200 outline-none select-none cursor-pointer w-full sm:w-auto shrink-0 touch-manipulation active:scale-[0.97]"
+              onKeyDown={(event) => {
+                if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+                event.preventDefault();
+                const offset = event.key === "ArrowRight" ? 1 : -1;
+                const nextIndex = (tabs.findIndex((item) => item.id === tab.id) + offset + tabs.length) % tabs.length;
+                const nextTab = tabs[nextIndex];
+                onTabChange(nextTab.id);
+                requestAnimationFrame(() => document.getElementById(`${nextTab.id}-tab`)?.focus());
+              }}
+              className="relative flex min-h-11 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-[color,transform] duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#081a13] select-none cursor-pointer w-full sm:w-auto shrink-0 touch-manipulation active:scale-[0.97]"
             >
               {/* Active animated pill sliding under the selected tab */}
               {isActive && (
                 <motion.div
-                  layoutId="activeTabPill"
+                  layoutId={shouldReduceMotion ? undefined : "activeTabPill"}
                   className="active-tab-signal absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/25 via-emerald-400/20 to-emerald-500/25 border border-emerald-400/50 shadow-[0_0_20px_rgba(34,197,94,0.35)]"
-                  transition={{
+                  transition={shouldReduceMotion ? { duration: 0 } : {
                     type: "spring",
                     stiffness: 450,
                     damping: 32,
