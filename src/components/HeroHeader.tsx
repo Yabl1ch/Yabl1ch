@@ -1,8 +1,15 @@
 import * as React from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 
 export function HeroHeader() {
   const letters = ["Y", "a", "b", "l", "1", "c", "h"];
+  const shouldReduceMotion = useReducedMotion();
 
   // 3D Tilt state for Avatar
   const cardRef = React.useRef<HTMLDivElement>(null);
@@ -16,7 +23,7 @@ export function HeroHeader() {
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-18deg", "18deg"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (shouldReduceMotion || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const width = rect.width;
@@ -34,13 +41,20 @@ export function HeroHeader() {
     y.set(0);
   };
 
+  React.useEffect(() => {
+    if (shouldReduceMotion) {
+      x.set(0);
+      y.set(0);
+    }
+  }, [shouldReduceMotion, x, y]);
+
   return (
     <header className="relative flex flex-col items-center justify-center pt-8 sm:pt-12 pb-3 sm:pb-6 px-4 text-center">
       {/* 3D Tilt Avatar with Rotating Emerald Glow */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.92, y: 10 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.92, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
         <div
           ref={cardRef}
@@ -68,7 +82,7 @@ export function HeroHeader() {
               rotateY,
               transformStyle: "preserve-3d",
             }}
-            whileHover={{ scale: 1.05 }}
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
             className="relative h-24 w-24 sm:h-32 sm:w-32 rounded-full p-1 bg-gradient-to-b from-emerald-400/80 via-emerald-600/40 to-emerald-950/90 shadow-[0_0_30px_rgba(34,197,94,0.35)]"
           >
@@ -92,10 +106,10 @@ export function HeroHeader() {
 
             {/* Status Indicator Dot */}
             <div
-              className="absolute bottom-1 right-1 h-5 w-5 rounded-full border-2 border-[#07130e] bg-emerald-500 shadow-[0_0_10px_#4ade80] flex items-center justify-center"
+              className="status-breathe absolute bottom-1 right-1 h-5 w-5 rounded-full border-2 border-[#07130e] bg-emerald-500 flex items-center justify-center"
               title="Online"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-white" />
+              <span className="h-1.5 w-1.5 rounded-full bg-white transition-transform duration-300 group-hover:scale-125" />
             </div>
           </motion.div>
         </div>
@@ -106,11 +120,11 @@ export function HeroHeader() {
         {letters.map((char, index) => (
           <motion.span
             key={index}
-            initial={{ opacity: 0, y: 14, filter: "blur(4px)" }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 14, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{
-              delay: 0.08 + index * 0.045,
-              duration: 0.45,
+              delay: shouldReduceMotion ? 0 : 0.08 + index * 0.045,
+              duration: shouldReduceMotion ? 0 : 0.45,
               ease: [0.16, 1, 0.3, 1],
             }}
             className="relative inline-block py-2 -my-2 group/char cursor-pointer select-none"

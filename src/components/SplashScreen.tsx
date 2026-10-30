@@ -1,5 +1,5 @@
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { playIntroChime } from "@/lib/sound";
 
 interface SplashScreenProps {
@@ -16,6 +16,7 @@ interface SplashScreenProps {
 export function SplashScreen({ onStartReveal, onComplete }: SplashScreenProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [isDone, setIsDone] = React.useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   React.useEffect(() => {
     const canvas = canvasRef.current;
@@ -43,6 +44,19 @@ export function SplashScreen({ onStartReveal, onComplete }: SplashScreenProps) {
     window.addEventListener("resize", resize);
 
     const render = (now: number) => {
+      if (shouldReduceMotion) {
+        if (!hasTriggeredReveal) {
+          hasTriggeredReveal = true;
+          onStartReveal?.();
+        }
+        if (!hasCompleted) {
+          hasCompleted = true;
+          setIsDone(true);
+          onComplete();
+        }
+        return;
+      }
+
       if (startTime === null) {
         startTime = now;
       }
@@ -193,7 +207,7 @@ export function SplashScreen({ onStartReveal, onComplete }: SplashScreenProps) {
       window.removeEventListener("resize", resize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [onStartReveal, onComplete]);
+  }, [onStartReveal, onComplete, shouldReduceMotion]);
 
   return (
     <AnimatePresence>
@@ -202,7 +216,7 @@ export function SplashScreen({ onStartReveal, onComplete }: SplashScreenProps) {
           key="splash-overlay"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
+          transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="fixed inset-0 z-50 pointer-events-none overflow-hidden select-none"
         >
           <canvas

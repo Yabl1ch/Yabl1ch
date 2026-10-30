@@ -71,8 +71,9 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
               hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 18 },
               visible: { opacity: 1, y: 0 },
             }}
-            whileHover={shouldReduceMotion ? undefined : { y: -5, scale: 1.01 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.012 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
+            transition={{ type: "spring", stiffness: 280, damping: 24 }}
             key={cert.id}
             role="button"
             tabIndex={0}
@@ -83,12 +84,18 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
                 onSelectCertificate(cert);
               }
             }}
-            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] active:scale-[0.99] cursor-pointer h-full touch-manipulation"
+            onPointerMove={(event) => {
+              if (shouldReduceMotion || event.pointerType !== "mouse") return;
+              const rect = event.currentTarget.getBoundingClientRect();
+              event.currentTarget.style.setProperty("--spotlight-x", `${event.clientX - rect.left}px`);
+              event.currentTarget.style.setProperty("--spotlight-y", `${event.clientY - rect.top}px`);
+            }}
+            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color,background-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:bg-[#0b2118]/90 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] active:scale-[0.99] cursor-pointer h-full touch-manipulation"
           >
-            {/* Ambient backlight glow on hover */}
+            {/* Cursor-following spotlight adds local focus without changing layout. */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-tr from-emerald-500/0 via-emerald-400/20 to-emerald-500/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-700 ease-out z-0"
+              className="spotlight-layer pointer-events-none absolute -inset-0.5 rounded-2xl bg-[radial-gradient(circle_at_var(--spotlight-x,50%)_var(--spotlight-y,50%),rgba(74,222,128,0.2),transparent_42%)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out z-0"
             />
 
             {/* Specular glass reflection layer */}

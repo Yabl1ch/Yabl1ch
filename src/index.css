@@ -115,6 +115,10 @@ img {
 }
 
 /* A soft diagonal reflection sweeps across project and certificate artwork on hover. */
+.image-sheen {
+  isolation: isolate;
+}
+
 .image-sheen::after {
   content: "";
   position: absolute;
@@ -129,8 +133,34 @@ img {
   transition: transform 750ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.group:hover .image-sheen::after {
-  transform: translateX(520%) rotate(18deg);
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .image-sheen::after {
+    transform: translateX(520%) rotate(18deg);
+  }
+}
+
+/* Tactile press feedback stays scoped to direct pointer interactions. */
+.is-pressed {
+  transform: scale(0.98) translateY(1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-pressed {
+    transform: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .group-hover\\:rotate-\[3deg\] {
+    transform: rotate(3deg);
+  }
+}
+
+/* Cursor spotlights are pointer-only decoration and disappear for reduced motion. */
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .spotlight-layer {
+    display: none;
+  }
 }
 
 /* Keep keyboard navigation visible against the dark glass surfaces. */
@@ -164,7 +194,8 @@ img {
     backdrop-filter: blur(10px);
   }
 
-  .animate-aurora-drift {
+  .animate-aurora-drift,
+  .animate-aurora-drift-reverse {
     animation-duration: 28s;
     opacity: 0.7;
   }

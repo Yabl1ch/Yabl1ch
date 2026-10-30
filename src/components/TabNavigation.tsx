@@ -55,13 +55,13 @@ export function TabNavigation({
               aria-selected={isActive}
               aria-controls={`${tab.id}-panel`}
               onClick={() => onTabChange(tab.id)}
-              className="relative flex min-h-11 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-200 outline-none select-none cursor-pointer w-full sm:w-auto shrink-0 touch-manipulation"
+              className="relative flex min-h-11 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-[color,transform] duration-200 outline-none select-none cursor-pointer w-full sm:w-auto shrink-0 touch-manipulation active:scale-[0.97]"
             >
               {/* Active animated pill sliding under the selected tab */}
               {isActive && (
                 <motion.div
                   layoutId="activeTabPill"
-                  className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/25 via-emerald-400/20 to-emerald-500/25 border border-emerald-400/50 shadow-[0_0_20px_rgba(34,197,94,0.35)]"
+                  className="active-tab-signal absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/25 via-emerald-400/20 to-emerald-500/25 border border-emerald-400/50 shadow-[0_0_20px_rgba(34,197,94,0.35)]"
                   transition={{
                     type: "spring",
                     stiffness: 450,

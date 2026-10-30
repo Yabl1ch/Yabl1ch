@@ -32,6 +32,10 @@ export default {
           '0%, 100%': { transform: 'translate3d(-6%, -3%, 0) scale(1)' },
           '50%': { transform: 'translate3d(6%, 5%, 0) scale(1.12)' },
         },
+        'aurora-drift-reverse': {
+          '0%, 100%': { transform: 'translate3d(5%, 4%, 0) scale(1.08)' },
+          '50%': { transform: 'translate3d(-7%, -5%, 0) scale(0.94)' },
+        },
         'float-soft': {
           '0%, 100%': { transform: 'translate3d(0, 0, 0)' },
           '50%': { transform: 'translate3d(0, -8px, 0)' },
@@ -54,6 +58,7 @@ export default {
         'fade-up': 'fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both',
         'fade-in': 'fade-in 0.5s ease-out both',
         'aurora-drift': 'aurora-drift 18s ease-in-out infinite',
+        'aurora-drift-reverse': 'aurora-drift-reverse 23s ease-in-out infinite',
         'float-soft': 'float-soft 6s ease-in-out infinite',
         'gradient-pan': 'gradient-pan 8s ease-in-out infinite',
         'ring-spin': 'ring-spin 9s linear infinite',

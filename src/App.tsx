@@ -26,6 +26,7 @@ const tabSlideVariants: Variants = {
   enter: (direction: number) => ({
     x: direction > 0 ? 36 : direction < 0 ? -36 : 0,
     opacity: 0,
+    filter: "blur(4px)",
     transition: {
       x: { type: "spring", stiffness: 440, damping: 34, mass: 0.7 },
       opacity: { duration: 0.16, ease: "easeOut" },
@@ -34,6 +35,7 @@ const tabSlideVariants: Variants = {
   center: {
     x: 0,
     opacity: 1,
+    filter: "blur(0px)",
     transition: {
       x: { type: "spring", stiffness: 440, damping: 34, mass: 0.7 },
       opacity: { duration: 0.16, ease: "easeOut" },
@@ -42,6 +44,7 @@ const tabSlideVariants: Variants = {
   exit: (direction: number) => ({
     x: direction < 0 ? 28 : -28,
     opacity: 0,
+    filter: "blur(2px)",
     transition: {
       x: { duration: 0.09, ease: [0.32, 0, 0.67, 0] },
       opacity: { duration: 0.08, ease: "linear" },
@@ -112,6 +115,10 @@ export function App() {
       <div
         aria-hidden="true"
         className="pointer-events-none fixed top-[-10%] left-[20%] h-[320px] w-[320px] sm:h-[500px] sm:w-[500px] rounded-full bg-emerald-600/10 blur-[100px] sm:blur-[130px] z-0 animate-aurora-drift"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed right-[-18%] top-[34%] h-[260px] w-[260px] sm:h-[420px] sm:w-[420px] rounded-full bg-green-400/[0.06] blur-[90px] sm:blur-[120px] z-0 animate-aurora-drift-reverse"
       />
       {/* Main Content with Timed Smooth Reveal */}
       <motion.div

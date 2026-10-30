@@ -42,7 +42,7 @@ export function AnimatedGrid({
     linear-gradient(to bottom, ${color} 1px, transparent 1px);
   background-size: ${size}px ${size}px;
   opacity: ${opacity * 0.6};
-  animation: ${cls}-drift 28s linear infinite;
+  animation: ${cls}-drift 38s linear infinite;
   will-change: background-position;
 }
 .${cls}::after {
@@ -51,7 +51,7 @@ export function AnimatedGrid({
     linear-gradient(to bottom, color-mix(in oklab, ${accent} 50%, ${color}) 1.2px, transparent 1.2px);
   background-size: ${major}px ${major}px;
   opacity: ${opacity * 0.5};
-  animation: ${cls}-drift 28s linear infinite;
+  animation: ${cls}-drift 38s linear infinite;
   will-change: background-position;
 }
 .${cls} > .${cls}-glow {

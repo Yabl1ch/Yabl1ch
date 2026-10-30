@@ -1,5 +1,5 @@
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ExternalLink, Copy, Check, ChevronDown } from "lucide-react";
 import { bioData } from "@/data/bio";
 import { socialLinks } from "@/data/socials";
@@ -14,6 +14,7 @@ interface BioTabProps {
 }
 
 export function BioTab({ onShowToast }: BioTabProps) {
+  const shouldReduceMotion = useReducedMotion();
   const [isBioExpanded, setIsBioExpanded] = React.useState(false);
   const [copiedId, setCopiedId] = React.useState<string | null>(null);
 
@@ -70,7 +71,7 @@ export function BioTab({ onShowToast }: BioTabProps) {
               <span>{isBioExpanded ? "Свернуть" : "Развернуть"}</span>
               <motion.div
                 animate={{ rotate: isBioExpanded ? 180 : 0 }}
-                transition={{ duration: 0.25, ease: "easeInOut" }}
+                transition={{ type: "spring", stiffness: 420, damping: 26 }}
               >
                 <ChevronDown className="h-4 w-4 text-emerald-400" />
               </motion.div>
@@ -84,16 +85,26 @@ export function BioTab({ onShowToast }: BioTabProps) {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                transition={shouldReduceMotion ? { duration: 0 } : { type: "spring", stiffness: 280, damping: 30 }}
                 id="bio-content"
                 className="overflow-hidden"
               >
                 <div className="px-5 sm:px-6 pb-6 pt-1 border-t border-emerald-900/50">
                   <div className="space-y-4 text-emerald-100/90 text-sm sm:text-base leading-relaxed font-normal pt-4">
                     {bioData.paragraphs.map((paragraph, index) => (
-                      <p key={index} className="tracking-wide">
+                      <motion.p
+                        key={index}
+                        initial={shouldReduceMotion ? false : { opacity: 0, y: 8, filter: "blur(3px)" }}
+                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                        transition={{
+                          delay: shouldReduceMotion ? 0 : index * 0.06,
+                          duration: shouldReduceMotion ? 0 : 0.32,
+                          ease: [0.16, 1, 0.3, 1],
+                        }}
+                        className="tracking-wide"
+                      >
                         {paragraph}
-                      </p>
+                      </motion.p>
                     ))}
                   </div>
                 </div>
@@ -125,6 +136,9 @@ export function BioTab({ onShowToast }: BioTabProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-emerald-800/40 bg-[#081a12]/60 backdrop-blur-md overflow-hidden transition-[transform,box-shadow,border-color,background-color,backdrop-filter] duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.015] active:scale-[0.98] touch-manipulation hover:border-emerald-400/80 hover:bg-[#062417]/80 hover:backdrop-blur-3xl hover:shadow-[0_16px_40px_rgba(16,185,129,0.35),0_0_24px_rgba(52,211,153,0.22),inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-1px_3px_rgba(16,185,129,0.45),inset_0_0_24px_rgba(16,185,129,0.18)] cursor-pointer text-left will-change-transform"
+                    onPointerDown={(event) => event.currentTarget.classList.add("is-pressed")}
+                    onPointerUp={(event) => event.currentTarget.classList.remove("is-pressed")}
+                    onPointerCancel={(event) => event.currentTarget.classList.remove("is-pressed")}
                   >
                     {/* Green Liquid Glass: Ambient caustic radial glow */}
                     <div
@@ -185,6 +199,9 @@ export function BioTab({ onShowToast }: BioTabProps) {
                     )
                   }
                   className="group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-emerald-800/40 bg-[#081a12]/60 backdrop-blur-md overflow-hidden transition-[transform,box-shadow,border-color,background-color,backdrop-filter] duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.015] active:scale-[0.98] touch-manipulation hover:border-emerald-400/80 hover:bg-[#062417]/80 hover:backdrop-blur-3xl hover:shadow-[0_16px_40px_rgba(16,185,129,0.35),0_0_24px_rgba(52,211,153,0.22),inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-1px_3px_rgba(16,185,129,0.45),inset_0_0_24px_rgba(16,185,129,0.18)] cursor-pointer text-left will-change-transform"
+                  onPointerDown={(event) => event.currentTarget.classList.add("is-pressed")}
+                  onPointerUp={(event) => event.currentTarget.classList.remove("is-pressed")}
+                  onPointerCancel={(event) => event.currentTarget.classList.remove("is-pressed")}
                 >
                   {/* Green Liquid Glass: Ambient caustic radial glow */}
                   <div
@@ -211,11 +228,22 @@ export function BioTab({ onShowToast }: BioTabProps) {
                         {renderBrandAvatar(social.id)}
 
                         <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-950/60 border border-emerald-800/50 group-hover:border-emerald-400/70 group-hover:bg-emerald-900/50 transition-colors">
-                          {isCopied ? (
-                            <Check className="h-3.5 w-3.5 text-emerald-300" />
-                          ) : (
-                            <Copy className="h-3.5 w-3.5 text-emerald-400 group-hover:scale-110 transition-transform" />
-                          )}
+                          <AnimatePresence mode="wait" initial={false}>
+                            <motion.span
+                              key={isCopied ? "copied" : "copy"}
+                              initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.8, y: 3 }}
+                              animate={{ opacity: 1, scale: 1, y: 0 }}
+                              exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.8, y: -3 }}
+                              transition={{ duration: shouldReduceMotion ? 0 : 0.16, ease: [0.16, 1, 0.3, 1] }}
+                              className="flex"
+                            >
+                              {isCopied ? (
+                                <Check className="h-3.5 w-3.5 text-emerald-300" />
+                              ) : (
+                                <Copy className="h-3.5 w-3.5 text-emerald-400 group-hover:scale-110 transition-transform" />
+                              )}
+                            </motion.span>
+                          </AnimatePresence>
                         </div>
                       </div>
 

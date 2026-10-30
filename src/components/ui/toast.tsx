@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Check } from "lucide-react";
 
 export interface ToastProps {
@@ -9,6 +9,8 @@ export interface ToastProps {
 }
 
 export function Toast({ message, onClose, duration = 2400 }: ToastProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   React.useEffect(() => {
     if (!message) return;
     const timer = setTimeout(() => {
@@ -22,10 +24,10 @@ export function Toast({ message, onClose, duration = 2400 }: ToastProps) {
       <AnimatePresence>
         {message && (
           <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.92 }}
-            transition={{ type: "spring", stiffness: 450, damping: 28 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 18, scale: 0.96, filter: "blur(4px)" }}
+            animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+            exit={shouldReduceMotion ? undefined : { opacity: 0, y: 10, scale: 0.98, filter: "blur(3px)" }}
+            transition={{ type: "spring", stiffness: 450, damping: 28, filter: { duration: 0.18 } }}
             className="pointer-events-auto"
           >
             <div className="flex items-center gap-3 rounded-xl border border-emerald-500/50 bg-[#071911]/95 px-5 py-3 shadow-[0_0_30px_rgba(34,197,94,0.35)] backdrop-blur-xl">

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   X,
   ChevronLeft,
@@ -39,6 +39,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [activeImageIndex, setActiveImageIndex] = React.useState(0);
   const [direction, setDirection] = React.useState(0);
   const [isLightbox, setIsLightbox] = React.useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   // Reset active image whenever modal opens or project changes
   React.useEffect(() => {
@@ -132,10 +133,10 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           aria-modal="true"
           aria-labelledby="project-modal-title"
           tabIndex={-1}
-          initial={{ opacity: 0, scale: 0.94, y: 16 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 16 }}
-          transition={{ type: "spring", stiffness: 350, damping: 28 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.94, y: 16, filter: "blur(5px)" }}
+          animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
+          exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.97, y: 10, filter: "blur(3px)" }}
+          transition={{ type: "spring", stiffness: 350, damping: 28, filter: { duration: 0.22 } }}
           className={`relative z-10 w-full max-w-4xl max-h-[92dvh] sm:max-h-[92vh] overflow-y-auto rounded-2xl border border-emerald-500/30 bg-[#091811]/95 text-white shadow-[0_0_50px_rgba(34,197,94,0.25)] backdrop-blur-2xl flex flex-col ${
             isLightbox ? "max-w-6xl max-h-[96dvh] sm:max-h-[96vh]" : ""
           }`}
