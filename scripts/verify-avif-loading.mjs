@@ -77,6 +77,22 @@ async function runVerification() {
     });
     console.log('Works Tab Images:', JSON.stringify(imagesWorks, null, 2));
 
+    // Click Votex project card to open modal and test all 5 slides
+    console.log('Opening Votex project modal...');
+    await page.click('article:has-text("Votex")');
+    await page.waitForTimeout(600);
+
+    // Verify thumbnail filmstrip for all 5 images
+    for (let idx = 0; idx < 5; idx++) {
+      await page.click(`button:has(img[alt="Миниатюра ${idx + 1}"])`);
+      await page.waitForTimeout(400);
+      const captionText = await page.textContent('div[role="dialog"] div.border-t.border-emerald-950\\/80');
+      const counterText = await page.textContent('div[role="dialog"] div.font-mono');
+      console.log(`Thumbnail ${idx + 1} Active -> Counter: ${counterText.trim()} | Caption: ${captionText.trim()}`);
+    }
+    await page.click('button[aria-label="Закрыть окно проекта"]');
+    await page.waitForTimeout(400);
+
     // Click Certificates tab
     console.log('Switching to Certificates tab...');
     await page.click('button:has-text("Certificates"), button:has-text("Certs")');

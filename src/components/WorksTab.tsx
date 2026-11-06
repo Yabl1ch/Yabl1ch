@@ -22,7 +22,7 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
         </div>
       </div>
 
-      {/* Projects Grid: strictly in requested order 1..4 with instant rendering */}
+      {/* Projects Grid: strictly in requested order 1..5 with instant rendering */}
       <motion.div
         initial="hidden"
         animate="visible"

@@ -13,7 +13,7 @@ interface TabNavigationProps {
 export function TabNavigation({
   activeTab,
   onTabChange,
-  workCount = 4,
+  workCount = 5,
   certificateCount = 5,
 }: TabNavigationProps) {
   const shouldReduceMotion = useReducedMotion();
