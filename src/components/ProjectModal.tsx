@@ -4,8 +4,6 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  Maximize2,
-  Minimize2,
   FileText,
 } from "lucide-react";
 import type { Project } from "@/data/projects";
@@ -38,14 +36,12 @@ const slideVariants = {
 export function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [activeImageIndex, setActiveImageIndex] = React.useState(0);
   const [direction, setDirection] = React.useState(0);
-  const [isLightbox, setIsLightbox] = React.useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   // Reset active image whenever modal opens or project changes
   React.useEffect(() => {
     setActiveImageIndex(0);
     setDirection(0);
-    setIsLightbox(false);
   }, [project]);
 
   // Handle keyboard navigation & escape key
@@ -54,11 +50,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        if (isLightbox) {
-          setIsLightbox(false);
-        } else {
-          onClose();
-        }
+        onClose();
       } else if (e.key === "ArrowLeft") {
         setDirection(-1);
         setActiveImageIndex((prev) =>
@@ -74,7 +66,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [project, isLightbox, onClose]);
+  }, [project, onClose]);
 
   // Prevent background scroll when modal is open
   React.useEffect(() => {
@@ -137,9 +129,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
           exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.97, y: 10, filter: "blur(3px)" }}
           transition={{ type: "spring", stiffness: 350, damping: 28, filter: { duration: 0.22 } }}
-          className={`relative z-10 w-full max-w-4xl max-h-[92dvh] sm:max-h-[92vh] overflow-y-auto rounded-2xl border border-emerald-500/30 bg-[#091811]/95 text-white shadow-[0_0_50px_rgba(34,197,94,0.25)] backdrop-blur-2xl flex flex-col ${
-            isLightbox ? "max-w-6xl max-h-[96dvh] sm:max-h-[96vh]" : ""
-          }`}
+          className="relative z-10 w-full max-w-4xl max-h-[92dvh] sm:max-h-[92vh] overflow-y-auto rounded-2xl border border-emerald-500/30 bg-[#091811]/95 text-white shadow-[0_0_50px_rgba(34,197,94,0.25)] backdrop-blur-2xl flex flex-col"
         >
           {/* Header Bar */}
           <div className="sticky top-0 z-20 flex items-center justify-between border-b border-emerald-900/60 bg-[#091811]/90 px-4 py-3 sm:px-5 sm:py-4 backdrop-blur-xl">
@@ -150,18 +140,6 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             </div>
 
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => setIsLightbox(!isLightbox)}
-                className="rounded-lg p-2 text-emerald-300/70 hover:bg-emerald-900/40 hover:text-emerald-200 transition-colors"
-                title={isLightbox ? "Свернуть просмотр" : "Развернуть на весь экран"}
-                aria-label={isLightbox ? "Свернуть просмотр проекта" : "Развернуть просмотр проекта"}
-              >
-                {isLightbox ? (
-                  <Minimize2 className="h-4 w-4" />
-                ) : (
-                  <Maximize2 className="h-4 w-4" />
-                )}
-              </button>
               <button
                 onClick={onClose}
                 className="rounded-lg p-2 text-emerald-300/70 hover:bg-emerald-900/40 hover:text-emerald-200 transition-colors"

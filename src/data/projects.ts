@@ -169,12 +169,12 @@ export const projects: Project[] = [
         caption: "Мастер автоматической установки VPS и лог харднинга ядра Linux в реальном времени",
       },
       {
-        url: "./projects/votex/Subscription_and_routes.avif",
-        caption: "Единый профиль подписки, быстрый импорт по QR-коду и раздельная маршрутизация РФ",
-      },
-      {
         url: "./projects/votex/Reports_and_speed.avif",
         caption: "Бенчмарки скорости, аналитика задержки туннеля и оценка устойчивости к ТСПУ",
+      },
+      {
+        url: "./projects/votex/Subscription_and_routes.avif",
+        caption: "Единый профиль подписки, быстрый импорт по QR-коду и раздельная маршрутизация РФ",
       },
       {
         url: "./projects/votex/Subscription.avif",

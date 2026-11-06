@@ -9,8 +9,6 @@ import {
   FileDown,
   Calendar,
   Award,
-  Maximize2,
-  Minimize2,
 } from "lucide-react";
 import type { Certificate } from "@/data/certificates";
 import { GoogleCloudLogo, IbmLogo, KaggleLogo } from "@/components/ui/brand-icons";
@@ -28,14 +26,12 @@ export function CertificateModal({
 }: CertificateModalProps) {
   const [copiedLink, setCopiedLink] = React.useState(false);
   const [copiedId, setCopiedId] = React.useState(false);
-  const [isExpanded, setIsExpanded] = React.useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   // Reset copied indicators when modal opens or certificate changes
   React.useEffect(() => {
     setCopiedLink(false);
     setCopiedId(false);
-    setIsExpanded(false);
   }, [certificate]);
 
   // Handle escape key and disable background scroll
@@ -44,11 +40,7 @@ export function CertificateModal({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        if (isExpanded) {
-          setIsExpanded(false);
-        } else {
-          onClose();
-        }
+        onClose();
       }
     };
 
@@ -59,7 +51,7 @@ export function CertificateModal({
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
     };
-  }, [certificate, isExpanded, onClose]);
+  }, [certificate, onClose]);
 
   if (!certificate) return null;
 
@@ -123,9 +115,7 @@ export function CertificateModal({
           animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
           exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.97, y: 10, filter: "blur(3px)" }}
           transition={{ type: "spring", stiffness: 350, damping: 28, filter: { duration: 0.22 } }}
-          className={`relative z-10 w-full max-w-4xl max-h-[92dvh] sm:max-h-[92vh] overflow-y-auto rounded-2xl border border-emerald-500/30 bg-[#091811]/95 text-white shadow-[0_0_50px_rgba(34,197,94,0.25)] backdrop-blur-2xl flex flex-col ${
-            isExpanded ? "max-w-6xl max-h-[96dvh] sm:max-h-[96vh]" : ""
-          }`}
+          className="relative z-10 w-full max-w-4xl max-h-[92dvh] sm:max-h-[92vh] overflow-y-auto rounded-2xl border border-emerald-500/30 bg-[#091811]/95 text-white shadow-[0_0_50px_rgba(34,197,94,0.25)] backdrop-blur-2xl flex flex-col"
         >
           {/* Header Bar */}
           <div className="sticky top-0 z-20 flex items-center justify-between border-b border-emerald-900/60 bg-[#091811]/90 px-4 py-3 sm:px-5 sm:py-4 backdrop-blur-xl">
@@ -144,18 +134,6 @@ export function CertificateModal({
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="rounded-lg p-2 text-emerald-300/70 hover:bg-emerald-900/40 hover:text-emerald-200 transition-colors"
-                title={isExpanded ? "Свернуть просмотр" : "Развернуть просмотр"}
-                aria-label="Переключить размер окна"
-              >
-                {isExpanded ? (
-                  <Minimize2 className="h-4 w-4" />
-                ) : (
-                  <Maximize2 className="h-4 w-4" />
-                )}
-              </button>
               <button
                 onClick={onClose}
                 className="rounded-lg p-2 text-emerald-300/70 hover:bg-emerald-900/40 hover:text-emerald-200 transition-colors"
