@@ -52,7 +52,7 @@ async function benchmark() {
   // 2. Benchmark My Work -> My certificates
   console.log('\n--- Test 2: Switch to "My certificates" ---');
   const t2 = Date.now();
-  await page.click('button:has-text("My certificates")');
+  await page.click('button:has-text("Certificates")');
   // Wait for first certificate card title to appear
   await page.waitForSelector('text="Introduction to Generative AI"', { timeout: 1500 });
   const t3 = Date.now();
