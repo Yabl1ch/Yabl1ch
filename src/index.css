@@ -254,7 +254,19 @@ article[role="button"] {
   }
 }
 
-/* Preserved system font specifically for Bio text ("Шрифт обо мне можешь не менять") */
+/* Daring, ultra-bold, high-impact font for nickname "Yabl1ch" */
+.font-nickname {
+  font-family: "Unbounded Variable", "Unbounded", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+}
+
+/* Preserved system font specifically for Bio text with persistent hardware antialiasing (no weight-snap) */
 .font-bio {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }

@@ -78,33 +78,26 @@ function BioTabComponent({ onShowToast }: BioTabProps) {
             </div>
           </button>
 
-          {/* Collapsible Content */}
+          {/* Collapsible Content with seamless smooth height expansion (Zero font-weight snapping) */}
           <AnimatePresence initial={false}>
             {isBioExpanded && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                transition={shouldReduceMotion ? { duration: 0 } : { type: "spring", stiffness: 280, damping: 30 }}
+                transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                 id="bio-content"
-                className="overflow-hidden"
+                className="overflow-hidden transform-gpu"
               >
                 <div className="px-5 sm:px-6 pb-6 pt-1 border-t border-emerald-900/50">
                   <div className="space-y-4 text-emerald-100/90 text-sm sm:text-base leading-relaxed font-normal pt-4 font-bio">
                     {bioData.paragraphs.map((paragraph, index) => (
-                      <motion.p
+                      <p
                         key={index}
-                        initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                          delay: shouldReduceMotion ? 0 : index * 0.06,
-                          duration: shouldReduceMotion ? 0 : 0.32,
-                          ease: [0.16, 1, 0.3, 1],
-                        }}
                         className="tracking-wide"
                       >
                         {paragraph}
-                      </motion.p>
+                      </p>
                     ))}
                   </div>
                 </div>

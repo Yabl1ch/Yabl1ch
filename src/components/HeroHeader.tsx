@@ -147,7 +147,7 @@ function HeroHeaderComponent() {
             }}
             className="relative inline-block py-2 -my-2 group/char cursor-pointer select-none"
           >
-            <span className="inline-block text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white transition-[transform,color,filter] duration-200 ease-out will-change-[transform,color,filter] group-hover/char:-translate-y-2 group-hover/char:scale-110 group-hover/char:text-emerald-400 group-hover/char:drop-shadow-[0_0_16px_rgba(74,222,128,0.85)]">
+            <span className="font-nickname inline-block text-3xl sm:text-5xl md:text-6xl font-black text-white transition-[transform,color,filter] duration-200 ease-out will-change-[transform,color,filter] group-hover/char:-translate-y-2 group-hover/char:scale-110 group-hover/char:text-emerald-400 group-hover/char:drop-shadow-[0_0_18px_rgba(74,222,128,0.9)]">
               {char}
             </span>
           </motion.span>
