@@ -74,7 +74,7 @@ function SplashScreenComponent({ onStartReveal, onComplete }: SplashScreenProps)
     };
 
     const resize = () => {
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -221,10 +221,20 @@ function SplashScreenComponent({ onStartReveal, onComplete }: SplashScreenProps)
       animationFrameId = requestAnimationFrame(render);
     };
 
+    const handleVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animationFrameId);
+      } else if (!hasCompleted) {
+        animationFrameId = requestAnimationFrame(render);
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
     animationFrameId = requestAnimationFrame(render);
 
     return () => {
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", handleVisibility);
       cancelAnimationFrame(animationFrameId);
     };
   }, [onStartReveal, onComplete, shouldReduceMotion]);

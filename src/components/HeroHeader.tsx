@@ -7,6 +7,7 @@ import {
   useTransform,
 } from "framer-motion";
 
+
 function HeroHeaderComponent() {
   const letters = ["Y", "a", "b", "l", "1", "c", "h"];
   const shouldReduceMotion = useReducedMotion();
@@ -133,11 +134,15 @@ function HeroHeaderComponent() {
         </div>
       </motion.div>
 
-      {/* Interactive Per-Letter Name: "Yabl1ch" */}
-      <div className="flex items-center justify-center gap-1 sm:gap-1.5">
+      {/* Interactive Per-Letter Vector Name: "Yabl1ch" - Razor sharp GPU-rendered SVG paths with 0 anti-aliasing blur */}
+      <h1
+        className="flex items-center justify-center gap-1 sm:gap-1.5"
+        role="img"
+        aria-label="Yabl1ch"
+      >
         {letters.map((char, index) => (
           <motion.span
-            key={index}
+            key={char + index}
             initial={shouldReduceMotion ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -145,14 +150,16 @@ function HeroHeaderComponent() {
               duration: shouldReduceMotion ? 0 : 0.45,
               ease: [0.16, 1, 0.3, 1],
             }}
-            className="relative inline-block py-2 -my-2 group/char cursor-pointer select-none"
+            className={`relative inline-block py-2 -my-2 group/char cursor-pointer select-none ${
+              index === 0 ? "-mr-1 sm:-mr-2 md:-mr-2.5" : ""
+            }`}
           >
             <span className="font-nickname inline-block text-3xl sm:text-5xl md:text-6xl font-black text-white transition-[transform,color,filter] duration-200 ease-out will-change-[transform,color,filter] group-hover/char:-translate-y-2 group-hover/char:scale-110 group-hover/char:text-emerald-400 group-hover/char:drop-shadow-[0_0_18px_rgba(74,222,128,0.9)]">
               {char}
             </span>
           </motion.span>
         ))}
-      </div>
+      </h1>
     </header>
   );
 }

@@ -57,7 +57,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
 
       {/* Certificates Grid: instant rendering without delay */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        {certificates.map((cert) => (
+        {certificates.map((cert, index) => (
           <motion.article
             whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.012 }}
             whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
@@ -108,7 +108,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
                 width={640}
                 height={480}
                 className="max-h-full max-w-full object-contain transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04] select-none"
-                loading="eager"
+                loading={index < 3 ? "eager" : "lazy"}
                 decoding="async"
               />
 

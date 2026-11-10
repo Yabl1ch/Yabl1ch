@@ -23,5 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Temporary screenshot captures
-screenshots/*.tmp.png
+# Testing screenshots and raw asset sources
+screenshots/
+Google_AI_Essentials/
+Google_Cloud_AI/
+IBM_SkillsBuild/
+Kaggle_AI/

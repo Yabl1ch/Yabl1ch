@@ -69,41 +69,34 @@ function BioTabComponent({ onShowToast }: BioTabProps) {
 
             <div className="flex items-center gap-2 rounded-lg bg-emerald-950/70 border border-emerald-800/60 px-3 py-1.5 text-xs font-medium text-emerald-300 group-hover:bg-emerald-900/60 group-hover:border-emerald-500/50 transition-all">
               <span>{isBioExpanded ? "Свернуть" : "Развернуть"}</span>
-              <motion.div
-                animate={{ rotate: isBioExpanded ? 180 : 0 }}
-                transition={{ type: "spring", stiffness: 420, damping: 26 }}
-              >
+              <div className={`transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${isBioExpanded ? "rotate-180" : ""}`}>
                 <ChevronDown className="h-4 w-4 text-emerald-400" />
-              </motion.div>
+              </div>
             </div>
           </button>
 
-          {/* Collapsible Content with seamless smooth height expansion (Zero font-weight snapping) */}
-          <AnimatePresence initial={false}>
-            {isBioExpanded && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                id="bio-content"
-                className="overflow-hidden transform-gpu"
-              >
-                <div className="px-5 sm:px-6 pb-6 pt-1 border-t border-emerald-900/50">
-                  <div className="space-y-4 text-emerald-100/90 text-sm sm:text-base leading-relaxed font-normal pt-4 font-bio">
-                    {bioData.paragraphs.map((paragraph, index) => (
-                      <p
-                        key={index}
-                        className="tracking-wide"
-                      >
-                        {paragraph}
-                      </p>
-                    ))}
-                  </div>
+          {/* Collapsible Content with CSS Grid transition (100% zero layout thrashing & zero font-weight snap) */}
+          <div
+            id="bio-content"
+            className={`grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              isBioExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 pointer-events-none"
+            }`}
+          >
+            <div className="overflow-hidden">
+              <div className="px-5 sm:px-6 pb-6 pt-1 border-t border-emerald-900/50">
+                <div className="space-y-4 text-emerald-100/90 text-sm sm:text-base leading-relaxed font-normal pt-4 font-bio">
+                  {bioData.paragraphs.map((paragraph, index) => (
+                    <p
+                      key={index}
+                      className="tracking-wide"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            </div>
+          </div>
         </section>
 
       {/* Social Media & Contact Cards with Stylized Official Avatars */}
@@ -128,7 +121,7 @@ function BioTabComponent({ onShowToast }: BioTabProps) {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-emerald-800/40 bg-[#081a12]/60 backdrop-blur-md overflow-hidden transition-[transform,box-shadow,border-color,background-color,backdrop-filter] duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.015] active:scale-[0.98] touch-manipulation hover:border-emerald-400/80 hover:bg-[#062417]/80 hover:backdrop-blur-3xl hover:shadow-[0_16px_40px_rgba(16,185,129,0.35),0_0_24px_rgba(52,211,153,0.22),inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-1px_3px_rgba(16,185,129,0.45),inset_0_0_24px_rgba(16,185,129,0.18)] cursor-pointer text-left will-change-transform"
+                    className="group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-emerald-800/40 bg-[#081a12]/60 backdrop-blur-md overflow-hidden transition-[transform,box-shadow,border-color,background-color,backdrop-filter] duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.015] active:scale-[0.98] touch-manipulation hover:border-emerald-400/80 hover:bg-[#062417]/80 hover:backdrop-blur-3xl hover:shadow-[0_16px_40px_rgba(16,185,129,0.35),0_0_24px_rgba(52,211,153,0.22),inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-1px_3px_rgba(16,185,129,0.45),inset_0_0_24px_rgba(16,185,129,0.18)] cursor-pointer text-left hover:will-change-transform"
                     onPointerDown={(event) => event.currentTarget.classList.add("is-pressed")}
                     onPointerUp={(event) => event.currentTarget.classList.remove("is-pressed")}
                     onPointerCancel={(event) => event.currentTarget.classList.remove("is-pressed")}
@@ -192,7 +185,7 @@ function BioTabComponent({ onShowToast }: BioTabProps) {
                       social.id
                     )
                   }
-                  className="group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-emerald-800/40 bg-[#081a12]/60 backdrop-blur-md overflow-hidden transition-[transform,box-shadow,border-color,background-color,backdrop-filter] duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.015] active:scale-[0.98] touch-manipulation hover:border-emerald-400/80 hover:bg-[#062417]/80 hover:backdrop-blur-3xl hover:shadow-[0_16px_40px_rgba(16,185,129,0.35),0_0_24px_rgba(52,211,153,0.22),inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-1px_3px_rgba(16,185,129,0.45),inset_0_0_24px_rgba(16,185,129,0.18)] cursor-pointer text-left will-change-transform"
+                  className="group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-emerald-800/40 bg-[#081a12]/60 backdrop-blur-md overflow-hidden transition-[transform,box-shadow,border-color,background-color,backdrop-filter] duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.015] active:scale-[0.98] touch-manipulation hover:border-emerald-400/80 hover:bg-[#062417]/80 hover:backdrop-blur-3xl hover:shadow-[0_16px_40px_rgba(16,185,129,0.35),0_0_24px_rgba(52,211,153,0.22),inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-1px_3px_rgba(16,185,129,0.45),inset_0_0_24px_rgba(16,185,129,0.18)] cursor-pointer text-left hover:will-change-transform"
                   onPointerDown={(event) => event.currentTarget.classList.add("is-pressed")}
                   onPointerUp={(event) => event.currentTarget.classList.remove("is-pressed")}
                   onPointerCancel={(event) => event.currentTarget.classList.remove("is-pressed")}

@@ -7,8 +7,8 @@ import { TabNavigation, type TabType } from "@/components/TabNavigation";
 import BioTab from "@/components/BioTab";
 import WorksTab from "@/components/WorksTab";
 import CertificatesTab from "@/components/CertificatesTab";
-import { ProjectModal } from "@/components/ProjectModal";
-import { CertificateModal } from "@/components/CertificateModal";
+const ProjectModal = React.lazy(() => import("@/components/ProjectModal"));
+const CertificateModal = React.lazy(() => import("@/components/CertificateModal"));
 import { SplashScreen } from "@/components/SplashScreen";
 import type { Project } from "@/data/projects";
 import { projects } from "@/data/projects";
@@ -107,6 +107,11 @@ export function App() {
         const img = new Image();
         img.decoding = "async";
         img.src = p.coverImage;
+      });
+      ["./socials/github_avatar.avif", "./socials/discord_avatar.avif", "./socials/telegram_avatar.avif"].forEach((src) => {
+        const img = new Image();
+        img.decoding = "async";
+        img.src = src;
       });
     };
 
@@ -209,21 +214,25 @@ export function App() {
         </footer>
       </motion.div>
 
-      {/* Project Lightbox & Details Modal */}
+      {/* Project Lightbox & Details Modal (Lazy Loaded for Initial Bundle Reduction) */}
       {selectedProject && (
-        <ProjectModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
+        <React.Suspense fallback={null}>
+          <ProjectModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        </React.Suspense>
       )}
 
-      {/* Certificate Verification & Cover Modal */}
+      {/* Certificate Verification & Cover Modal (Lazy Loaded) */}
       {selectedCertificate && (
-        <CertificateModal
-          certificate={selectedCertificate}
-          onClose={() => setSelectedCertificate(null)}
-          onShowToast={handleShowToast}
-        />
+        <React.Suspense fallback={null}>
+          <CertificateModal
+            certificate={selectedCertificate}
+            onClose={() => setSelectedCertificate(null)}
+            onShowToast={handleShowToast}
+          />
+        </React.Suspense>
       )}
 
       {/* Global Toast Notification */}
