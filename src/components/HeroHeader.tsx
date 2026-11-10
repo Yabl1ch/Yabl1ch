@@ -7,7 +7,7 @@ import {
   useTransform,
 } from "framer-motion";
 
-export function HeroHeader() {
+function HeroHeaderComponent() {
   const letters = ["Y", "a", "b", "l", "1", "c", "h"];
   const shouldReduceMotion = useReducedMotion();
 
@@ -22,21 +22,38 @@ export function HeroHeader() {
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["18deg", "-18deg"]);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-18deg", "18deg"]);
 
+  const cardRectRef = React.useRef<{ left: number; top: number; width: number; height: number } | null>(null);
+
+  const handleMouseEnter = () => {
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      cardRectRef.current = {
+        left: rect.left,
+        top: rect.top,
+        width: rect.width || 1,
+        height: rect.height || 1,
+      };
+    }
+  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (shouldReduceMotion || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
+    if (!cardRectRef.current && cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      cardRectRef.current = { left: rect.left, top: rect.top, width: rect.width || 1, height: rect.height || 1 };
+    }
+    const rect = cardRectRef.current;
+    if (!rect) return;
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
+    const xPct = mouseX / rect.width - 0.5;
+    const yPct = mouseY / rect.height - 0.5;
     x.set(xPct);
     y.set(yPct);
   };
 
   const handleMouseLeave = () => {
+    cardRectRef.current = null;
     x.set(0);
     y.set(0);
   };
@@ -58,6 +75,7 @@ export function HeroHeader() {
       >
         <div
           ref={cardRef}
+          onMouseEnter={handleMouseEnter}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           style={{ perspective: 1000 }}
@@ -120,8 +138,8 @@ export function HeroHeader() {
         {letters.map((char, index) => (
           <motion.span
             key={index}
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 14, filter: "blur(4px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
               delay: shouldReduceMotion ? 0 : 0.08 + index * 0.045,
               duration: shouldReduceMotion ? 0 : 0.45,
@@ -139,4 +157,5 @@ export function HeroHeader() {
   );
 }
 
-export default React.memo(HeroHeader);
+export const HeroHeader = React.memo(HeroHeaderComponent);
+export default HeroHeader;

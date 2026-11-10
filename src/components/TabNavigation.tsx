@@ -1,3 +1,4 @@
+import * as React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { User, FolderGit2, Award } from "lucide-react";
 
@@ -10,7 +11,7 @@ interface TabNavigationProps {
   certificateCount?: number;
 }
 
-export function TabNavigation({
+function TabNavigationComponent({
   activeTab,
   onTabChange,
   workCount = 5,
@@ -118,4 +119,5 @@ export function TabNavigation({
   );
 }
 
+export const TabNavigation = React.memo(TabNavigationComponent);
 export default TabNavigation;

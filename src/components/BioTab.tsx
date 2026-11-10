@@ -13,7 +13,7 @@ interface BioTabProps {
   onShowToast: (message: string) => void;
 }
 
-export function BioTab({ onShowToast }: BioTabProps) {
+function BioTabComponent({ onShowToast }: BioTabProps) {
   const shouldReduceMotion = useReducedMotion();
   const [isBioExpanded, setIsBioExpanded] = React.useState(false);
   const [copiedId, setCopiedId] = React.useState<string | null>(null);
@@ -94,8 +94,8 @@ export function BioTab({ onShowToast }: BioTabProps) {
                     {bioData.paragraphs.map((paragraph, index) => (
                       <motion.p
                         key={index}
-                        initial={shouldReduceMotion ? false : { opacity: 0, y: 8, filter: "blur(3px)" }}
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                        initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
                         transition={{
                           delay: shouldReduceMotion ? 0 : index * 0.06,
                           duration: shouldReduceMotion ? 0 : 0.32,
@@ -271,4 +271,5 @@ export function BioTab({ onShowToast }: BioTabProps) {
   );
 }
 
-export default React.memo(BioTab);
+export const BioTab = React.memo(BioTabComponent);
+export default BioTab;

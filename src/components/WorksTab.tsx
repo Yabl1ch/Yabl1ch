@@ -39,11 +39,19 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
                 onSelectProject(project);
               }
             }}
+            onPointerEnter={(event) => {
+              if (shouldReduceMotion || event.pointerType !== "mouse") return;
+              (event.currentTarget as HTMLElement & { _cachedRect?: DOMRect })._cachedRect = event.currentTarget.getBoundingClientRect();
+            }}
             onPointerMove={(event) => {
               if (shouldReduceMotion || event.pointerType !== "mouse") return;
-              const rect = event.currentTarget.getBoundingClientRect();
-              event.currentTarget.style.setProperty("--spotlight-x", `${event.clientX - rect.left}px`);
-              event.currentTarget.style.setProperty("--spotlight-y", `${event.clientY - rect.top}px`);
+              const target = event.currentTarget as HTMLElement & { _cachedRect?: DOMRect };
+              const rect = target._cachedRect || target.getBoundingClientRect();
+              target.style.setProperty("--spotlight-x", `${event.clientX - rect.left}px`);
+              target.style.setProperty("--spotlight-y", `${event.clientY - rect.top}px`);
+            }}
+            onPointerLeave={(event) => {
+              (event.currentTarget as HTMLElement & { _cachedRect?: DOMRect | null })._cachedRect = null;
             }}
             className="group relative flex flex-col rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color,background-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:bg-[#0b2118]/90 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] active:scale-[0.99] cursor-pointer touch-manipulation transform-gpu"
           >

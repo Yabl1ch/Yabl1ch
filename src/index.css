@@ -195,17 +195,17 @@ img {
   }
 }
 
+/* Global GPU-containment for project and certificate cards */
+article[role="button"] {
+  contain: layout paint style;
+}
+
 /* Keep decorative GPU work gentle on compact and battery-powered devices. */
 @media (max-width: 640px) {
   /* Prevent heavy multi-layer blur thrashing on mobile dialogs and cards */
   div[role="dialog"] {
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
-  }
-
-  /* GPU-containment for project and certificate cards */
-  article[role="button"] {
-    contain: layout paint style;
   }
   .glass-panel,
   .glass-panel-glow,

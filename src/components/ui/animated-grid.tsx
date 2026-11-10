@@ -19,7 +19,7 @@ export interface AnimatedGridProps extends React.HTMLAttributes<HTMLDivElement> 
  * Depth comes from two grids (a fine base + a 4x major grid whose lines pick up
  * the accent) plus a slow, drifting radial accent glow.
  */
-export function AnimatedGrid({
+function AnimatedGridComponent({
   size = 40,
   color = "var(--color-border, #14532d)",
   accent = "var(--color-accent, #22c55e)",
@@ -119,4 +119,5 @@ export function AnimatedGrid({
   );
 }
 
+export const AnimatedGrid = React.memo(AnimatedGridComponent);
 export default AnimatedGrid;

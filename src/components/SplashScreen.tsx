@@ -13,7 +13,7 @@ interface SplashScreenProps {
  * - 0.5s: Celestial sound chime plays, triggering text & content reveal.
  * - 0.5s - 0.7s: Smooth cross-fade into live site content and persistent background grid.
  */
-export function SplashScreen({ onStartReveal, onComplete }: SplashScreenProps) {
+function SplashScreenComponent({ onStartReveal, onComplete }: SplashScreenProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [isDone, setIsDone] = React.useState(false);
   const shouldReduceMotion = useReducedMotion();
@@ -32,12 +32,54 @@ export function SplashScreen({ onStartReveal, onComplete }: SplashScreenProps) {
 
     const cellSize = 42; // Exactly matches AnimatedGrid size in App.tsx
 
+    interface PrecomputedCell {
+      cellX: number;
+      cellY: number;
+      normDist: number;
+      isAccent: boolean;
+      isBright: boolean;
+    }
+
+    let cells: PrecomputedCell[] = [];
+    let cols = 0;
+    let rows = 0;
+
+    const buildGrid = (width: number, height: number) => {
+      cols = Math.ceil(width / cellSize) + 1;
+      rows = Math.ceil(height / cellSize) + 1;
+      const centerX = width / 2;
+      const centerY = height * 0.38;
+      const maxDist = Math.hypot(
+        Math.max(centerX, width - centerX),
+        Math.max(centerY, height - centerY)
+      );
+
+      cells = [];
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+          const cellX = c * cellSize;
+          const cellY = r * cellSize;
+          const dist = Math.hypot(
+            cellX + cellSize / 2 - centerX,
+            cellY + cellSize / 2 - centerY
+          );
+          const normDist = dist / maxDist;
+          const hash = Math.sin(c * 12.9898 + r * 78.233) * 43758.5453;
+          const rand = hash - Math.floor(hash);
+          const isAccent = rand > 0.68;
+          const isBright = rand > 0.91;
+          cells.push({ cellX, cellY, normDist, isAccent, isBright });
+        }
+      }
+    };
+
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
+      buildGrid(window.innerWidth, window.innerHeight);
     };
 
     resize();
@@ -100,10 +142,6 @@ export function SplashScreen({ onStartReveal, onComplete }: SplashScreenProps) {
 
       const centerX = width / 2;
       const centerY = height * 0.38; // Originates around hero avatar
-      const maxDist = Math.hypot(
-        Math.max(centerX, width - centerX),
-        Math.max(centerY, height - centerY)
-      );
 
       // Radial ambient lighting aura expanding outward
       const ambientGlowRadius = Math.max(width, height) * 0.45 * progress;
@@ -129,9 +167,6 @@ export function SplashScreen({ onStartReveal, onComplete }: SplashScreenProps) {
       ctx.lineWidth = 1;
       ctx.beginPath();
 
-      const cols = Math.ceil(width / cellSize) + 1;
-      const rows = Math.ceil(height / cellSize) + 1;
-
       for (let c = 0; c <= cols; c++) {
         const x = c * cellSize;
         ctx.moveTo(x, 0);
@@ -147,52 +182,37 @@ export function SplashScreen({ onStartReveal, onComplete }: SplashScreenProps) {
       // Glowing squares revealing in a wave outward from center
       const wave = progress * 1.35; // Front covers screen within ~420ms
 
-      for (let c = 0; c < cols; c++) {
-        for (let r = 0; r < rows; r++) {
-          const cellX = c * cellSize;
-          const cellY = r * cellSize;
-          const dist = Math.hypot(
-            cellX + cellSize / 2 - centerX,
-            cellY + cellSize / 2 - centerY
-          );
-          const normDist = dist / maxDist;
+      for (let i = 0; i < cells.length; i++) {
+        const cell = cells[i];
+        if (wave >= cell.normDist) {
+          const cellAge = Math.min(1, (wave - cell.normDist) / 0.3);
 
-          if (wave >= normDist) {
-            const cellAge = Math.min(1, (wave - normDist) / 0.3);
+          if (cell.isAccent) {
+            const fillAlpha = (cell.isBright ? 0.24 : 0.12) * cellAge;
+            const borderAlpha = (cell.isBright ? 0.85 : 0.5) * cellAge;
 
-            // Deterministic distribution for glowing accent squares
-            const hash = Math.sin(c * 12.9898 + r * 78.233) * 43758.5453;
-            const rand = hash - Math.floor(hash);
-            const isAccent = rand > 0.68;
-            const isBright = rand > 0.91;
+            ctx.fillStyle = `rgba(34, 197, 94, ${fillAlpha})`;
+            ctx.fillRect(cell.cellX + 1, cell.cellY + 1, cellSize - 2, cellSize - 2);
 
-            if (isAccent) {
-              const fillAlpha = (isBright ? 0.24 : 0.12) * cellAge;
-              const borderAlpha = (isBright ? 0.85 : 0.5) * cellAge;
+            if (cell.isBright) {
+              // High performance 2-pass glow (zero software shadowBlur convolution)
+              ctx.strokeStyle = `rgba(74, 222, 128, ${0.28 * cellAge})`;
+              ctx.lineWidth = 2.5;
+              ctx.strokeRect(cell.cellX + 1, cell.cellY + 1, cellSize - 2, cellSize - 2);
 
-              ctx.fillStyle = `rgba(34, 197, 94, ${fillAlpha})`;
-              ctx.fillRect(cellX + 1, cellY + 1, cellSize - 2, cellSize - 2);
-
-              ctx.strokeStyle = isBright
-                ? `rgba(74, 222, 128, ${borderAlpha})`
-                : `rgba(34, 197, 94, ${borderAlpha})`;
-              ctx.lineWidth = isBright ? 1.5 : 1;
-
-              if (isBright) {
-                ctx.save();
-                ctx.shadowColor = "#4ade80";
-                ctx.shadowBlur = 10 * cellAge;
-                ctx.strokeRect(cellX + 1, cellY + 1, cellSize - 2, cellSize - 2);
-                ctx.restore();
-              } else {
-                ctx.strokeRect(cellX + 1, cellY + 1, cellSize - 2, cellSize - 2);
-              }
+              ctx.strokeStyle = `rgba(74, 222, 128, ${borderAlpha})`;
+              ctx.lineWidth = 1.2;
+              ctx.strokeRect(cell.cellX + 1, cell.cellY + 1, cellSize - 2, cellSize - 2);
             } else {
-              // Subtle square fill for non-accent cells
-              const fillAlpha = 0.04 * cellAge;
-              ctx.fillStyle = `rgba(20, 83, 45, ${fillAlpha})`;
-              ctx.fillRect(cellX + 1, cellY + 1, cellSize - 2, cellSize - 2);
+              ctx.strokeStyle = `rgba(34, 197, 94, ${borderAlpha})`;
+              ctx.lineWidth = 1;
+              ctx.strokeRect(cell.cellX + 1, cell.cellY + 1, cellSize - 2, cellSize - 2);
             }
+          } else {
+            // Subtle square fill for non-accent cells
+            const fillAlpha = 0.04 * cellAge;
+            ctx.fillStyle = `rgba(20, 83, 45, ${fillAlpha})`;
+            ctx.fillRect(cell.cellX + 1, cell.cellY + 1, cellSize - 2, cellSize - 2);
           }
         }
       }
@@ -230,4 +250,5 @@ export function SplashScreen({ onStartReveal, onComplete }: SplashScreenProps) {
   );
 }
 
+export const SplashScreen = React.memo(SplashScreenComponent);
 export default SplashScreen;
