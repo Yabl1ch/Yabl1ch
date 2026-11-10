@@ -7,8 +7,8 @@ import { TabNavigation, type TabType } from "@/components/TabNavigation";
 import BioTab from "@/components/BioTab";
 import WorksTab from "@/components/WorksTab";
 import CertificatesTab from "@/components/CertificatesTab";
-const ProjectModal = React.lazy(() => import("@/components/ProjectModal"));
-const CertificateModal = React.lazy(() => import("@/components/CertificateModal"));
+import { ProjectModal } from "@/components/ProjectModal";
+import { CertificateModal } from "@/components/CertificateModal";
 import { SplashScreen } from "@/components/SplashScreen";
 import type { Project } from "@/data/projects";
 import { projects } from "@/data/projects";
@@ -307,32 +307,28 @@ export function App() {
         </footer>
       </motion.div>
 
-      {/* Project Lightbox & Details Modal (Lazy Loaded with Smooth Open/Close Animation) */}
-      <React.Suspense fallback={null}>
-        <AnimatePresence>
-          {selectedProject && (
-            <ProjectModal
-              key={selectedProject.id}
-              project={selectedProject}
-              onClose={() => setSelectedProject(null)}
-            />
-          )}
-        </AnimatePresence>
-      </React.Suspense>
+      {/* Project Lightbox & Details Modal with Smooth Unfolding & Vertical Slide */}
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectModal
+            key={selectedProject.id}
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        )}
+      </AnimatePresence>
 
-      {/* Certificate Verification & Cover Modal (Lazy Loaded with Smooth Open/Close Animation) */}
-      <React.Suspense fallback={null}>
-        <AnimatePresence>
-          {selectedCertificate && (
-            <CertificateModal
-              key={selectedCertificate.id}
-              certificate={selectedCertificate}
-              onClose={() => setSelectedCertificate(null)}
-              onShowToast={handleShowToast}
-            />
-          )}
-        </AnimatePresence>
-      </React.Suspense>
+      {/* Certificate Verification & Cover Modal with Smooth Unfolding & Vertical Slide */}
+      <AnimatePresence>
+        {selectedCertificate && (
+          <CertificateModal
+            key={selectedCertificate.id}
+            certificate={selectedCertificate}
+            onClose={() => setSelectedCertificate(null)}
+            onShowToast={handleShowToast}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Global Toast Notification */}
       {toastMessage && (

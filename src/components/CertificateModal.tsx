@@ -111,32 +111,50 @@ export function CertificateModal({
         className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity"
       />
 
-      {/* Modal Window Container with Cinematic Spring Open & Close */}
+      {/* Modal Window Container: Luxurious Vertical Unfolding & Smooth Vertical Slide */}
       <motion.div
         role="dialog"
         aria-modal="true"
         aria-labelledby="certificate-modal-title"
         data-lenis-prevent
         tabIndex={-1}
-        initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.92, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
+        initial={
+          shouldReduceMotion
+            ? false
+            : {
+                opacity: 0,
+                scale: 0.94,
+                scaleY: 0.88,
+                y: 48,
+              }
+        }
+        animate={{
+          opacity: 1,
+          scale: 1,
+          scaleY: 1,
+          y: 0,
+          transition: {
+            type: "spring",
+            stiffness: 280,
+            damping: 24,
+            mass: 0.85,
+          },
+        }}
         exit={
           shouldReduceMotion
             ? undefined
             : {
                 opacity: 0,
                 scale: 0.94,
-                y: 14,
-                transition: { duration: 0.2, ease: [0.32, 0, 0.67, 0] },
+                scaleY: 0.90,
+                y: 36,
+                transition: {
+                  duration: 0.24,
+                  ease: [0.32, 0, 0.67, 0],
+                },
               }
         }
-        transition={{
-          type: "spring",
-          stiffness: 340,
-          damping: 28,
-          mass: 0.8,
-        }}
-        className="relative z-10 w-full max-w-4xl max-h-[92dvh] sm:max-h-[92vh] overflow-y-auto rounded-2xl border border-emerald-500/30 bg-[#091811]/95 text-white shadow-[0_24px_64px_rgba(0,0,0,0.85),0_0_32px_rgba(34,197,94,0.22)] backdrop-blur-xl flex flex-col transform-gpu"
+        className="relative z-10 w-full max-w-4xl max-h-[92dvh] sm:max-h-[92vh] overflow-y-auto scroll-smooth rounded-2xl border border-emerald-500/40 bg-[#091811]/95 text-white shadow-[0_24px_64px_rgba(0,0,0,0.85),0_0_36px_rgba(34,197,94,0.22)] backdrop-blur-xl flex flex-col transform-gpu origin-center"
       >
           {/* Header Bar */}
           <div className="sticky top-0 z-20 flex items-center justify-between border-b border-emerald-900/60 bg-[#091811]/90 px-4 py-3 sm:px-5 sm:py-4 backdrop-blur-xl">
