@@ -45,6 +45,36 @@
   color: #86efac;
 }
 
+/* Lenis smooth scrolling base integration */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Kinetic scroll motion blur container */
+.motion-blur-stream {
+  transform-origin: center center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-blur-stream {
+    filter: none !important;
+    transform: none !important;
+  }
+}
+
 /* Base body styles */
 html {
   scroll-behavior: smooth;

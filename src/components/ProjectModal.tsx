@@ -108,30 +108,50 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
   };
 
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 overflow-y-auto">
-        {/* Backdrop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.18, ease: "easeOut" }}
-          onClick={onClose}
-          className="fixed inset-0 bg-black/75 backdrop-blur-sm sm:backdrop-blur-md transition-opacity"
-        />
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: shouldReduceMotion ? 0 : 0.22, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 overflow-y-auto"
+    >
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: "easeOut" }}
+        onClick={onClose}
+        className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity"
+      />
 
-        {/* Modal Window Container */}
-        <motion.div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="project-modal-title"
-          tabIndex={-1}
-          initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.96, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.98, y: 6 }}
-          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10 w-full max-w-4xl max-h-[92dvh] sm:max-h-[92vh] overflow-y-auto rounded-2xl border border-emerald-500/30 bg-[#091811]/95 text-white shadow-[0_16px_48px_rgba(0,0,0,0.8),0_0_24px_rgba(34,197,94,0.18)] backdrop-blur-xl flex flex-col transform-gpu will-change-[transform,opacity]"
-        >
+      {/* Modal Window Container with Cinematic Spring Open & Close */}
+      <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="project-modal-title"
+        data-lenis-prevent
+        tabIndex={-1}
+        initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.92, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={
+          shouldReduceMotion
+            ? undefined
+            : {
+                opacity: 0,
+                scale: 0.94,
+                y: 14,
+                transition: { duration: 0.2, ease: [0.32, 0, 0.67, 0] },
+              }
+        }
+        transition={{
+          type: "spring",
+          stiffness: 340,
+          damping: 28,
+          mass: 0.8,
+        }}
+        className="relative z-10 w-full max-w-4xl max-h-[92dvh] sm:max-h-[92vh] overflow-y-auto rounded-2xl border border-emerald-500/30 bg-[#091811]/95 text-white shadow-[0_24px_64px_rgba(0,0,0,0.85),0_0_32px_rgba(34,197,94,0.22)] backdrop-blur-xl flex flex-col transform-gpu"
+      >
           {/* Header Bar */}
           <div className="sticky top-0 z-20 flex items-center justify-between border-b border-emerald-900/60 bg-[#091811]/90 px-4 py-3 sm:px-5 sm:py-4 backdrop-blur-xl">
             <div className="flex items-center gap-3">
@@ -282,8 +302,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             </button>
           </div>
         </motion.div>
-      </div>
-    </AnimatePresence>
+    </motion.div>
   );
 }
 

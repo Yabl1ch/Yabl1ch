@@ -69,26 +69,47 @@ function BioTabComponent({ onShowToast }: BioTabProps) {
 
             <div className="flex items-center gap-2 rounded-lg bg-emerald-950/70 border border-emerald-800/60 px-3 py-1.5 text-xs font-medium text-emerald-300 group-hover:bg-emerald-900/60 group-hover:border-emerald-500/50 transition-all">
               <span>{isBioExpanded ? "Свернуть" : "Развернуть"}</span>
-              <div className={`transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${isBioExpanded ? "rotate-180" : ""}`}>
+              <div className={`transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${isBioExpanded ? "rotate-180" : ""}`}>
                 <ChevronDown className="h-4 w-4 text-emerald-400" />
               </div>
             </div>
           </button>
 
-          {/* Collapsible Content with CSS Grid transition (100% zero layout thrashing & zero font-weight snap) */}
+          {/* Collapsible Content with Cinematic Cascading CSS Grid transition (100% zero layout thrashing & zero font-weight snap) */}
           <div
             id="bio-content"
-            className={`grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`grid transition-[grid-template-rows,opacity] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               isBioExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 pointer-events-none"
             }`}
           >
             <div className="overflow-hidden">
-              <div className="px-5 sm:px-6 pb-6 pt-1 border-t border-emerald-900/50">
-                <div className="space-y-4 text-emerald-100/90 text-sm sm:text-base leading-relaxed font-normal pt-4 font-bio">
+              <div className="relative px-5 sm:px-6 pb-6 pt-1 border-t border-emerald-900/60">
+                {/* Luminous emerald border beam sheen */}
+                <div
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent transition-opacity duration-700 ease-out ${
+                    isBioExpanded ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+
+                {/* Soft ambient corner luminescence */}
+                <div
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute -bottom-10 -right-10 h-36 w-36 rounded-full bg-emerald-500/10 blur-2xl transition-opacity duration-700 ease-out ${
+                    isBioExpanded ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+
+                <div className="relative z-10 space-y-4 text-emerald-100/90 text-sm sm:text-base leading-relaxed font-normal pt-4 font-bio">
                   {bioData.paragraphs.map((paragraph, index) => (
                     <p
                       key={index}
-                      className="tracking-wide"
+                      style={{
+                        transitionDelay: isBioExpanded && !shouldReduceMotion ? `${index * 60 + 70}ms` : "0ms",
+                      }}
+                      className={`tracking-wide transition-[transform,opacity] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        isBioExpanded ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+                      }`}
                     >
                       {paragraph}
                     </p>

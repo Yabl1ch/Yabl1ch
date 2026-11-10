@@ -15,6 +15,7 @@ import { projects } from "@/data/projects";
 import type { Certificate } from "@/data/certificates";
 import { certificates } from "@/data/certificates";
 import { Code2 } from "lucide-react";
+import Lenis from "lenis";
 
 const TAB_INDICES: Record<TabType, number> = {
   bio: 0,
@@ -24,13 +25,13 @@ const TAB_INDICES: Record<TabType, number> = {
 
 const tabSlideVariants: Variants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? 32 : direction < 0 ? -32 : 0,
+    x: direction > 0 ? 56 : direction < 0 ? -56 : 0,
     opacity: 0,
-    filter: "blur(3.5px)",
+    filter: "blur(7px)",
     transition: {
-      x: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
-      opacity: { duration: 0.18, ease: "easeOut" },
-      filter: { duration: 0.2, ease: "easeOut" },
+      x: { duration: 0.26, ease: [0.16, 1, 0.3, 1] },
+      opacity: { duration: 0.2, ease: "easeOut" },
+      filter: { duration: 0.22, ease: "easeOut" },
     },
   }),
   center: {
@@ -38,19 +39,19 @@ const tabSlideVariants: Variants = {
     opacity: 1,
     filter: "blur(0px)",
     transition: {
-      x: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
-      opacity: { duration: 0.18, ease: "easeOut" },
-      filter: { duration: 0.2, ease: "easeOut" },
+      x: { duration: 0.26, ease: [0.16, 1, 0.3, 1] },
+      opacity: { duration: 0.2, ease: "easeOut" },
+      filter: { duration: 0.22, ease: "easeOut" },
     },
   },
   exit: (direction: number) => ({
-    x: direction < 0 ? 24 : -24,
+    x: direction < 0 ? 44 : -44,
     opacity: 0,
-    filter: "blur(3px)",
+    filter: "blur(6px)",
     transition: {
-      x: { duration: 0.14, ease: [0.32, 0, 0.67, 0] },
-      opacity: { duration: 0.12, ease: "linear" },
-      filter: { duration: 0.12, ease: "linear" },
+      x: { duration: 0.16, ease: [0.32, 0, 0.67, 0] },
+      opacity: { duration: 0.14, ease: "linear" },
+      filter: { duration: 0.14, ease: "linear" },
     },
   }),
 };
@@ -126,6 +127,98 @@ export function App() {
     }
   }, [isContentVisible]);
 
+  // Lenis silky smooth momentum scrolling
+  React.useEffect(() => {
+    if (shouldReduceMotion) return;
+
+    const lenis = new Lenis({
+      duration: 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.0,
+      infinite: false,
+    });
+
+    let rafId: number;
+    function raf(time: number) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+    rafId = requestAnimationFrame(raf);
+
+    if (selectedProject || selectedCertificate) {
+      lenis.stop();
+    } else {
+      lenis.start();
+    }
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
+  }, [shouldReduceMotion, selectedProject, selectedCertificate]);
+
+  // Kinetic vertical motion blur on rapid scroll flicks (up/down)
+  React.useEffect(() => {
+    if (shouldReduceMotion) return;
+
+    let targetBlur = 0;
+    let currentBlur = 0;
+    let rafId: number;
+    let lastScrollY = window.scrollY;
+    let lastTime = performance.now();
+
+    const handleScroll = () => {
+      const now = performance.now();
+      const dt = Math.max(1, now - lastTime);
+      const dy = Math.abs(window.scrollY - lastScrollY);
+      const velocity = dy / dt;
+
+      if (velocity > 0.75) {
+        targetBlur = Math.min(8, (velocity - 0.75) * 2.8);
+      } else {
+        targetBlur = 0;
+      }
+
+      lastScrollY = window.scrollY;
+      lastTime = now;
+    };
+
+    const updateBlur = () => {
+      currentBlur += (targetBlur - currentBlur) * 0.22;
+      targetBlur *= 0.82;
+
+      const flowContainer = document.getElementById("main-content-flow");
+      if (flowContainer) {
+        if (currentBlur > 0.18) {
+          flowContainer.style.filter = `blur(${currentBlur.toFixed(2)}px)`;
+          flowContainer.style.transform = `scaleY(${(1 + Math.min(0.012, currentBlur * 0.002)).toFixed(4)})`;
+        } else if (flowContainer.style.filter) {
+          flowContainer.style.filter = "";
+          flowContainer.style.transform = "";
+        }
+      }
+
+      rafId = requestAnimationFrame(updateBlur);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    rafId = requestAnimationFrame(updateBlur);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(rafId);
+      const flowContainer = document.getElementById("main-content-flow");
+      if (flowContainer) {
+        flowContainer.style.filter = "";
+        flowContainer.style.transform = "";
+      }
+    };
+  }, [shouldReduceMotion]);
+
   return (
     <div className="relative min-h-[100dvh] w-full bg-[#07130e] text-[#f0fdf4] overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">
       {/* 0.7s Grid & Glowing Squares Intro Screen */}
@@ -166,7 +259,7 @@ export function App() {
         transition={{ duration: shouldReduceMotion ? 0 : 0.45, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 flex min-h-[100dvh] flex-col justify-between max-w-6xl mx-auto will-change-[transform,opacity] px-2 sm:px-4 pt-[env(safe-area-inset-top)]"
       >
-        <main className="flex-1 pb-10 sm:pb-16">
+        <main id="main-content-flow" className="motion-blur-stream flex-1 pb-10 sm:pb-16">
           {/* Hero Header with 3D Tilt Avatar and Per-Letter Interactive Hover */}
           <HeroHeader />
 
@@ -214,26 +307,32 @@ export function App() {
         </footer>
       </motion.div>
 
-      {/* Project Lightbox & Details Modal (Lazy Loaded for Initial Bundle Reduction) */}
-      {selectedProject && (
-        <React.Suspense fallback={null}>
-          <ProjectModal
-            project={selectedProject}
-            onClose={() => setSelectedProject(null)}
-          />
-        </React.Suspense>
-      )}
+      {/* Project Lightbox & Details Modal (Lazy Loaded with Smooth Open/Close Animation) */}
+      <React.Suspense fallback={null}>
+        <AnimatePresence>
+          {selectedProject && (
+            <ProjectModal
+              key={selectedProject.id}
+              project={selectedProject}
+              onClose={() => setSelectedProject(null)}
+            />
+          )}
+        </AnimatePresence>
+      </React.Suspense>
 
-      {/* Certificate Verification & Cover Modal (Lazy Loaded) */}
-      {selectedCertificate && (
-        <React.Suspense fallback={null}>
-          <CertificateModal
-            certificate={selectedCertificate}
-            onClose={() => setSelectedCertificate(null)}
-            onShowToast={handleShowToast}
-          />
-        </React.Suspense>
-      )}
+      {/* Certificate Verification & Cover Modal (Lazy Loaded with Smooth Open/Close Animation) */}
+      <React.Suspense fallback={null}>
+        <AnimatePresence>
+          {selectedCertificate && (
+            <CertificateModal
+              key={selectedCertificate.id}
+              certificate={selectedCertificate}
+              onClose={() => setSelectedCertificate(null)}
+              onShowToast={handleShowToast}
+            />
+          )}
+        </AnimatePresence>
+      </React.Suspense>
 
       {/* Global Toast Notification */}
       {toastMessage && (
