@@ -71,6 +71,12 @@ export function AnimatedGrid({
 @media (prefers-reduced-motion: reduce) {
   .${cls}::before, .${cls}::after, .${cls} > .${cls}-glow { animation: none; }
 }
+@media (max-width: 640px) {
+  .${cls}::before, .${cls}::after {
+    animation: none;
+    will-change: auto;
+  }
+}
 .${cls} > .${cls}-fc { display: none; }
 @media (forced-colors: active) {
   .${cls}::before, .${cls}::after, .${cls} > .${cls}-glow { display: none; }

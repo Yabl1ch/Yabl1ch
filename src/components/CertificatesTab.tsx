@@ -56,24 +56,12 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
       </div>
 
       {/* Certificates Grid: instant rendering without delay */}
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={{
-          hidden: {},
-          visible: { transition: { staggerChildren: shouldReduceMotion ? 0 : 0.07 } },
-        }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
-      >
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {certificates.map((cert) => (
           <motion.article
-            variants={{
-              hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 18 },
-              visible: { opacity: 1, y: 0 },
-            }}
             whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.012 }}
             whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
-            transition={{ type: "spring", stiffness: 280, damping: 24 }}
+            transition={{ type: "spring", stiffness: 300, damping: 24 }}
             key={cert.id}
             role="button"
             tabIndex={0}
@@ -90,7 +78,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
               event.currentTarget.style.setProperty("--spotlight-x", `${event.clientX - rect.left}px`);
               event.currentTarget.style.setProperty("--spotlight-y", `${event.clientY - rect.top}px`);
             }}
-            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color,background-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:bg-[#0b2118]/90 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] active:scale-[0.99] cursor-pointer h-full touch-manipulation"
+            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color,background-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:bg-[#0b2118]/90 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] active:scale-[0.99] cursor-pointer h-full touch-manipulation transform-gpu"
           >
             {/* Cursor-following spotlight adds local focus without changing layout. */}
             <div
@@ -112,7 +100,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
                 width={640}
                 height={480}
                 className="max-h-full max-w-full object-contain transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04] select-none"
-                loading="lazy"
+                loading="eager"
                 decoding="async"
               />
 
@@ -211,7 +199,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
             </div>
           </motion.article>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }

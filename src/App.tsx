@@ -24,27 +24,27 @@ const TAB_INDICES: Record<TabType, number> = {
 
 const tabSlideVariants: Variants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? 36 : direction < 0 ? -36 : 0,
+    x: direction > 0 ? 32 : direction < 0 ? -32 : 0,
     opacity: 0,
     transition: {
-      x: { type: "spring", stiffness: 440, damping: 34, mass: 0.7 },
-      opacity: { duration: 0.16, ease: "easeOut" },
+      x: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
+      opacity: { duration: 0.18, ease: "easeOut" },
     },
   }),
   center: {
     x: 0,
     opacity: 1,
     transition: {
-      x: { type: "spring", stiffness: 440, damping: 34, mass: 0.7 },
-      opacity: { duration: 0.16, ease: "easeOut" },
+      x: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
+      opacity: { duration: 0.18, ease: "easeOut" },
     },
   },
   exit: (direction: number) => ({
-    x: direction < 0 ? 28 : -28,
+    x: direction < 0 ? 24 : -24,
     opacity: 0,
     transition: {
-      x: { duration: 0.09, ease: [0.32, 0, 0.67, 0] },
-      opacity: { duration: 0.08, ease: "linear" },
+      x: { duration: 0.12, ease: [0.32, 0, 0.67, 0] },
+      opacity: { duration: 0.1, ease: "linear" },
     },
   }),
 };
@@ -87,6 +87,33 @@ export function App() {
     setShowSplash(false);
     setIsContentVisible(true);
   }, []);
+
+  // Pre-warm certificates and project images into memory during idle time
+  React.useEffect(() => {
+    if (!isContentVisible) return;
+    const prewarm = () => {
+      certificates.forEach((c) => {
+        const img = new Image();
+        img.decoding = "async";
+        img.src = c.imageUrl;
+      });
+      projects.forEach((p) => {
+        const img = new Image();
+        img.decoding = "async";
+        img.src = p.coverImage;
+      });
+    };
+
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      const id = (window as unknown as { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(prewarm);
+      return () => {
+        (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(id);
+      };
+    } else {
+      const timer = setTimeout(prewarm, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [isContentVisible]);
 
   return (
     <div className="relative min-h-[100dvh] w-full bg-[#07130e] text-[#f0fdf4] overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">

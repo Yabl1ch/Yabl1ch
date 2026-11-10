@@ -23,24 +23,12 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
       </div>
 
       {/* Projects Grid: strictly in requested order 1..5 with instant rendering */}
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={{
-          hidden: {},
-          visible: { transition: { staggerChildren: shouldReduceMotion ? 0 : 0.08 } },
-        }}
-        className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"
-      >
-        {projects.map((project) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        {projects.map((project, idx) => (
           <motion.article
-            variants={{
-              hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 18 },
-              visible: { opacity: 1, y: 0 },
-            }}
             whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.012 }}
             whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
-            transition={{ type: "spring", stiffness: 280, damping: 24 }}
+            transition={{ type: "spring", stiffness: 300, damping: 24 }}
             key={project.id}
             role="button"
             tabIndex={0}
@@ -57,7 +45,7 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
               event.currentTarget.style.setProperty("--spotlight-x", `${event.clientX - rect.left}px`);
               event.currentTarget.style.setProperty("--spotlight-y", `${event.clientY - rect.top}px`);
             }}
-            className="group relative flex flex-col rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color,background-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:bg-[#0b2118]/90 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] active:scale-[0.99] cursor-pointer touch-manipulation"
+            className="group relative flex flex-col rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color,background-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:bg-[#0b2118]/90 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] active:scale-[0.99] cursor-pointer touch-manipulation transform-gpu"
           >
             {/* Cursor-following spotlight adds local focus without changing layout. */}
             <div
@@ -79,7 +67,7 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
                 width={960}
                 height={540}
                 className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
-                loading="lazy"
+                loading={idx < 2 ? "eager" : "lazy"}
                 decoding="async"
               />
 
@@ -110,7 +98,7 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
             </div>
           </motion.article>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }
