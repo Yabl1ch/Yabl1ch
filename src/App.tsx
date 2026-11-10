@@ -26,25 +26,31 @@ const tabSlideVariants: Variants = {
   enter: (direction: number) => ({
     x: direction > 0 ? 32 : direction < 0 ? -32 : 0,
     opacity: 0,
+    filter: "blur(3.5px)",
     transition: {
       x: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
       opacity: { duration: 0.18, ease: "easeOut" },
+      filter: { duration: 0.2, ease: "easeOut" },
     },
   }),
   center: {
     x: 0,
     opacity: 1,
+    filter: "blur(0px)",
     transition: {
       x: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
       opacity: { duration: 0.18, ease: "easeOut" },
+      filter: { duration: 0.2, ease: "easeOut" },
     },
   },
   exit: (direction: number) => ({
     x: direction < 0 ? 24 : -24,
     opacity: 0,
+    filter: "blur(3px)",
     transition: {
-      x: { duration: 0.12, ease: [0.32, 0, 0.67, 0] },
-      opacity: { duration: 0.1, ease: "linear" },
+      x: { duration: 0.14, ease: [0.32, 0, 0.67, 0] },
+      opacity: { duration: 0.12, ease: "linear" },
+      filter: { duration: 0.12, ease: "linear" },
     },
   }),
 };
@@ -180,7 +186,7 @@ export function App() {
                 initial={shouldReduceMotion ? false : "enter"}
                 animate="center"
                 exit={shouldReduceMotion ? undefined : "exit"}
-                className="w-full will-change-transform"
+                className="w-full transform-gpu will-change-[transform,filter,opacity]"
               >
                 {activeTab === "bio" ? (
                   <BioTab onShowToast={handleShowToast} />

@@ -57,7 +57,8 @@ body {
   padding: 0;
   background-color: #07130e;
   color: #f0fdf4;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Manrope Variable", "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   min-height: 100dvh;
   text-rendering: optimizeLegibility;
@@ -251,4 +252,9 @@ article[role="button"] {
     background: Canvas;
     border-color: CanvasText;
   }
+}
+
+/* Preserved system font specifically for Bio text ("Шрифт обо мне можешь не менять") */
+.font-bio {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }

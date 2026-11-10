@@ -90,7 +90,7 @@ function BioTabComponent({ onShowToast }: BioTabProps) {
                 className="overflow-hidden"
               >
                 <div className="px-5 sm:px-6 pb-6 pt-1 border-t border-emerald-900/50">
-                  <div className="space-y-4 text-emerald-100/90 text-sm sm:text-base leading-relaxed font-normal pt-4">
+                  <div className="space-y-4 text-emerald-100/90 text-sm sm:text-base leading-relaxed font-normal pt-4 font-bio">
                     {bioData.paragraphs.map((paragraph, index) => (
                       <motion.p
                         key={index}
