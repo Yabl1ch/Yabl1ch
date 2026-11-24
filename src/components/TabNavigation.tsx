@@ -46,15 +46,29 @@ function TabNavigationComponent({
   }, [activeTab]);
 
   React.useLayoutEffect(() => {
-    const shouldAnimate = hasMeasuredRef.current && !shouldReduceMotion;
-    measureActivePill(shouldAnimate);
-    hasMeasuredRef.current = true;
+    if (!hasMeasuredRef.current) {
+      hasMeasuredRef.current = true;
+      measureActivePill(false);
+      if (!shouldReduceMotion) {
+        const raf = requestAnimationFrame(() => {
+          setPillStyle((prev) => (prev.ready ? { ...prev, animate: true } : prev));
+        });
+        return () => cancelAnimationFrame(raf);
+      }
+      return;
+    }
+    measureActivePill(!shouldReduceMotion);
   }, [measureActivePill, shouldReduceMotion]);
 
   React.useEffect(() => {
     const container = tablistRef.current;
     if (!container || typeof ResizeObserver === "undefined") return;
+    let lastWidth = container.clientWidth;
     const observer = new ResizeObserver(() => {
+      const nextWidth = container.clientWidth;
+      // Ignore 1-2px font-weight jitter on tab switch so the pill glide animation is never cancelled
+      if (Math.abs(nextWidth - lastWidth) < 8) return;
+      lastWidth = nextWidth;
       measureActivePill(false);
     });
     observer.observe(container);

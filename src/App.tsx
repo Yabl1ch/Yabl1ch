@@ -4,6 +4,7 @@ import {
   LazyMotion,
   domAnimation,
   m,
+  useIsPresent,
   useReducedMotion,
   type Variants,
 } from "framer-motion";
@@ -35,36 +36,67 @@ const TAB_INDICES: Record<TabType, number> = {
 
 const tabSlideVariants: Variants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? 36 : direction < 0 ? -36 : 0,
+    x: direction > 0 ? 96 : direction < 0 ? -96 : 0,
     opacity: 0,
-    scale: 0.99,
-    transition: {
-      x: { duration: 0.16, ease: [0.16, 1, 0.3, 1] },
-      opacity: { duration: 0.12, ease: "easeOut" },
-      scale: { duration: 0.16, ease: "easeOut" },
-    },
+    scale: 0.975,
   }),
   center: {
     x: 0,
     opacity: 1,
     scale: 1,
     transition: {
-      x: { duration: 0.16, ease: [0.16, 1, 0.3, 1] },
-      opacity: { duration: 0.12, ease: "easeOut" },
-      scale: { duration: 0.16, ease: "easeOut" },
+      x: { duration: 0.28, ease: [0.22, 1, 0.36, 1] },
+      opacity: { duration: 0.2, ease: "easeOut" },
+      scale: { duration: 0.28, ease: [0.22, 1, 0.36, 1] },
     },
   },
   exit: (direction: number) => ({
-    x: direction < 0 ? 28 : -28,
+    x: direction < 0 ? 96 : -96,
     opacity: 0,
-    scale: 0.99,
+    scale: 0.975,
     transition: {
-      x: { duration: 0.07, ease: [0.32, 0, 0.67, 0] },
-      opacity: { duration: 0.07, ease: "linear" },
-      scale: { duration: 0.07, ease: "linear" },
+      x: { duration: 0.22, ease: [0.32, 0, 0.67, 0] },
+      opacity: { duration: 0.16, ease: "easeIn" },
+      scale: { duration: 0.22, ease: [0.32, 0, 0.67, 0] },
     },
   }),
 };
+
+interface TabSlidePaneProps {
+  id: string;
+  labelledBy: string;
+  direction: number;
+  reduceMotion: boolean | null;
+  children: React.ReactNode;
+}
+
+function TabSlidePane({
+  id,
+  labelledBy,
+  direction,
+  reduceMotion,
+  children,
+}: TabSlidePaneProps) {
+  const isPresent = useIsPresent();
+
+  return (
+    <m.div
+      id={id}
+      role="tabpanel"
+      aria-labelledby={labelledBy}
+      custom={direction}
+      variants={reduceMotion ? undefined : tabSlideVariants}
+      initial={reduceMotion ? false : "enter"}
+      animate="center"
+      exit={reduceMotion ? undefined : "exit"}
+      className={`w-full transform-gpu ${
+        isPresent ? "relative z-10" : "absolute inset-x-0 top-0 z-0 pointer-events-none"
+      }`}
+    >
+      {children}
+    </m.div>
+  );
+}
 
 function hasSeenIntroInSession(): boolean {
   if (typeof window === "undefined") return false;
@@ -307,20 +339,15 @@ export function App() {
               certificateCount={certificates.length}
             />
 
-            {/* Animated Directional Tab Content Switcher */}
+            {/* Animated Directional Tab Content Switcher (simultaneous GPU slide) */}
             <div className="relative mt-2 sm:mt-4 overflow-hidden min-h-[420px] sm:min-h-[480px]">
-              <AnimatePresence mode="wait" custom={tabDirection} initial={false}>
-                <m.div
+              <AnimatePresence mode="sync" custom={tabDirection} initial={false}>
+                <TabSlidePane
                   key={activeTab}
                   id={`${activeTab}-panel`}
-                  role="tabpanel"
-                  aria-labelledby={`${activeTab}-tab`}
-                  custom={tabDirection}
-                  variants={shouldReduceMotion ? undefined : tabSlideVariants}
-                  initial={shouldReduceMotion ? false : "enter"}
-                  animate="center"
-                  exit={shouldReduceMotion ? undefined : "exit"}
-                  className="w-full transform-gpu"
+                  labelledBy={`${activeTab}-tab`}
+                  direction={tabDirection}
+                  reduceMotion={shouldReduceMotion}
                 >
                   {activeTab === "bio" ? (
                     <BioTab
@@ -333,7 +360,7 @@ export function App() {
                   ) : (
                     <CertificatesTab onSelectCertificate={setSelectedCertificate} />
                   )}
-                </m.div>
+                </TabSlidePane>
               </AnimatePresence>
             </div>
           </main>
