@@ -1,5 +1,5 @@
 import * as React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import {
   ExternalLink,
   ShieldCheck,
@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { certificates, type Certificate } from "@/data/certificates";
 import { GoogleCloudLogo, IbmLogo, KaggleLogo } from "@/components/ui/brand-icons";
+import { prewarmCertificateFull } from "@/lib/prewarm";
 
 interface CertificatesTabProps {
   onSelectCertificate: (cert: Certificate) => void;
@@ -58,7 +59,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
       {/* Certificates Grid: instant rendering without delay */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {certificates.map((cert, index) => (
-          <motion.article
+          <m.article
             whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.012 }}
             whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
             transition={{ type: "spring", stiffness: 300, damping: 24 }}
@@ -66,6 +67,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
             role="button"
             tabIndex={0}
             onClick={() => onSelectCertificate(cert)}
+            onFocus={() => prewarmCertificateFull(cert)}
             onKeyDown={(event) => {
               if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault();
@@ -73,6 +75,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
               }
             }}
             onPointerEnter={(event) => {
+              prewarmCertificateFull(cert);
               if (shouldReduceMotion || event.pointerType !== "mouse") return;
               (event.currentTarget as HTMLElement & { _cachedRect?: DOMRect })._cachedRect = event.currentTarget.getBoundingClientRect();
             }}
@@ -86,7 +89,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
             onPointerLeave={(event) => {
               (event.currentTarget as HTMLElement & { _cachedRect?: DOMRect | null })._cachedRect = null;
             }}
-            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color,background-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:bg-[#0b2118]/90 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] active:scale-[0.99] cursor-pointer h-full touch-manipulation transform-gpu"
+            className="group relative flex flex-col justify-between rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[box-shadow,border-color,background-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:bg-[#0b2118]/90 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer h-full touch-manipulation transform-gpu"
           >
             {/* Cursor-following spotlight adds local focus without changing layout. */}
             <div
@@ -103,7 +106,13 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
             {/* Cover Image Container */}
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#050f0b] flex items-center justify-center p-6 border-b border-emerald-900/40 z-10 image-sheen">
               <img
-                src={cert.imageUrl}
+                src={cert.thumbImage || cert.imageUrl}
+                srcSet={
+                  cert.thumbImage
+                    ? `${cert.thumbImage} 480w, ${cert.imageUrl} ${cert.imageWidth || 1000}w`
+                    : undefined
+                }
+                sizes="(max-width: 768px) calc(100vw - 2rem), (max-width: 1024px) 46vw, 310px"
                 alt={cert.title}
                 width={640}
                 height={480}
@@ -205,7 +214,7 @@ export function CertificatesTab({ onSelectCertificate }: CertificatesTabProps) {
                 </div>
               </div>
             </div>
-          </motion.article>
+          </m.article>
         ))}
       </div>
     </div>

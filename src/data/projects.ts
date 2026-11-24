@@ -10,6 +10,8 @@ export interface Project {
   subtitle: string;
   description: string;
   coverImage: string;
+  thumbImage?: string;
+  coverWidth?: number;
   images: ProjectImage[];
   tags: string[];
   features?: string[];
@@ -24,6 +26,8 @@ export const projects: Project[] = [
     description:
       "MudroHub — локальный мессенджер, рассчитанный на 6 человек и разработанный всего за 2 дня мною. В нём предусмотрены как общий чат для всех участников, так и личные диалоги. В сервис также встроены общая медиатека, аудиоплеер и подборка мини-игр. Все сообщения защищены сквозным шифрованием (E2EE), а сам проект написан на TypeScript.",
     coverImage: "./projects/mudro-hub/General_chat.avif",
+    thumbImage: "./projects/mudro-hub/General_chat-640.avif",
+    coverWidth: 1919,
     images: [
       {
         url: "./projects/mudro-hub/General_chat.avif",
@@ -71,6 +75,8 @@ export const projects: Project[] = [
     description:
       "Glyph Master — разработанное мной приложение для создания шрифтов с поддержкой русской и английской раскладок, работающее локально. Оно оснащено богатой палитрой векторных инструментов, а также поддерживает автоматическую компиляцию в форматы TTF, OTF и WOFF2 с возможностью выгрузки в общий ZIP-архив.",
     coverImage: "./projects/glyph-master/Landing.avif",
+    thumbImage: "./projects/glyph-master/Landing-640.avif",
+    coverWidth: 1919,
     images: [
       {
         url: "./projects/glyph-master/Landing.avif",
@@ -103,6 +109,8 @@ export const projects: Project[] = [
     description:
       "Yabl1chVoice — это разработаный мною аналог Clownfish Voice Changer. Оно было написано на базе PyQt6 и низколатентного аудиодвижка DSP.",
     coverImage: "./projects/yabl1ch-voice/main.avif",
+    thumbImage: "./projects/yabl1ch-voice/main-640.avif",
+    coverWidth: 1835,
     images: [
       {
         url: "./projects/yabl1ch-voice/main.avif",
@@ -131,6 +139,8 @@ export const projects: Project[] = [
     description:
       "AI Vibe Designer (Aura Studio) — разработанное мной веб-приложение, позволяющее с помощью API любой LLM-модели составить полноценный профиль дизайна со всеми цветами и шрифтами, а затем скопировать готовый промпт.",
     coverImage: "./projects/ai-vibe-designer/main.avif",
+    thumbImage: "./projects/ai-vibe-designer/main-640.avif",
+    coverWidth: 1919,
     images: [
       {
         url: "./projects/ai-vibe-designer/main.avif",
@@ -159,6 +169,8 @@ export const projects: Project[] = [
     description:
       "Votex — это простое настольное приложение для Windows, которое самостоятельно подключается к вашему чистому виртуальному серверу (VPS) и полностью настраивает современную, быструю и устойчивую к блокировкам VPN-сеть. Достаточно ввести IP-адрес и пароль от купленного сервера — программа сделает всё сама за пару минут.",
     coverImage: "./projects/votex/main.avif",
+    thumbImage: "./projects/votex/main-640.avif",
+    coverWidth: 1919,
     images: [
       {
         url: "./projects/votex/main.avif",

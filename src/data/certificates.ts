@@ -11,6 +11,8 @@ export interface Certificate {
   secondaryVerifyUrl?: string;
   secondaryVerifyLabel?: string;
   imageUrl: string;
+  thumbImage?: string;
+  imageWidth?: number;
   pdfUrl?: string;
   skills: string[];
   description: string;
@@ -30,6 +32,8 @@ export const certificates: Certificate[] = [
     verifyUrl:
       "https://www.skills.google/public_profiles/ff0cb930-aafd-45ad-ba31-a8d58aa189a2/badges/28934995",
     imageUrl: "./certificates/google-intro-genai.avif",
+    thumbImage: "./certificates/google-intro-genai-480.avif",
+    imageWidth: 1000,
     pdfUrl: "./certificates/google-intro-genai.pdf",
     skills: ["Generative AI", "Deep Learning", "Google Cloud", "AI Ethics"],
     description:
@@ -48,6 +52,8 @@ export const certificates: Certificate[] = [
     verifyUrl:
       "https://www.skills.google/public_profiles/ff0cb930-aafd-45ad-ba31-a8d58aa189a2/badges/28935144",
     imageUrl: "./certificates/google-intro-llm.avif",
+    thumbImage: "./certificates/google-intro-llm-480.avif",
+    imageWidth: 1000,
     pdfUrl: "./certificates/google-intro-llm.pdf",
     skills: ["Large Language Models", "NLP", "Prompt Tuning", "Transformers"],
     description:
@@ -66,6 +72,8 @@ export const certificates: Certificate[] = [
     verifyUrl:
       "https://www.skills.google/public_profiles/ff0cb930-aafd-45ad-ba31-a8d58aa189a2/badges/28935156",
     imageUrl: "./certificates/google-responsible-ai.avif",
+    thumbImage: "./certificates/google-responsible-ai-480.avif",
+    imageWidth: 1000,
     pdfUrl: "./certificates/google-responsible-ai.pdf",
     skills: ["Responsible AI", "AI Ethics", "Bias Mitigation", "Safety & Fairness"],
     description:
@@ -104,6 +112,8 @@ export const certificates: Certificate[] = [
     credentialId: "yabl1ch/intro-to-ai-ethics",
     verifyUrl: "https://www.kaggle.com/learn/certification/yabl1ch/intro-to-ai-ethics",
     imageUrl: "./certificates/kaggle-ai-ethics.avif",
+    thumbImage: "./certificates/kaggle-ai-ethics-480.avif",
+    imageWidth: 1920,
     pdfUrl: "./certificates/kaggle-ai-ethics.pdf",
     skills: ["AI Fairness", "Model Card Toolkit", "Mitigating Bias", "Data Ethics"],
     description:

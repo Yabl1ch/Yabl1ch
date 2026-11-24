@@ -12,12 +12,13 @@ export interface AnimatedGridProps extends React.HTMLAttributes<HTMLDivElement> 
   opacity?: number;
   /** Radial mask so the grid fades toward the edges. */
   fade?: boolean;
+  /** Pause decorative background motion (e.g. when a modal covers the page). */
+  paused?: boolean;
 }
 
 /**
  * AnimatedGrid — a layered, CSS-only animated grid backdrop.
- * Depth comes from two grids (a fine base + a 4x major grid whose lines pick up
- * the accent) plus a slow, drifting radial accent glow.
+ * Shifts grid layers using GPU-only `transform: translate3d(...)` so zero paint is triggered per frame.
  */
 function AnimatedGridComponent({
   size = 40,
@@ -25,6 +26,7 @@ function AnimatedGridComponent({
   accent = "var(--color-accent, #22c55e)",
   opacity = 0.55,
   fade = true,
+  paused = false,
   className,
   style,
   ...props
@@ -35,7 +37,15 @@ function AnimatedGridComponent({
 
   const css = `
 .${cls}::before,
-.${cls}::after { content: ""; position: absolute; inset: -${major}px; }
+.${cls}::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: -${major}px;
+  bottom: -${major}px;
+  will-change: transform;
+}
 .${cls}::before {
   background-image:
     linear-gradient(to right, ${color} 1px, transparent 1px),
@@ -43,7 +53,6 @@ function AnimatedGridComponent({
   background-size: ${size}px ${size}px;
   opacity: ${opacity * 0.6};
   animation: ${cls}-drift 38s linear infinite;
-  will-change: background-position;
 }
 .${cls}::after {
   background-image:
@@ -52,7 +61,6 @@ function AnimatedGridComponent({
   background-size: ${major}px ${major}px;
   opacity: ${opacity * 0.5};
   animation: ${cls}-drift 38s linear infinite;
-  will-change: background-position;
 }
 .${cls} > .${cls}-glow {
   position: absolute; inset: 0;
@@ -60,16 +68,24 @@ function AnimatedGridComponent({
   animation: ${cls}-pulse 10s ease-in-out infinite;
   will-change: transform, opacity;
 }
+.${cls}[data-paused="true"]::before,
+.${cls}[data-paused="true"]::after,
+.${cls}[data-paused="true"] > .${cls}-glow {
+  animation-play-state: paused;
+}
 @keyframes ${cls}-drift {
-  from { background-position: 0 0, 0 0; }
-  to   { background-position: ${major}px ${major}px, ${major}px ${major}px; }
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-${major}px, -${major}px, 0); }
 }
 @keyframes ${cls}-pulse {
   0%, 100% { transform: scale(1); opacity: 0.6; }
   50%      { transform: scale(1.15); opacity: 0.95; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .${cls}::before, .${cls}::after, .${cls} > .${cls}-glow { animation: none; }
+  .${cls}::before, .${cls}::after, .${cls} > .${cls}-glow {
+    animation: none;
+    will-change: auto;
+  }
 }
 @media (max-width: 640px) {
   .${cls}::before, .${cls}::after {
@@ -94,6 +110,7 @@ function AnimatedGridComponent({
   return (
     <div
       aria-hidden="true"
+      data-paused={paused ? "true" : undefined}
       className={cn(
         "pointer-events-none absolute inset-0 overflow-hidden",
         cls,

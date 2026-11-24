@@ -3,7 +3,6 @@ export interface SocialLink {
   title: string;
   handle: string;
   description: string;
-  avatarUrl: string;
   url?: string;
   copyValue?: string;
   copyLabel?: string;
@@ -16,7 +15,6 @@ export const socialLinks: SocialLink[] = [
     title: "Telegram",
     handle: "@Yabl1ch",
     description: "Личные сообщения и связь для сотрудничества",
-    avatarUrl: "./socials/telegram_avatar.avif",
     url: "https://t.me/Yabl1ch",
     isExternal: true,
   },
@@ -25,7 +23,6 @@ export const socialLinks: SocialLink[] = [
     title: "GitHub",
     handle: "Yabl1ch",
     description: "Репозитории, исходный код и открытые проекты",
-    avatarUrl: "./socials/github_avatar.avif",
     url: "https://github.com/Yabl1ch",
     isExternal: true,
   },
@@ -34,7 +31,6 @@ export const socialLinks: SocialLink[] = [
     title: "Discord",
     handle: "yabl1ch",
     description: "ID: 800254982641025056 (нажмите, чтобы скопировать)",
-    avatarUrl: "./socials/discord_avatar.avif",
     copyValue: "yabl1ch",
     copyLabel: "Discord ник yabl1ch",
     isExternal: false,

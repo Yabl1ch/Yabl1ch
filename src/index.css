@@ -202,13 +202,8 @@ img {
 
 /* Decorative motion should never be required to use the portfolio. */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  html {
     scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
   }
 
   .image-sheen::after,
@@ -217,7 +212,8 @@ img {
   .animate-aurora-drift,
   .animate-aurora-drift-reverse,
   .animate-ring-spin,
-  .animate-glow-pulse {
+  .animate-glow-pulse,
+  .animate-float-soft {
     animation: none;
   }
 
@@ -226,15 +222,95 @@ img {
   }
 }
 
-/* Global GPU-containment for project and certificate cards */
+/* Pause background decorative animations when modal is open or tab is hidden */
+[data-bg-paused="true"] .animate-aurora-drift,
+[data-bg-paused="true"] .animate-aurora-drift-reverse {
+  animation-play-state: paused;
+}
+
+/* Native top-layer modal dialogs with @starting-style entry/exit */
+dialog.portfolio-dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog.portfolio-dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background-color: rgb(0 0 0 / 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  transition-property: background-color, backdrop-filter, -webkit-backdrop-filter, display, overlay;
+  transition-duration: 0.24s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-behavior: allow-discrete;
+}
+
+dialog.portfolio-dialog {
+  opacity: 0;
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 0.24s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-behavior: allow-discrete;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  dialog.portfolio-dialog {
+    transform: translate3d(0, 32px, 0) scale(0.95);
+  }
+}
+
+dialog.portfolio-dialog[open]:where(:not([data-closing])) {
+  opacity: 1;
+}
+
+@starting-style {
+  dialog.portfolio-dialog[open]:where(:not([data-closing])) {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  dialog.portfolio-dialog[open]:where(:not([data-closing])) {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  @starting-style {
+    dialog.portfolio-dialog[open]:where(:not([data-closing])) {
+      transform: translate3d(0, 32px, 0) scale(0.95);
+    }
+  }
+}
+
+dialog.portfolio-dialog[open]:where(:not([data-closing]))::backdrop {
+  background-color: rgb(0 0 0 / 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@starting-style {
+  dialog.portfolio-dialog[open]:where(:not([data-closing]))::backdrop {
+    background-color: rgb(0 0 0 / 0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.portfolio-dialog,
+  dialog.portfolio-dialog::backdrop {
+    transition-duration: 0.1s;
+  }
+}
+
+/* Isolate below-the-fold cards without clipping outer hover glows on top rows */
 article[role="button"] {
-  contain: layout paint;
+  contain: layout style;
 }
 
 @supports (content-visibility: auto) {
-  article[role="button"] {
+  article[role="button"]:nth-child(n + 4) {
     content-visibility: auto;
-    contain-intrinsic-size: 1px 400px;
+    contain-intrinsic-size: auto 400px;
   }
 }
 
@@ -247,9 +323,13 @@ article[role="button"] {
 /* Keep decorative GPU work gentle on compact and battery-powered devices. */
 @media (max-width: 640px) {
   /* Prevent heavy multi-layer blur thrashing on mobile dialogs and cards */
-  div[role="dialog"] {
+  dialog.portfolio-dialog {
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
+  }
+  dialog.portfolio-dialog[open]:where(:not([data-closing]))::backdrop {
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
   }
   .glass-panel,
   .glass-panel-glow,

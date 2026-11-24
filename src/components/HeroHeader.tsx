@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  motion,
+  m,
   useMotionValue,
   useReducedMotion,
   useSpring,
@@ -8,9 +8,14 @@ import {
 } from "framer-motion";
 
 
-function HeroHeaderComponent() {
+interface HeroHeaderProps {
+  skipIntro?: boolean;
+}
+
+function HeroHeaderComponent({ skipIntro = false }: HeroHeaderProps) {
   const letters = ["Y", "a", "b", "l", "1", "c", "h"];
   const shouldReduceMotion = useReducedMotion();
+  const disableEntrance = Boolean(shouldReduceMotion || skipIntro);
 
   // 3D Tilt state for Avatar
   const cardRef = React.useRef<HTMLDivElement>(null);
@@ -69,10 +74,10 @@ function HeroHeaderComponent() {
   return (
     <header className="relative flex flex-col items-center justify-center pt-8 sm:pt-12 pb-3 sm:pb-6 px-4 text-center">
       {/* 3D Tilt Avatar with Rotating Emerald Glow */}
-      <motion.div
-        initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.92, y: 10 }}
+      <m.div
+        initial={disableEntrance ? false : { opacity: 0, scale: 0.92, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: shouldReduceMotion ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: disableEntrance ? 0 : 0.4, ease: [0.16, 1, 0.3, 1] }}
       >
         <div
           ref={cardRef}
@@ -95,7 +100,7 @@ function HeroHeaderComponent() {
           />
 
           {/* 3D Card Container */}
-          <motion.div
+          <m.div
             style={{
               rotateX,
               rotateY,
@@ -108,6 +113,8 @@ function HeroHeaderComponent() {
             <div className="relative h-full w-full rounded-full overflow-hidden border-2 border-emerald-400/60 bg-[#07130e]">
               <img
                 src="./avatar.avif"
+                srcSet="./avatar-256.avif 256w, ./avatar.avif 384w"
+                sizes="(max-width: 640px) 96px, 128px"
                 alt="Yabl1ch Avatar"
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="eager"
@@ -130,34 +137,34 @@ function HeroHeaderComponent() {
             >
               <span className="h-1.5 w-1.5 rounded-full bg-white transition-transform duration-300 group-hover:scale-125" />
             </div>
-          </motion.div>
+          </m.div>
         </div>
-      </motion.div>
+      </m.div>
 
-      {/* Interactive Per-Letter Vector Name: "Yabl1ch" - Razor sharp GPU-rendered SVG paths with 0 anti-aliasing blur */}
+      {/* Interactive Per-Letter Vector Name: "Yabl1ch" */}
       <h1
         className="flex items-center justify-center gap-1 sm:gap-1.5"
         role="img"
         aria-label="Yabl1ch"
       >
         {letters.map((char, index) => (
-          <motion.span
+          <m.span
             key={char + index}
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 14 }}
+            initial={disableEntrance ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              delay: shouldReduceMotion ? 0 : 0.08 + index * 0.045,
-              duration: shouldReduceMotion ? 0 : 0.45,
+              delay: disableEntrance ? 0 : 0.05 + index * 0.035,
+              duration: disableEntrance ? 0 : 0.35,
               ease: [0.16, 1, 0.3, 1],
             }}
             className={`relative inline-block py-2 -my-2 group/char cursor-pointer select-none ${
               index === 0 ? "-mr-1 sm:-mr-2 md:-mr-2.5" : ""
             }`}
           >
-            <span className="font-nickname inline-block text-3xl sm:text-5xl md:text-6xl font-black text-white transition-[transform,color,filter] duration-200 ease-out will-change-[transform,color,filter] group-hover/char:-translate-y-2 group-hover/char:scale-110 group-hover/char:text-emerald-400 group-hover/char:drop-shadow-[0_0_18px_rgba(74,222,128,0.9)]">
+            <span className="font-nickname inline-block text-3xl sm:text-5xl md:text-6xl font-black text-white transition-[transform,color,filter] duration-200 ease-out group-hover/char:will-change-[transform,color,filter] group-hover/char:-translate-y-2 group-hover/char:scale-110 group-hover/char:text-emerald-400 group-hover/char:drop-shadow-[0_0_18px_rgba(74,222,128,0.9)]">
               {char}
             </span>
-          </motion.span>
+          </m.span>
         ))}
       </h1>
     </header>

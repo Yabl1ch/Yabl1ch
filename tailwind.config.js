@@ -64,6 +64,12 @@ export default {
         'ring-spin': 'ring-spin 9s linear infinite',
         'glow-pulse': 'glow-pulse 3.5s ease-in-out infinite',
       },
+      transitionDuration: {
+        '400': '400ms',
+      },
+      scale: {
+        '102': '1.02',
+      },
     },
   },
   plugins: [],

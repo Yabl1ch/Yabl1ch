@@ -1,5 +1,5 @@
 import * as React from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { m, AnimatePresence, useReducedMotion } from "framer-motion";
 import { playIntroChime } from "@/lib/sound";
 
 interface SplashScreenProps {
@@ -43,8 +43,9 @@ function SplashScreenComponent({ onStartReveal, onComplete }: SplashScreenProps)
     let cells: PrecomputedCell[] = [];
     let cols = 0;
     let rows = 0;
+    let wireframeCanvas: HTMLCanvasElement | null = null;
 
-    const buildGrid = (width: number, height: number) => {
+    const buildGrid = (width: number, height: number, dpr: number) => {
       cols = Math.ceil(width / cellSize) + 1;
       rows = Math.ceil(height / cellSize) + 1;
       const centerX = width / 2;
@@ -71,6 +72,30 @@ function SplashScreenComponent({ onStartReveal, onComplete }: SplashScreenProps)
           cells.push({ cellX, cellY, normDist, isAccent, isBright });
         }
       }
+
+      // Cache static grid lines once per resize instead of rebuilding path every frame
+      const offscreen = document.createElement("canvas");
+      offscreen.width = Math.max(1, Math.floor(width * dpr));
+      offscreen.height = Math.max(1, Math.floor(height * dpr));
+      const offCtx = offscreen.getContext("2d");
+      if (offCtx) {
+        offCtx.scale(dpr, dpr);
+        offCtx.strokeStyle = "#14532d";
+        offCtx.lineWidth = 1;
+        offCtx.beginPath();
+        for (let c = 0; c <= cols; c++) {
+          const x = c * cellSize;
+          offCtx.moveTo(x, 0);
+          offCtx.lineTo(x, height);
+        }
+        for (let r = 0; r <= rows; r++) {
+          const y = r * cellSize;
+          offCtx.moveTo(0, y);
+          offCtx.lineTo(width, y);
+        }
+        offCtx.stroke();
+        wireframeCanvas = offscreen;
+      }
     };
 
     const resize = () => {
@@ -79,7 +104,7 @@ function SplashScreenComponent({ onStartReveal, onComplete }: SplashScreenProps)
       canvas.height = window.innerHeight * dpr;
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
-      buildGrid(window.innerWidth, window.innerHeight);
+      buildGrid(window.innerWidth, window.innerHeight, dpr);
     };
 
     resize();
@@ -161,23 +186,13 @@ function SplashScreenComponent({ onStartReveal, onComplete }: SplashScreenProps)
         ctx.fillRect(0, 0, width, height);
       }
 
-      // Grid line wireframe
-      const lineAlpha = Math.min(0.65, progress * 0.85);
-      ctx.strokeStyle = `rgba(20, 83, 45, ${lineAlpha})`;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-
-      for (let c = 0; c <= cols; c++) {
-        const x = c * cellSize;
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
+      // Cached wireframe grid blit
+      if (wireframeCanvas) {
+        const lineAlpha = Math.min(0.65, progress * 0.85) * overlayAlpha;
+        ctx.globalAlpha = lineAlpha;
+        ctx.drawImage(wireframeCanvas, 0, 0, width, height);
+        ctx.globalAlpha = overlayAlpha;
       }
-      for (let r = 0; r <= rows; r++) {
-        const y = r * cellSize;
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-      }
-      ctx.stroke();
 
       // Glowing squares revealing in a wave outward from center
       const wave = progress * 1.35; // Front covers screen within ~420ms
@@ -242,7 +257,7 @@ function SplashScreenComponent({ onStartReveal, onComplete }: SplashScreenProps)
   return (
     <AnimatePresence>
       {!isDone && (
-        <motion.div
+        <m.div
           key="splash-overlay"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -254,7 +269,7 @@ function SplashScreenComponent({ onStartReveal, onComplete }: SplashScreenProps)
             className="h-full w-full block pointer-events-none"
             aria-hidden="true"
           />
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

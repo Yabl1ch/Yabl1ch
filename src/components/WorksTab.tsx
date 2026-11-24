@@ -1,7 +1,8 @@
 import * as React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { projects, type Project } from "@/data/projects";
+import { prewarmProjectGallery } from "@/lib/prewarm";
 
 interface WorksTabProps {
   onSelectProject: (project: Project) => void;
@@ -25,7 +26,7 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
       {/* Projects Grid: strictly in requested order 1..5 with instant rendering */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {projects.map((project, idx) => (
-          <motion.article
+          <m.article
             whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.012 }}
             whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
             transition={{ type: "spring", stiffness: 300, damping: 24 }}
@@ -33,6 +34,7 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
             role="button"
             tabIndex={0}
             onClick={() => onSelectProject(project)}
+            onFocus={() => prewarmProjectGallery(project)}
             onKeyDown={(event) => {
               if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault();
@@ -40,6 +42,7 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
               }
             }}
             onPointerEnter={(event) => {
+              prewarmProjectGallery(project);
               if (shouldReduceMotion || event.pointerType !== "mouse") return;
               (event.currentTarget as HTMLElement & { _cachedRect?: DOMRect })._cachedRect = event.currentTarget.getBoundingClientRect();
             }}
@@ -53,7 +56,7 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
             onPointerLeave={(event) => {
               (event.currentTarget as HTMLElement & { _cachedRect?: DOMRect | null })._cachedRect = null;
             }}
-            className="group relative flex flex-col rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[transform,box-shadow,border-color,background-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:bg-[#0b2118]/90 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] active:scale-[0.99] cursor-pointer touch-manipulation transform-gpu"
+            className="group relative flex flex-col rounded-2xl border border-emerald-800/40 bg-[#091a13]/70 overflow-hidden backdrop-blur-xl shadow-lg transition-[box-shadow,border-color,background-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-emerald-400/80 hover:bg-[#0b2118]/90 hover:shadow-[0_20px_45px_rgba(16,185,129,0.22),0_0_24px_rgba(52,211,153,0.18)] cursor-pointer touch-manipulation transform-gpu"
           >
             {/* Cursor-following spotlight adds local focus without changing layout. */}
             <div
@@ -70,7 +73,13 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
             {/* Cover Image Container */}
             <div className="relative aspect-video w-full overflow-hidden bg-[#050f0b] z-10 image-sheen">
               <img
-                src={project.coverImage}
+                src={project.thumbImage || project.coverImage}
+                srcSet={
+                  project.thumbImage
+                    ? `${project.thumbImage} 640w, ${project.coverImage} ${project.coverWidth || 1919}w`
+                    : undefined
+                }
+                sizes="(max-width: 768px) calc(100vw - 2rem), 480px"
                 alt={project.title}
                 width={960}
                 height={540}
@@ -104,7 +113,7 @@ export function WorksTab({ onSelectProject }: WorksTabProps) {
                 <ArrowUpRight className="h-4 w-4 text-emerald-400 group-hover:text-black transition-colors" />
               </button>
             </div>
-          </motion.article>
+          </m.article>
         ))}
       </div>
     </div>

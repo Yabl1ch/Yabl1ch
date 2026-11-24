@@ -86,8 +86,8 @@ async function runVerification() {
     for (let idx = 0; idx < 5; idx++) {
       await page.click(`button:has(img[alt="Миниатюра ${idx + 1}"])`);
       await page.waitForTimeout(400);
-      const captionText = await page.textContent('div[role="dialog"] div.border-t.border-emerald-950\\/80');
-      const counterText = await page.textContent('div[role="dialog"] div.font-mono');
+      const captionText = await page.textContent('dialog.portfolio-dialog div.border-t.border-emerald-950\\/80');
+      const counterText = await page.textContent('dialog.portfolio-dialog div.font-mono');
       console.log(`Thumbnail ${idx + 1} Active -> Counter: ${counterText.trim()} | Caption: ${captionText.trim()}`);
     }
     await page.click('button[aria-label="Закрыть окно проекта"]');

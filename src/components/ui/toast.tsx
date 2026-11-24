@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { Check } from "lucide-react";
 
 export interface ToastProps {
@@ -23,7 +23,7 @@ function ToastComponent({ message, onClose, duration = 2400 }: ToastProps) {
     <div className="fixed bottom-8 left-0 right-0 z-50 flex justify-center pointer-events-none px-4">
       <AnimatePresence>
         {message && (
-          <motion.div
+          <m.div
             initial={shouldReduceMotion ? false : { opacity: 0, y: 14, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={shouldReduceMotion ? undefined : { opacity: 0, y: 8, scale: 0.98 }}
@@ -38,7 +38,7 @@ function ToastComponent({ message, onClose, duration = 2400 }: ToastProps) {
                 {message}
               </p>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>
